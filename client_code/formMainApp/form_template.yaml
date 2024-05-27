@@ -1,0 +1,70 @@
+is_package: true
+container:
+  type: HtmlTemplate
+  properties: {html: '@theme:standard-page.html'}
+components:
+- name: lblTitleMainApp
+  properties: {text: P-Shopper, align: center}
+  type: Label
+  layout_properties: {slot: default}
+- name: flow_panel_2
+  properties: {}
+  type: FlowPanel
+  layout_properties: {slot: default}
+  components:
+  - name: lblListSelector
+    properties: {text: 'List Selector:'}
+    type: Label
+  - name: ddListSelector
+    properties:
+      items: [Placeholder 1, Placeholder 2, Placeholder 3]
+      placeholder: Select List
+      include_placeholder: true
+    type: DropDown
+- name: flow_panel_1
+  properties: {}
+  type: FlowPanel
+  layout_properties: {slot: default}
+  components:
+  - name: btnNewItem
+    properties: {text: New, icon: 'fa:plus'}
+    type: Button
+  - name: lblSearchListIcon
+    properties: {icon: 'fa:search', text: Search}
+    type: Label
+    layout_properties: {expand: false}
+  - name: tbSearchList
+    properties: {placeholder: Enter Search Term}
+    type: TextBox
+    layout_properties: {}
+  - name: lblCategorySelector
+    properties: {text: Select Category, icon: 'fa:coffee'}
+    type: Label
+    layout_properties: {}
+  - name: ddCategorySelector
+    properties:
+      items: [Category 1, Category 2, Category 3]
+      placeholder: Category
+      include_placeholder: true
+    type: DropDown
+    layout_properties: {}
+  - name: spacer_1
+    properties: {height: 32}
+    type: Spacer
+    layout_properties: {width: 247.3830625, expand: true}
+  - name: btnCheckItem
+    properties: {text: Check, icon: 'fa:shopping-basket'}
+    type: Button
+    layout_properties: {}
+  - name: btnEditItem
+    properties: {text: Edit, icon: 'fa:pencil'}
+    type: Button
+    layout_properties: {}
+  - name: btnDeleteItem
+    properties: {text: Delete, icon: 'fa:close'}
+    type: Button
+    layout_properties: {}
+- name: spacer_2
+  properties: {height: 32}
+  type: Spacer
+  layout_properties: {slot: default}

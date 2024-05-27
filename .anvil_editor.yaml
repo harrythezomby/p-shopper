@@ -1,8 +1,10 @@
 unique_ids:
-  forms: {}
+  forms:
+    formMainApp: '1716852517862887069987633.4924'
   modules: {}
   server_modules: {}
   assets:
+    logo.png: '1716852951895182163564872.55502'
     standard-page.html: 6XVEHVUOZ6PO7WD6D3NGNXFJIYXZY3WS
     theme.css: RFEFUYHNF64D4J3IPT6HK77IVJ7CRXHU
   scripts: {}

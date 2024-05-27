@@ -1,0 +1,6 @@
+/* */
+
+/* Hiding the Anvil banner for a cleaner UI */
+body.anvil-show-banner #anvil-header {
+    display: none;
+}
