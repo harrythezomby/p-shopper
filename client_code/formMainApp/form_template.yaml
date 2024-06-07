@@ -68,3 +68,7 @@ components:
   properties: {height: 32}
   type: Spacer
   layout_properties: {slot: default}
+- name: rpanelList
+  properties: {item_template: formMainApp.ItemTemplate1}
+  type: RepeatingPanel
+  layout_properties: {slot: default}
