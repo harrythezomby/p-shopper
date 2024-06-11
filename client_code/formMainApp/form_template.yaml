@@ -113,3 +113,4 @@ components:
     properties: {text: Settings, icon: 'fa:cog'}
     type: Button
     layout_properties: {}
+    event_bindings: {click: btnSettings_click}
