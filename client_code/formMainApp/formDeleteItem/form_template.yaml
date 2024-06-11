@@ -1,0 +1,16 @@
+container: {type: ColumnPanel}
+components:
+- name: lblDeleteConfirmation
+  properties: {text: 'Are you sure you would like to delete item [Item Placeholder] from list [List Placeholder]? This action cannot be undone!', align: center}
+  type: Label
+  layout_properties: {grid_position: 'YFGYVF,EATDRS'}
+- name: btnBack
+  properties: {text: Back}
+  type: Button
+  layout_properties: {grid_position: 'ANIPCW,FFFXJS'}
+  event_bindings: {click: btnBack_click}
+- name: btnDelete
+  properties: {text: Delete}
+  type: Button
+  layout_properties: {grid_position: 'ANIPCW,JTFPNG'}
+is_package: true

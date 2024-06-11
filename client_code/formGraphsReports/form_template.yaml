@@ -30,3 +30,8 @@ components:
     type: ColumnPanel
     layout_properties: {grid_position: 'WVLNAK,OBDWPH'}
     event_bindings: {}
+- name: btnBack
+  properties: {text: Back, icon: 'fa:angle-double-left', align: left}
+  type: Button
+  layout_properties: {slot: default}
+  event_bindings: {click: btnBack_click}

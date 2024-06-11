@@ -63,14 +63,17 @@ components:
     properties: {text: Check, icon: 'fa:shopping-basket'}
     type: Button
     layout_properties: {}
+    event_bindings: {click: btnCheckItem_click}
   - name: btnEditItem
     properties: {text: Edit, icon: 'fa:pencil'}
     type: Button
     layout_properties: {}
+    event_bindings: {click: btnEditItem_click}
   - name: btnDeleteItem
     properties: {text: Delete, icon: 'fa:close'}
     type: Button
     layout_properties: {}
+    event_bindings: {click: btnDeleteItem_click}
 - name: spacerListTop
   properties: {height: 10}
   type: Spacer
@@ -92,10 +95,12 @@ components:
     properties: {text: Reports, icon: 'fa:bar-chart'}
     type: Button
     layout_properties: {}
+    event_bindings: {click: btnReports_click}
   - name: btnShare
     properties: {text: Share, icon: 'fa:share-alt'}
     type: Button
     layout_properties: {}
+    event_bindings: {click: btnShare_click}
   - name: btnExport
     properties: {text: Export, icon: 'fa:save'}
     type: Button
@@ -105,6 +110,6 @@ components:
     type: Spacer
     layout_properties: {width: 776, expand: true}
   - name: btnSettings
-    properties: {text: button_5, icon: 'fa:cog'}
+    properties: {text: Settings, icon: 'fa:cog'}
     type: Button
     layout_properties: {}
