@@ -21,4 +21,25 @@ components:
     properties: {text: Dark, icon: 'fa:moon-o'}
     type: Button
     layout_properties: {grid_position: 'WXCBFM,OGUOCU'}
+- name: columnColourTheme
+  properties: {}
+  type: ColumnPanel
+  layout_properties: {grid_position: 'JUQNMH,IXMNEC'}
+  components:
+  - name: lblColourTheme
+    properties: {text: 'Colour Theme:'}
+    type: Label
+    layout_properties: {grid_position: 'OQGZPT,RMSGMJ'}
+  - name: btnColourThemePlainish
+    properties: {text: Plainish}
+    type: Button
+    layout_properties: {grid_position: 'CJBYXN,FKZSJA'}
+  - name: btnColourThemeDefault
+    properties: {text: Default}
+    type: Button
+    layout_properties: {grid_position: 'CJBYXN,WUSUBN'}
+  - name: btnColourThemeBerry
+    properties: {text: Berry, icon: ''}
+    type: Button
+    layout_properties: {grid_position: 'CJBYXN,YWUYUJ'}
 is_package: true
