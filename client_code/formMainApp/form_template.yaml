@@ -35,6 +35,7 @@ components:
   - name: btnNewItem
     properties: {text: New, icon: 'fa:plus'}
     type: Button
+    event_bindings: {click: btnNewItem_click}
   - name: lblSearchListIcon
     properties: {icon: 'fa:search', text: Search}
     type: Label
@@ -75,7 +76,7 @@ components:
   type: Spacer
   layout_properties: {slot: default}
 - name: rpanelList
-  properties: {item_template: formMainApp.ItemTemplate1}
+  properties: {item_template: null}
   type: RepeatingPanel
   layout_properties: {slot: default}
 - name: spacerListBottom

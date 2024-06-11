@@ -1,0 +1,91 @@
+container: {type: ColumnPanel}
+components:
+- name: flowItemName
+  properties: {align: center}
+  type: FlowPanel
+  layout_properties: {grid_position: 'XOMWPG,XOTFHX'}
+  components:
+  - name: lblItemName
+    properties: {text: 'Item Name:'}
+    type: Label
+    layout_properties: {}
+  - name: tbItemname
+    properties: {placeholder: Enter Item Name...}
+    type: TextBox
+    layout_properties: {}
+- name: flowQuantity
+  properties: {align: center}
+  type: FlowPanel
+  layout_properties: {grid_position: 'WAHZBU,YIQGPS'}
+  components:
+  - name: lblQuantity
+    properties: {text: 'Quantity:'}
+    type: Label
+    layout_properties: {}
+  - name: tbQuantity
+    properties: {placeholder: Enter Quantity...}
+    type: TextBox
+    layout_properties: {}
+- name: spacerTopThird
+  properties: {height: 32}
+  type: Spacer
+  layout_properties: {grid_position: 'OIELPT,OHNTUP'}
+- name: flowCategory
+  properties: {align: center}
+  type: FlowPanel
+  layout_properties: {grid_position: 'CUSAGY,GMSXPY'}
+  components:
+  - name: lblCategory
+    properties: {text: 'Category:'}
+    type: Label
+    layout_properties: {}
+  - name: ddCategory
+    properties:
+      placeholder: Select Category...
+      items: [PH Cat 1, PH Cat 2, PH Cat 3]
+    type: DropDown
+    layout_properties: {}
+- name: flowBrand
+  properties: {align: center}
+  type: FlowPanel
+  layout_properties: {grid_position: 'WQYZOF,DRSDJG'}
+  components:
+  - name: lblBrand
+    properties: {text: 'Brand:'}
+    type: Label
+    layout_properties: {}
+  - name: tbBrand
+    properties: {placeholder: Enter Brand...}
+    type: TextBox
+    layout_properties: {}
+- name: spacerMidThird
+  properties: {height: 32}
+  type: Spacer
+  layout_properties: {grid_position: 'IROWGG,FTPKZT'}
+- name: flowStore
+  properties: {align: center}
+  type: FlowPanel
+  layout_properties: {grid_position: 'VINJMI,UYKZKU'}
+  components:
+  - name: lblStore
+    properties: {text: 'Store:'}
+    type: Label
+    layout_properties: {}
+  - name: tbStore
+    properties: {placeholder: Enter Store...}
+    type: TextBox
+    layout_properties: {}
+- name: flowAisle
+  properties: {align: center}
+  type: FlowPanel
+  layout_properties: {grid_position: 'LUTVUF,QHSAMR'}
+  components:
+  - name: lblAisle
+    properties: {text: 'Enter Aisle:'}
+    type: Label
+    layout_properties: {}
+  - name: tbAisle
+    properties: {placeholder: Enter Aisle...}
+    type: TextBox
+    layout_properties: {}
+is_package: true
