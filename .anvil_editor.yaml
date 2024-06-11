@@ -1,9 +1,11 @@
 unique_ids:
   forms:
+    formGraphsReports.formReports.formItemExpReport: '1718064715369736207443093.8615'
     formGraphsReports.formReports.formItemCompReport: '1718064681696308995577989.88873'
     formGraphsReports.formGraphs.formCatConsGraph: '1718064535227918917320607.7393'
     formMainApp.ItemTemplate1: '1717736513468877623180651.7299'
     formGraphsReports.formGraphs.formItemPriceHistGraph: '1718064505697540681355279.95386'
+    formGraphsReports.formReports.formWeeklySpendReport: '17180646992726135591659.15889'
     formGraphsReports.formGraphs.formMonSpentHistGraph: '1718064660961597576589945.9387'
     formMainApp: '1716852517862887069987633.4924'
     formGraphsReports.formGraphs: '1718061166518677588093283.318'

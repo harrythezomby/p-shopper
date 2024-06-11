@@ -12,6 +12,7 @@ class formGraphsReports(formGraphsReportsTemplate):
     # Any code you write here will run before the form opens.
 
   def tabClick(self, **event_args):
+    """Tab funtionality adapted from Anvil forum user david.wylie's example. See https://anvil.works/forum/t/is-there-a-tab-bar-component/4291"""
     sender = event_args.get("sender", None)
     if not sender:
       print("Can't get sender  from : ", event_args)
