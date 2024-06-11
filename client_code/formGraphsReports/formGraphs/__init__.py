@@ -32,8 +32,8 @@ class formGraphs(formGraphsTemplate):
   def form_show(self, **event_args):
     """This method is called when the form is shown on the page"""
     self.btnItemPriceHistTab.tag = formItemPriceHistGraph()
-    self.btnItemQuanConsTab.tag = formItemQuanConsGraph()
     self.btnCatConsTab.tag = formCatConsGraph()
+    self.btnItemQuanConsTab.tag = formItemQuanConsGraph()
     self.btnMonSpentHistTab.tag = formMonSpentHistGraph()
 
     self.tabClick(sender = self.btnItemPriceHistTab)

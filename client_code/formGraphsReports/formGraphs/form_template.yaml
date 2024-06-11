@@ -2,6 +2,7 @@ is_package: true
 container:
   type: HtmlTemplate
   properties: {html: '@theme:standard-page.html'}
+  event_bindings: {show: form_show}
 components:
 - type: ColumnPanel
   properties: {}
@@ -18,6 +19,7 @@ components:
       type: Button
       layout_properties: {}
       event_bindings: {click: tabClick}
+      data_bindings: []
     - name: btnItemQuanConsTab
       properties: {text: Item Quantity Consumption}
       type: Button
