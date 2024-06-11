@@ -3,12 +3,8 @@ container:
   type: HtmlTemplate
   properties: {html: '@theme:standard-page.html'}
 components:
-- name: lblTitleMainApp
-  properties: {text: P-Shopper, align: center}
-  type: Label
-  layout_properties: {slot: default}
-- name: flow_panel_2
-  properties: {}
+- name: flowListSelector
+  properties: {align: left}
   type: FlowPanel
   layout_properties: {slot: default}
   components:
@@ -21,7 +17,17 @@ components:
       placeholder: Select List
       include_placeholder: true
     type: DropDown
-- name: flow_panel_1
+  - name: spacerListSelector
+    properties: {height: 32}
+    type: Spacer
+    layout_properties: {width: 264, expand: true}
+  - name: lblListTitle
+    properties: {text: List Placeholder}
+    type: Label
+  - name: lblTitleMainApp
+    properties: {text: P-Shopper, align: center}
+    type: Label
+- name: flowListTopButtons
   properties: {}
   type: FlowPanel
   layout_properties: {slot: default}
@@ -48,7 +54,7 @@ components:
       include_placeholder: true
     type: DropDown
     layout_properties: {}
-  - name: spacer_1
+  - name: spacerListTopButtons
     properties: {height: 32}
     type: Spacer
     layout_properties: {width: 247.3830625, expand: true}
@@ -64,11 +70,40 @@ components:
     properties: {text: Delete, icon: 'fa:close'}
     type: Button
     layout_properties: {}
-- name: spacer_2
-  properties: {height: 32}
+- name: spacerListTop
+  properties: {height: 10}
   type: Spacer
   layout_properties: {slot: default}
 - name: rpanelList
   properties: {item_template: formMainApp.ItemTemplate1}
   type: RepeatingPanel
   layout_properties: {slot: default}
+- name: spacerListBottom
+  properties: {height: 9}
+  type: Spacer
+  layout_properties: {slot: default}
+- name: flowListBottomButtons
+  properties: {}
+  type: FlowPanel
+  layout_properties: {slot: default}
+  components:
+  - name: btnReports
+    properties: {text: Reports, icon: 'fa:bar-chart'}
+    type: Button
+    layout_properties: {}
+  - name: btnShare
+    properties: {text: Share, icon: 'fa:share-alt'}
+    type: Button
+    layout_properties: {}
+  - name: btnExport
+    properties: {text: Export, icon: 'fa:save'}
+    type: Button
+    layout_properties: {}
+  - name: spacerListBottomButtons
+    properties: {height: 32}
+    type: Spacer
+    layout_properties: {width: 776, expand: true}
+  - name: btnSettings
+    properties: {text: button_5, icon: 'fa:cog'}
+    type: Button
+    layout_properties: {}
