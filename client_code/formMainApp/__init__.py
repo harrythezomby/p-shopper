@@ -4,6 +4,7 @@ from .formNewItem import formNewItem
 from .formDeleteItem import formDeleteItem
 from .formCheckItem import formCheckItem
 from .formInitiateShare import formInitiateShare
+from .formSettings import formSettings
 
 
 class formMainApp(formMainAppTemplate):
@@ -65,5 +66,8 @@ class formMainApp(formMainAppTemplate):
 
   def btnSettings_click(self, **event_args):
     """This method is called when the button is clicked"""
-    pass
+    alert(content=formSettings(), # For now, the edit button will just use the new item form for simplicity, this may be changed later on
+    large=False,
+    buttons = [],
+    title="Settings")
     
