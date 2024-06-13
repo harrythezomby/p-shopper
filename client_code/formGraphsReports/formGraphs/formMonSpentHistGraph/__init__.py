@@ -1,5 +1,6 @@
 from ._anvil_designer import formMonSpentHistGraphTemplate
 from anvil import *
+import plotly.graph_objects as go
 
 
 class formMonSpentHistGraph(formMonSpentHistGraphTemplate):

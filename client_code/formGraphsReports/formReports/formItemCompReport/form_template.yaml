@@ -8,7 +8,27 @@ components:
   name: content_panel
   layout_properties: {slot: default}
   components:
-  - name: label_1
-    properties: {text: placeholder item comp}
+  - name: lblTitle
+    properties: {text: Item Comparison Report}
     type: Label
     layout_properties: {grid_position: 'CXKIJH,MBUHIV'}
+  - name: lblTimeframeSelector
+    properties: {text: 'Select Timeframe:'}
+    type: Label
+    layout_properties: {grid_position: 'BIUSXR,SEMORH'}
+  - name: btnWeek
+    properties: {text: Week}
+    type: Button
+    layout_properties: {grid_position: 'XCOQZO,QBDLZP'}
+  - name: btnMonth
+    properties: {text: Month}
+    type: Button
+    layout_properties: {grid_position: 'XCOQZO,USJFLT'}
+  - name: btnYear
+    properties: {text: Year}
+    type: Button
+    layout_properties: {grid_position: 'XCOQZO,KBGLFS'}
+  - name: taReport
+    properties: {text: '', placeholder: Report will appear here once generation/loading is complete..., auto_expand: true}
+    type: TextArea
+    layout_properties: {grid_position: 'PGGEDT,JUTUPF'}

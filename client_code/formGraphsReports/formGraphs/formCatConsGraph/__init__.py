@@ -1,5 +1,6 @@
 from ._anvil_designer import formCatConsGraphTemplate
 from anvil import *
+import plotly.graph_objects as go
 
 
 class formCatConsGraph(formCatConsGraphTemplate):
