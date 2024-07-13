@@ -78,9 +78,22 @@ components:
   properties: {height: 10}
   type: Spacer
   layout_properties: {slot: default}
-- name: rpanelList
-  properties: {item_template: null}
-  type: RepeatingPanel
+- name: gridList
+  properties:
+    columns:
+    - {id: VDDUJA, data_key: item_id, title: item_id}
+    - {id: UJCSTL, data_key: item_name, title: item_name}
+    - {id: BYPHYZ, data_key: category_id, title: category_id}
+    - {id: QHNMEC, data_key: quantity, title: quantity}
+    - {id: QEVMHQ, data_key: brand, title: brand}
+    - {id: GOPKWM, data_key: store, title: store}
+    - {id: AKPEWB, data_key: aisle, title: aisle}
+    wrap_on: never
+  type: DataGrid
+  components:
+  - name: repeatListItems
+    properties: {item_template: formMainApp.RowTemplate2}
+    type: RepeatingPanel
   layout_properties: {slot: default}
 - name: spacerListBottom
   properties: {height: 9}

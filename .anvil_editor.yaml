@@ -3,9 +3,12 @@ unique_ids:
     formGraphsReports.formReports.formItemExpReport: '1718064715369736207443093.8615'
     formGraphsReports.formReports.formItemCompReport: '1718064681696308995577989.88873'
     formGraphsReports.formGraphs.formCatConsGraph: '1718064535227918917320607.7393'
+    formMainApp.RowTemplate1: '1720838428471576440190575.2358'
+    formLogin: '1720836848960933775851747.2561'
     formMainApp.formDeleteItem: '171807287130082157765522.00027'
     formMainApp.formInitiateShare: '1718073692333319927248305.75757'
     formGraphsReports.formGraphs.formItemPriceHistGraph: '1718064505697540681355279.95386'
+    formMainApp.RowTemplate2: '1720838879105609556665.8925744'
     formMainApp.formCheckItem: '1718073080212814317549765.8871'
     formGraphsReports.formReports.formWeeklySpendReport: '17180646992726135591659.15889'
     formGraphsReports.formGraphs.formMonSpentHistGraph: '1718064660961597576589945.9387'
@@ -17,7 +20,8 @@ unique_ids:
     formMainApp.formNewItem: '1718069028341540039357780.18787'
     formMainApp.formSettings: '1718074502817903103090083.9081'
   modules: {}
-  server_modules: {}
+  server_modules:
+    dataAPI: '1720839390244248509513271.08295'
   assets:
     logo.png: '1716852951895182163564872.55502'
     standard-page.html: 6XVEHVUOZ6PO7WD6D3NGNXFJIYXZY3WS

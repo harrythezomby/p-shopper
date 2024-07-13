@@ -1,5 +1,10 @@
 from ._anvil_designer import formMainAppTemplate
 from anvil import *
+import anvil.server
+import anvil.tables as tables
+import anvil.tables.query as q
+from anvil.tables import app_tables
+import anvil.users
 from .formNewItem import formNewItem
 from .formDeleteItem import formDeleteItem
 from .formCheckItem import formCheckItem
@@ -12,7 +17,9 @@ class formMainApp(formMainAppTemplate):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
 
-    # Any code you write here will run before the form opens.
+    # Any code you write here will run before the form opens
+
+    self.repeatListItems.items = anvil.server.call('getAllItems')
 
   # When the new item button is clicked
   def btnNewItem_click(self, **event_args):

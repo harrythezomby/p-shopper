@@ -9,3 +9,116 @@ services:
 - source: /runtime/services/tables.yml
   client_config: {}
   server_config: {}
+- source: /runtime/services/anvil/users.yml
+  client_config: {allow_signup: false, enable_automatically: true, use_email: true, confirm_email: true}
+  server_config: {user_table: users}
+db_schema:
+  tblusers:
+    client: none
+    server: full
+    columns:
+    - name: email
+      admin_ui: {order: 0, width: 200}
+      type: string
+    - name: enabled
+      admin_ui: {order: 1, width: 200}
+      type: bool
+    - name: last_login
+      admin_ui: {order: 2, width: 200}
+      type: datetime
+    - name: password_hash
+      admin_ui: {order: 3, width: 200}
+      type: string
+    - name: n_password_failures
+      admin_ui: {order: 4, width: 200}
+      type: number
+    - name: confirmed_email
+      admin_ui: {order: 5, width: 200}
+      type: bool
+    title: tblUsers
+  tbllistitems:
+    client: none
+    server: full
+    columns:
+    - name: list_item_id
+      admin_ui: {width: 200, order: 0}
+      type: number
+    - name: list_id
+      admin_ui: {order: -0.25, width: 200}
+      type: number
+    - name: item_id
+      admin_ui: {order: -0.5, width: 200}
+      type: number
+    - name: checked
+      admin_ui: {width: 200, order: -1}
+      type: bool
+    title: tblListItems
+  tblcategories:
+    client: none
+    server: full
+    columns:
+    - name: category_id
+      admin_ui: {width: 200, order: 0}
+      type: number
+    - name: category_name
+      admin_ui: {width: 200, order: 1}
+      type: string
+    title: tblCategories
+  tbllists:
+    client: none
+    server: full
+    columns:
+    - name: list_id
+      admin_ui: {width: 200, order: 0}
+      type: number
+    - name: list_name
+      admin_ui: {width: 200, order: 1}
+      type: string
+    title: tblLists
+  tbllongtermhistory:
+    client: none
+    server: full
+    columns:
+    - name: long_term_id
+      admin_ui: {width: 200, order: 0}
+      type: number
+    - name: item_id
+      admin_ui: {width: 200, order: 1}
+      type: number
+    - name: price
+      admin_ui: {width: 200, order: 2}
+      type: number
+    - name: purchase_date
+      admin_ui: {width: 200, order: 3}
+      type: date
+    - name: expiry_date
+      admin_ui: {width: 200, order: 4}
+      type: date
+    title: tblLongTermHistory
+  tblitems:
+    client: none
+    server: full
+    columns:
+    - name: item_id
+      admin_ui: {width: 200, order: 0}
+      type: number
+    - name: item_name
+      admin_ui: {width: 200, order: 1}
+      type: string
+    - name: category_id
+      admin_ui: {width: 200, order: 2}
+      type: link_single
+      target: tblcategories
+    - name: quantity
+      admin_ui: {width: 200, order: 3}
+      type: number
+    - name: brand
+      admin_ui: {width: 200, order: 4}
+      type: string
+    - name: store
+      admin_ui: {width: 200, order: 5}
+      type: string
+    - name: aisle
+      admin_ui: {width: 200, order: 6}
+      type: string
+    title: tblItems

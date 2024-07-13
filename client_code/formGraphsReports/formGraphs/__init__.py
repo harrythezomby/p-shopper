@@ -1,5 +1,10 @@
 from ._anvil_designer import formGraphsTemplate
 from anvil import *
+import anvil.server
+import anvil.tables as tables
+import anvil.tables.query as q
+from anvil.tables import app_tables
+import anvil.users
 from .formCatConsGraph import formCatConsGraph
 from .formItemPriceHistGraph import formItemPriceHistGraph
 from .formItemQuanConsGraph import formItemQuanConsGraph
