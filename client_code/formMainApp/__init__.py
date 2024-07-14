@@ -21,6 +21,14 @@ class formMainApp(formMainAppTemplate):
 
     self.repeatListItems.items = anvil.server.call('getAllItems')
 
+
+  def search(self, **event_args):
+    self.repeatListItems.items = anvil.server.call(
+    'search_items',
+    self.tbSearchList.text
+    )
+
+
   # When the new item button is clicked
   def btnNewItem_click(self, **event_args):
     """This method is called when the button is clicked"""

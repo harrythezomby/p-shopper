@@ -44,6 +44,7 @@ components:
     properties: {placeholder: Enter Search Term}
     type: TextBox
     layout_properties: {}
+    event_bindings: {pressed_enter: search}
   - name: lblCategorySelector
     properties: {text: Select Category, icon: 'fa:coffee'}
     type: Label

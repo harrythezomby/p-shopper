@@ -14,6 +14,19 @@ def get_all_categories():
     return [dict(row) for row in app_tables.tblcategories.search()]
 
 @anvil.server.callable
+def search_items(query):
+  result = app_tables.tblitems.search()
+  if query:
+    result = [
+      x for x in result
+      if query in x['item_name']
+      or query in x['brand']
+      or query in x['store']
+      or query in x['aisle']
+    ]
+  return result
+
+@anvil.server.callable
 def add_item(item_name, quantity, category_id, brand, store, aisle):
     app_tables.tblitems.add_row(
         item_name=item_name,
