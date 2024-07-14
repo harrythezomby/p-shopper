@@ -100,10 +100,10 @@ db_schema:
     server: full
     columns:
     - name: item_id
-      admin_ui: {width: 200, order: 0}
+      admin_ui: {order: 0, width: 200}
       type: number
     - name: item_name
-      admin_ui: {width: 200, order: 1}
+      admin_ui: {order: 1, width: 200}
       type: string
     - name: category_id
       admin_ui: {width: 200, order: 2}

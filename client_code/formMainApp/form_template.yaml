@@ -82,12 +82,12 @@ components:
   properties:
     columns:
     - {id: VDDUJA, data_key: item_id, title: item_id}
-    - {id: UJCSTL, data_key: item_name, title: item_name}
-    - {id: BYPHYZ, data_key: category_id, title: category_id}
-    - {id: QHNMEC, data_key: quantity, title: quantity}
-    - {id: QEVMHQ, data_key: brand, title: brand}
-    - {id: GOPKWM, data_key: store, title: store}
-    - {id: AKPEWB, data_key: aisle, title: aisle}
+    - {id: UJCSTL, data_key: item_name, title: Item Name}
+    - {id: BYPHYZ, data_key: category_id, title: Category}
+    - {id: QHNMEC, data_key: quantity, title: Quantity}
+    - {id: QEVMHQ, data_key: brand, title: Brand}
+    - {id: GOPKWM, data_key: store, title: Store}
+    - {id: AKPEWB, data_key: aisle, title: Aisle}
     wrap_on: never
   type: DataGrid
   components:
