@@ -1,3 +1,9 @@
 is_package: true
 container: {type: DataRowPanel}
-components: []
+components:
+- name: lblCategory
+  properties: {}
+  type: Label
+  layout_properties: {column: BYPHYZ}
+  data_bindings:
+  - {property: text, code: 'self.item[''category_id''][''category_name'']', writeback: false}

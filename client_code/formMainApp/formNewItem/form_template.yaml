@@ -9,7 +9,7 @@ components:
     properties: {text: 'Item Name:'}
     type: Label
     layout_properties: {}
-  - name: tbItemname
+  - name: tbItemName
     properties: {placeholder: Enter Item Name...}
     type: TextBox
     layout_properties: {}
