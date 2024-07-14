@@ -18,16 +18,34 @@ class formMainApp(formMainAppTemplate):
     self.init_components(**properties)
 
     # Any code you write here will run before the form opens
+    self.refresh_data_grid()
 
-    self.repeatListItems.items = anvil.server.call('getAllItems')
+    # Populate the category dropdown
+    categories = anvil.server.call('get_all_categories')
+    self.ddCategorySelector.items = [('All Categories', None)] + [(r['category_name'], r['category_id']) for r in categories]
+    
+    # Perform initial filter to show all items
+    self.filter()
+
+  def filter(self, **event_args):
+      selected_category = self.ddCategorySelector.selected_value
+      print(f"Selected category: {selected_category}")  # Debug statement
+      self.repeatListItems.items = anvil.server.call('filter_items', selected_category)
 
 
   def search(self, **event_args):
     self.repeatListItems.items = anvil.server.call(
     'search_items',
-    self.tbSearchList.text
-    )
+    self.tbSearchList.text)
 
+  def refresh_data_grid(self, **event_args):
+      self.repeatListItems.items = anvil.server.call('get_all_items')
+
+
+
+
+
+  
 
   # When the new item button is clicked
   def btnNewItem_click(self, **event_args):
@@ -38,6 +56,8 @@ class formMainApp(formMainAppTemplate):
     large=True,
     buttons = [],
     title="New Item")
+
+    self.refresh_data_grid()
 
   def btnDeleteItem_click(self, **event_args):
     """This method is called when the button is clicked"""
@@ -57,14 +77,16 @@ class formMainApp(formMainAppTemplate):
     buttons = [],
     title="Check Off Item")
 
-  def btnEditItem_click(self, **event_args):
-    """This method is called when the button is clicked"""
-
+  """def btnEditItem_click(self, **event_args):
     # Alert to display the form in a popup
     alert(content=formNewItem(), # For now, the edit button will just use the new item form for simplicity, this may be changed later on
     large=True,
     buttons = [],
-    title="Edit Item")
+    title="Edit Item")"""
+
+ # def btnEditItem_click(self, **event_args):
+
+    
 
   def btnShare_click(self, **event_args):
     """This method is called when the button is clicked"""

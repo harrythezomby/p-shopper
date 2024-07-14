@@ -19,7 +19,8 @@ unique_ids:
     formGraphsReports: '1718060918858169682631648.09604'
     formMainApp.formNewItem: '1718069028341540039357780.18787'
     formMainApp.formSettings: '1718074502817903103090083.9081'
-  modules: {}
+  modules:
+    State: '1720975870372786863492441.1614'
   server_modules:
     dataAPI: '1720839390244248509513271.08295'
   assets:

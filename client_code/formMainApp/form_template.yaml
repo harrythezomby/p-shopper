@@ -36,26 +36,27 @@ components:
     properties: {text: New, icon: 'fa:plus'}
     type: Button
     event_bindings: {click: btnNewItem_click}
-  - name: lblSearchListIcon
-    properties: {icon: 'fa:search', text: Search}
-    type: Label
-    layout_properties: {expand: false}
+  - name: spacer_1
+    properties: {height: 32}
+    type: Spacer
+    layout_properties: {width: 24}
   - name: tbSearchList
     properties: {placeholder: Enter Search Term}
     type: TextBox
     layout_properties: {}
     event_bindings: {pressed_enter: search}
-  - name: lblCategorySelector
-    properties: {text: Select Category, icon: 'fa:coffee'}
-    type: Label
+  - name: btnSearch
+    properties: {text: ' Search', icon: 'fa:search'}
+    type: Button
     layout_properties: {}
+    event_bindings: {click: search}
   - name: ddCategorySelector
     properties:
-      items: [Category 1, Category 2, Category 3]
+      items: [Categories]
       placeholder: Category
-      include_placeholder: true
+      include_placeholder: false
     type: DropDown
-    layout_properties: {}
+    event_bindings: {change: filter}
   - name: spacerListTopButtons
     properties: {height: 32}
     type: Spacer

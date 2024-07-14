@@ -1,9 +1,40 @@
 is_package: true
 container: {type: DataRowPanel}
 components:
-- name: lblCategory
+- name: tbItemName
   properties: {}
-  type: Label
+  type: TextBox
+  layout_properties: {column: UJCSTL}
+  data_bindings:
+  - {property: text, code: 'self.item[''item_name'']', writeback: false}
+- name: ddCategory
+  properties:
+    items: []
+  type: DropDown
   layout_properties: {column: BYPHYZ}
   data_bindings:
-  - {property: text, code: 'self.item[''category_id''][''category_name'']', writeback: false}
+  - {property: selected_value, code: 'self.item[''category_id''][''category_name'']', writeback: false}
+- name: tbQuantity
+  properties: {}
+  type: TextBox
+  layout_properties: {column: QHNMEC}
+  data_bindings:
+  - {property: text, code: 'self.item[''quantity'']', writeback: false}
+- name: tbBrand
+  properties: {}
+  type: TextBox
+  layout_properties: {column: QEVMHQ}
+  data_bindings:
+  - {property: text, code: 'self.item[''brand'']', writeback: false}
+- name: tbStore
+  properties: {}
+  type: TextBox
+  layout_properties: {column: GOPKWM}
+  data_bindings:
+  - {property: text, code: 'self.item[''store'']', writeback: false}
+- name: tbAisle
+  properties: {}
+  type: TextBox
+  layout_properties: {column: AKPEWB}
+  data_bindings:
+  - {property: text, code: 'self.item[''aisle'']', writeback: false}
