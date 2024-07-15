@@ -5,9 +5,6 @@ import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
 import anvil.users
-from .formNewItem import formNewItem
-from .formDeleteItem import formDeleteItem
-from .formCheckItem import formCheckItem
 from .formInitiateShare import formInitiateShare
 from .formSettings import formSettings
 
@@ -23,6 +20,7 @@ class formMainApp(formMainAppTemplate):
     # Populate the category dropdown
     categories = anvil.server.call('get_all_categories')
     self.ddCategorySelector.items = [('All Categories', None)] + [(r['category_name'], r['category_id']) for r in categories]
+    self.ddNewItemCategory.items = [(r['category_name'], r['category_id']) for r in categories]
     
     # Perform initial filter to show all items
     self.filter()
@@ -107,4 +105,21 @@ class formMainApp(formMainAppTemplate):
     large=False,
     buttons = [],
     title="Settings")
+
+  def btnCreateItem_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    item_name = self.tbNewItemName.text
+    quantity = self.tbNewItemQuantity.text
+    category_id = self.ddNewItemCategory.selected_value
+    brand = self.tbNewItemBrand.text
+    store = self.tbNewItemStore.text
+    aisle = self.tbNewItemAisle.text
+    
+    anvil.server.call('add_item', item_name, quantity, category_id, brand, store, aisle)
+    alert("Item added successfully.")
+    self.refresh_data_grid()
+
+
+    
+
     

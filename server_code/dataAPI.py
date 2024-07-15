@@ -18,6 +18,10 @@ def get_all_categories():
 def get_categories_simple():
   return app_tables.tblcategories.search(tables.order_by("category_id", ascending=False))
 
+@anvil.server.callable
+def get_category_by_name(category_name):
+    return app_tables.tblcategories.get(category_name=category_name)
+
 # Search function for a list
 @anvil.server.callable
 def search_items(query):
@@ -62,6 +66,22 @@ def add_item(item_name, quantity, category_id, brand, store, aisle):
         store=store,
         aisle=aisle
     )
+
+@anvil.server.callable
+def edit_item(item_id, item_name, quantity, category_id, brand, store, aisle):
+    item = app_tables.tblitems.get(item_id=item_id)
+    if item:
+        category = app_tables.tblcategories.get(category_id=category_id)
+        item.update(
+            item_name=item_name,
+            quantity=quantity,
+            category_id=category,
+            brand=brand,
+            store=store,
+            aisle=aisle
+        )
+
+  
 
 
 

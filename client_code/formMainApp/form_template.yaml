@@ -32,14 +32,6 @@ components:
   type: FlowPanel
   layout_properties: {slot: default}
   components:
-  - name: btnNewItem
-    properties: {text: New, icon: 'fa:plus'}
-    type: Button
-    event_bindings: {click: btnNewItem_click}
-  - name: spacer_1
-    properties: {height: 32}
-    type: Spacer
-    layout_properties: {width: 24}
   - name: tbSearchList
     properties: {placeholder: Enter Search Term}
     type: TextBox
@@ -66,11 +58,6 @@ components:
     type: Button
     layout_properties: {}
     event_bindings: {click: btnCheckItem_click}
-  - name: btnEditItem
-    properties: {text: Edit, icon: 'fa:pencil'}
-    type: Button
-    layout_properties: {}
-    event_bindings: {click: btnEditItem_click}
   - name: btnDeleteItem
     properties: {text: Delete, icon: 'fa:close'}
     type: Button
@@ -83,15 +70,49 @@ components:
 - name: gridList
   properties:
     columns:
-    - {id: UJCSTL, data_key: item_name, title: Item Name}
-    - {id: BYPHYZ, data_key: category_id, title: Category}
-    - {id: QHNMEC, data_key: quantity, title: Quantity}
-    - {id: QEVMHQ, data_key: brand, title: Brand}
-    - {id: GOPKWM, data_key: store, title: Store}
-    - {id: AKPEWB, data_key: aisle, title: Aisle}
+    - {id: UJCSTL, data_key: item_name, title: Item Name, expand: true}
+    - {id: BYPHYZ, data_key: category_id, title: Category, expand: true}
+    - {id: QHNMEC, data_key: quantity, title: Quantity, expand: true}
+    - {id: QEVMHQ, data_key: brand, title: Brand, expand: true}
+    - {id: GOPKWM, data_key: store, title: Store, expand: true}
+    - {id: AKPEWB, data_key: aisle, title: Aisle, expand: true}
+    - {id: QCBSKP, data_key: column_1, title: '', expand: false, width: '60'}
     wrap_on: never
   type: DataGrid
   components:
+  - name: rowButtons
+    properties: {}
+    type: DataRowPanel
+    components:
+    - name: tbNewItemName
+      properties: {}
+      type: TextBox
+      layout_properties: {column: UJCSTL}
+    - name: ddNewItemCategory
+      properties: {}
+      type: DropDown
+      layout_properties: {column: BYPHYZ}
+    - name: tbNewItemQuantity
+      properties: {type: number}
+      type: TextBox
+      layout_properties: {column: QHNMEC}
+    - name: tbNewItemBrand
+      properties: {}
+      type: TextBox
+      layout_properties: {column: QEVMHQ}
+    - name: tbNewItemStore
+      properties: {}
+      type: TextBox
+      layout_properties: {column: GOPKWM}
+    - name: tbNewItemAisle
+      properties: {}
+      type: TextBox
+      layout_properties: {column: AKPEWB}
+    - name: btnCreateItem
+      properties: {text: '', icon: 'fa:plus', align: left}
+      type: Button
+      layout_properties: {column: QCBSKP}
+      event_bindings: {click: btnCreateItem_click}
   - name: repeatListItems
     properties: {item_template: formMainApp.RowTemplate2}
     type: RepeatingPanel
