@@ -81,6 +81,12 @@ def edit_item(item_id, item_name, quantity, category_id, brand, store, aisle):
             aisle=aisle
         )
 
+@anvil.server.callable
+def delete_item(item):
+    item.delete()
+
+
+
   
 
 

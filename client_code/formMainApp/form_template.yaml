@@ -76,7 +76,7 @@ components:
     - {id: QEVMHQ, data_key: brand, title: Brand, expand: true}
     - {id: GOPKWM, data_key: store, title: Store, expand: true}
     - {id: AKPEWB, data_key: aisle, title: Aisle, expand: true}
-    - {id: QCBSKP, data_key: column_1, title: '', expand: false, width: '60'}
+    - {id: QCBSKP, data_key: column_1, title: '', expand: false, width: '127'}
     wrap_on: never
   type: DataGrid
   components:

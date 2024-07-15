@@ -40,52 +40,50 @@ class formMainApp(formMainAppTemplate):
       self.repeatListItems.items = anvil.server.call('get_all_items')
 
 
-
-
-
-  
-
-  # When the new item button is clicked
-  def btnNewItem_click(self, **event_args):
+  def btnCreateItem_click(self, **event_args):
     """This method is called when the button is clicked"""
+    item_name = self.tbNewItemName.text
+    category_id = self.ddNewItemCategory.selected_value
 
-    # Alert to display the form in a popup
-    alert(content=formNewItem(),
-    large=True,
-    buttons = [],
-    title="New Item")
+    # If quantity is blank, assume 1
+    if self.tbNewItemQuantity.text == 0 or None:
+      quantity = 1
+    else:
+      quantity = self.tbNewItemQuantity.text
 
+    none = "None" # Assuming blank/N/A value, can be changed to whatever here easily
+
+    # If brand is empty assume no brand
+    if self.tbNewItemBrand.text == "" or None:
+      brand = none
+    else:
+      brand = self.tbNewItemBrand.text
+
+    # If store is empty assume no store
+    if self.tbNewItemStore.text == "" or None:
+      store = none
+    else:
+      store = self.tbNewItemStore.text
+      
+    # If aisle is empty assume no aisle
+    if self.tbNewItemAisle.text == "" or None:
+      aisle = none
+    else:
+      aisle = self.tbNewItemAisle.text
+    
+    anvil.server.call('add_item', item_name, quantity, category_id, brand, store, aisle)
+    alert("Item added successfully.")
     self.refresh_data_grid()
 
-  def btnDeleteItem_click(self, **event_args):
-    """This method is called when the button is clicked"""
 
-    # Alert to display the form in a popup
-    alert(content=formDeleteItem(),
-    large=False,
-    buttons = [],
-    title="Delete Item")
 
-  def btnCheckItem_click(self, **event_args):
-    """This method is called when the button is clicked"""
 
-    # Alert to display the form in a popup
-    alert(content=formCheckItem(),
-    large=True,
-    buttons = [],
-    title="Check Off Item")
 
-  """def btnEditItem_click(self, **event_args):
-    # Alert to display the form in a popup
-    alert(content=formNewItem(), # For now, the edit button will just use the new item form for simplicity, this may be changed later on
-    large=True,
-    buttons = [],
-    title="Edit Item")"""
 
- # def btnEditItem_click(self, **event_args):
 
-    
 
+
+# Other functions
   def btnShare_click(self, **event_args):
     """This method is called when the button is clicked"""
 
@@ -105,19 +103,6 @@ class formMainApp(formMainAppTemplate):
     large=False,
     buttons = [],
     title="Settings")
-
-  def btnCreateItem_click(self, **event_args):
-    """This method is called when the button is clicked"""
-    item_name = self.tbNewItemName.text
-    quantity = self.tbNewItemQuantity.text
-    category_id = self.ddNewItemCategory.selected_value
-    brand = self.tbNewItemBrand.text
-    store = self.tbNewItemStore.text
-    aisle = self.tbNewItemAisle.text
-    
-    anvil.server.call('add_item', item_name, quantity, category_id, brand, store, aisle)
-    alert("Item added successfully.")
-    self.refresh_data_grid()
 
 
     

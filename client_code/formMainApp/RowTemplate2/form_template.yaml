@@ -3,11 +3,6 @@ container:
   type: DataRowPanel
   properties: {visible: true, auto_display_data: false}
 components:
-- name: flowSave
-  properties: {spacing_below: none, spacing_above: none}
-  type: FlowPanel
-  layout_properties: {column: QCBSKP}
-  components: []
 - name: dataRowPanelReadView
   properties: {}
   type: DataRowPanel
@@ -49,16 +44,20 @@ components:
     layout_properties: {column: AKPEWB}
     data_bindings:
     - {property: text, code: 'self.item[''aisle'']', writeback: false}
-  - name: flowEditDelete
-    properties: {}
+  - name: flowRead
+    properties: {align: center, spacing_below: none, spacing_above: none}
     type: FlowPanel
     layout_properties: {column: QCBSKP}
     components:
     - name: btnEdit
-      properties: {text: '', icon: 'fa:pencil'}
+      properties: {text: '', icon: 'fa:pencil', spacing_below: small}
       type: Button
       layout_properties: {}
       event_bindings: {click: btnEdit_click}
+    - name: btnCheck
+      properties: {text: '', icon: 'fa:shopping-basket'}
+      type: Button
+      layout_properties: {}
 - name: dataRowPanelWriteView
   properties: {visible: false}
   type: DataRowPanel
@@ -107,8 +106,17 @@ components:
     data_bindings:
     - {property: text, code: 'self.item[''aisle'']', writeback: false}
     event_bindings: {}
-  - name: btnSaveEdits
-    properties: {text: '', icon: 'fa:save', spacing_below: none, spacing_above: none}
-    type: Button
+  - name: flowWrite
+    properties: {align: center, spacing_above: none, spacing_below: none, vertical_align: full}
+    type: FlowPanel
     layout_properties: {column: QCBSKP}
-    event_bindings: {click: btnSaveEdits_click}
+    components:
+    - name: btnSaveEdits
+      properties: {text: '', icon: 'fa:save', spacing_below: small, spacing_above: small, align: center}
+      type: Button
+      layout_properties: {}
+      event_bindings: {click: btnSaveEdits_click}
+    - name: btnDelete
+      properties: {text: '', icon: 'fa:trash'}
+      type: Button
+      event_bindings: {click: btnDelete_click}

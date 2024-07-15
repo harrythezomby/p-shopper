@@ -45,4 +45,17 @@ class RowTemplate2(RowTemplate2Template):
     self.refresh_data_bindings()
     self.parent.parent.parent.refresh_data_grid()
 
+  def btnDelete_click(self, **event_args):
+    """This method is called when the delete button is clicked"""
+    item_name = self.item['item_name']
+    confirmation = anvil.alert(
+        f"Are you sure you want to delete '{item_name}'? This item won't be included in data tracking such as graphs and reports. Please check the item off for this functionality instead.",
+        title="Confirm Deletion",
+        buttons=["Cancel", "Delete"]
+    )
+
+    if confirmation == "Delete":
+        anvil.server.call('delete_item', self.item)
+        self.parent.parent.parent.refresh_data_grid()
+
 
