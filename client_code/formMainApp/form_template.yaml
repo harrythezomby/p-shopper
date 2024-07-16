@@ -133,11 +133,20 @@ components:
       properties: {}
       type: TextBox
       layout_properties: {column: AKPEWB}
-    - name: btnCreateItem
-      properties: {text: '', icon: 'fa:plus', align: left}
-      type: Button
+    - name: flowNew
+      properties: {spacing_below: none, spacing_above: none, align: left}
+      type: FlowPanel
       layout_properties: {column: QCBSKP}
-      event_bindings: {click: btnCreateItem_click}
+      components:
+      - name: btnCreateItem
+        properties: {text: '', icon: 'fa:plus', align: left, underline: true, spacing_below: none, spacing_above: none}
+        type: Button
+        layout_properties: {}
+        event_bindings: {click: btnCreateItem_click}
+      - name: lblNew
+        properties: {text: New, spacing_below: none, spacing_above: none}
+        type: Label
+        layout_properties: {expand: false}
   - name: repeatListItems
     properties: {item_template: formMainApp.RowTemplate2, border: ''}
     type: RepeatingPanel

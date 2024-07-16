@@ -82,9 +82,6 @@ db_schema:
     - name: long_term_id
       admin_ui: {width: 200, order: 0}
       type: number
-    - name: item_id
-      admin_ui: {width: 200, order: 1}
-      type: number
     - name: price
       admin_ui: {width: 200, order: 2}
       type: number
@@ -101,6 +98,9 @@ db_schema:
     - name: quantity
       admin_ui: {order: 1.75, width: 200}
       type: number
+    - name: item_name
+      admin_ui: {width: 200, order: 0.75}
+      type: string
     title: tblLongTermHistory
   tblitems:
     client: none

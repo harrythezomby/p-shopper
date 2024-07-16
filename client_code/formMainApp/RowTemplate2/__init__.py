@@ -73,4 +73,3 @@ class RowTemplate2(RowTemplate2Template):
           large=True,
           buttons=[],
           title="Check Off Item")
-

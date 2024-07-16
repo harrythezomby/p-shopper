@@ -105,15 +105,12 @@ def check_off_item(item_id, purchase_date, expiry_date, price):
         raise Exception("Item not found")
 
     # Increment long_term_id
-    last_entry = app_tables.tbllongtermhistory.search(tables.order_by('long_term_id', ascending=False), limit=1)
-    if last_entry:
-        next_id = last_entry[0]['long_term_id'] + 1
-    else:
-        next_id = 1
+    last_entry = list(app_tables.tbllongtermhistory.search(tables.order_by('long_term_id', ascending=False)))[:1]
+    next_id = last_entry[0]['long_term_id'] + 1 if last_entry else 1
 
     app_tables.tbllongtermhistory.add_row(
         long_term_id=next_id,
-        item_id=item['item_id'],
+        item_name=item['item_name'],  # Store the item name instead of item ID
         price=price,
         purchase_date=purchase_date,
         expiry_date=expiry_date,

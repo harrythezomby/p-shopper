@@ -9,166 +9,165 @@ from .formInitiateShare import formInitiateShare
 from .formSettings import formSettings
 
 class formMainApp(formMainAppTemplate):
-  def __init__(self, **properties):
-      # Set Form properties and Data Bindings.
-      self.init_components(**properties)
+    def __init__(self, **properties):
+        # Set Form properties and Data Bindings.
+        self.init_components(**properties)
 
-      # Initialize data and headers
-      self.data = []
-      self.headers = {
-          'item_name': self.linkItemName,
-          'quantity': self.linkQuantity,
-          'category_id': self.linkCategory,
-          'brand': self.linkBrand,
-          'store': self.linkStore,
-          'aisle': self.linkAisle
-      }
+        # Initialize data and headers
+        self.data = []
+        self.headers = {
+            'item_name': self.linkItemName,
+            'quantity': self.linkQuantity,
+            'category_id': self.linkCategory,
+            'brand': self.linkBrand,
+            'store': self.linkStore,
+            'aisle': self.linkAisle
+        }
 
-      # Set default sorting to item_name in ascending order
-      self.current_sort_column = 'item_name'
-      self.current_sort_reverse = False  # Start with ascending
+        # Set default sorting to item_name in ascending order
+        self.current_sort_column = 'item_name'
+        self.current_sort_reverse = False  # Start with ascending
 
-      self.refresh_data_grid()
+        self.refresh_data_grid()
 
-      # Populate the category dropdown
-      categories = anvil.server.call('get_all_categories')
-      self.ddCategorySelector.items = [('All Categories', None)] + [(r['category_name'], r['category_id']) for r in categories]
-      self.ddNewItemCategory.items = [(r['category_name'], r['category_id']) for r in categories]
+        # Populate the category dropdown
+        categories = anvil.server.call('get_all_categories')
+        self.ddCategorySelector.items = [('All Categories', None)] + [(r['category_name'], r['category_id']) for r in categories]
+        self.ddNewItemCategory.items = [(r['category_name'], r['category_id']) for r in categories]
 
-      # Perform initial filter to show all items
-      self.filter()
+        # Perform initial filter to show all items
+        self.filter()
 
-  def filter(self, **event_args):
-      self.apply_filter_and_sort()
+    def filter(self, **event_args):
+        self.apply_filter_and_sort()
 
-  def search(self, **event_args):
-      self.apply_filter_and_sort(search_query=self.tbSearchList.text)
+    def search(self, **event_args):
+        self.apply_filter_and_sort(search_query=self.tbSearchList.text)
 
-  def refresh_data_grid(self, **event_args):
-      self.data = anvil.server.call('get_all_items')
-      self.apply_filter_and_sort()  # Apply filter and sort after fetching data
+    def refresh_data_grid(self, **event_args):
+        self.data = anvil.server.call('get_all_items')
+        self.apply_filter_and_sort()  # Apply filter and sort after fetching data
 
-  def btnCreateItem_click(self, **event_args):
-      """This method is called when the button is clicked"""
-      item_name = self.tbNewItemName.text
-      category_id = self.ddNewItemCategory.selected_value
+    def btnCreateItem_click(self, **event_args):
+        """This method is called when the button is clicked"""
+        item_name = self.tbNewItemName.text
+        category_id = self.ddNewItemCategory.selected_value
 
-      # If quantity is blank, assume 1
-      if self.tbNewItemQuantity.text == 0 or None:
-          quantity = 1
-      else:
-          quantity = self.tbNewItemQuantity.text
+        # If quantity is blank, assume 1
+        if self.tbNewItemQuantity.text == 0 or None:
+            quantity = 1
+        else:
+            quantity = self.tbNewItemQuantity.text
 
-      none = "None"  # Assuming blank/N/A value, can be changed to whatever here easily
+        none = "None"  # Assuming blank/N/A value, can be changed to whatever here easily
 
-      # If brand is empty assume no brand
-      if self.tbNewItemBrand.text == "" or None:
-          brand = none
-      else:
-          brand = self.tbNewItemBrand.text
+        # If brand is empty assume no brand
+        if self.tbNewItemBrand.text == "" or None:
+            brand = none
+        else:
+            brand = self.tbNewItemBrand.text
 
-      # If store is empty assume no store
-      if self.tbNewItemStore.text == "" or None:
-          store = none
-      else:
-          store = self.tbNewItemStore.text
+        # If store is empty assume no store
+        if self.tbNewItemStore.text == "" or None:
+            store = none
+        else:
+            store = self.tbNewItemStore.text
 
-      # If aisle is empty assume no aisle
-      if self.tbNewItemAisle.text == "" or None:
-          aisle = none
-      else:
-          aisle = self.tbNewItemAisle.text
+        # If aisle is empty assume no aisle
+        if self.tbNewItemAisle.text == "" or None:
+            aisle = none
+        else:
+            aisle = self.tbNewItemAisle.text
 
-      anvil.server.call('add_item', item_name, quantity, category_id, brand, store, aisle)
-      alert("Item added successfully.")
-      self.refresh_data_grid()
+        anvil.server.call('add_item', item_name, quantity, category_id, brand, store, aisle)
+        alert("Item added successfully.")
+        self.refresh_data_grid()
 
-  def sort_by_column(self, column):
-      # Determine the current sort direction and toggle it
-      if self.current_sort_column == column:
-          self.current_sort_reverse = not self.current_sort_reverse
-      else:
-          self.current_sort_column = column
-          self.current_sort_reverse = False  # Start with ascending
+    def sort_by_column(self, column):
+        # Determine the current sort direction and toggle it
+        if self.current_sort_column == column:
+            self.current_sort_reverse = not self.current_sort_reverse
+        else:
+            self.current_sort_column = column
+            self.current_sort_reverse = False  # Start with ascending
 
-      self.apply_filter_and_sort()
+        self.apply_filter_and_sort()
 
-  def sort_data(self, data):
-      if self.current_sort_column == 'category_id':
-          sorted_data = sorted(
-              data,
-              key=lambda x: x[self.current_sort_column]['category_name'].lower(),
-              reverse=self.current_sort_reverse
-          )
-      else:
-          sorted_data = sorted(
-              data,
-              key=lambda x: str(x[self.current_sort_column]).lower(),
-              reverse=self.current_sort_reverse
-          )
-      return sorted_data
+    def sort_data(self, data):
+        if self.current_sort_column == 'category_id':
+            sorted_data = sorted(
+                data,
+                key=lambda x: x[self.current_sort_column]['category_name'].lower(),
+                reverse=self.current_sort_reverse
+            )
+        else:
+            sorted_data = sorted(
+                data,
+                key=lambda x: str(x[self.current_sort_column]).lower(),
+                reverse=self.current_sort_reverse
+            )
+        return sorted_data
 
-  def apply_filter_and_sort(self, search_query=None):
-      # Apply filter
-      selected_category = self.ddCategorySelector.selected_value
-      if selected_category:
-          filtered_data = [item for item in self.data if item['category_id']['category_id'] == selected_category]
-      else:
-          filtered_data = self.data
+    def apply_filter_and_sort(self, search_query=None):
+        # Apply filter
+        selected_category = self.ddCategorySelector.selected_value
+        if selected_category:
+            filtered_data = [item for item in self.data if item['category_id']['category_id'] == selected_category]
+        else:
+            filtered_data = self.data
 
-      # Apply search filter
-      if search_query:
-          filtered_data = [item for item in filtered_data if search_query.lower() in item['item_name'].lower()]
+        # Apply search filter
+        if search_query:
+            filtered_data = [item for item in filtered_data if search_query.lower() in item['item_name'].lower()]
 
-      # Apply sorting
-      sorted_data = self.sort_data(filtered_data)
+        # Apply sorting
+        sorted_data = self.sort_data(filtered_data)
 
-      self.repeatListItems.items = sorted_data
+        self.repeatListItems.items = sorted_data
 
-      # Update arrow direction
-      for key, link in self.headers.items():
-          if key == self.current_sort_column:
-              link.icon = 'fa:caret-up' if self.current_sort_reverse else 'fa:caret-down'
-          else:
-              link.icon = None
+        # Update arrow direction
+        for key, link in self.headers.items():
+            if key == self.current_sort_column:
+                link.icon = 'fa:caret-up' if self.current_sort_reverse else 'fa:caret-down'
+            else:
+                link.icon = None
 
-  def linkItemName_click(self, **event_args):
-      self.sort_by_column('item_name')
+    def linkItemName_click(self, **event_args):
+        self.sort_by_column('item_name')
 
-  def linkQuantity_click(self, **event_args):
-      self.sort_by_column('quantity')
+    def linkQuantity_click(self, **event_args):
+        self.sort_by_column('quantity')
 
-  def linkCategory_click(self, **event_args):
-      self.sort_by_column('category_id')
+    def linkCategory_click(self, **event_args):
+        self.sort_by_column('category_id')
 
-  def linkBrand_click(self, **event_args):
-      self.sort_by_column('brand')
+    def linkBrand_click(self, **event_args):
+        self.sort_by_column('brand')
 
-  def linkStore_click(self, **event_args):
-      self.sort_by_column('store')
+    def linkStore_click(self, **event_args):
+        self.sort_by_column('store')
 
-  def linkAisle_click(self, **event_args):
-      self.sort_by_column('aisle')
+    def linkAisle_click(self, **event_args):
+        self.sort_by_column('aisle')
 
-  def btnShare_click(self, **event_args):
-      """This method is called when the button is clicked"""
-      # Alert to display the form in a popup
-      alert(content=formInitiateShare(),  # For now, the edit button will just use the new item form for simplicity, this may be changed later on
-            large=False,
-            buttons=[],
-            title="Initiate Share")
+    def btnShare_click(self, **event_args):
+        """This method is called when the button is clicked"""
+        # Alert to display the form in a popup
+        alert(content=formInitiateShare(),  # For now, the edit button will just use the new item form for simplicity, this may be changed later on
+              large=False,
+              buttons=[],
+              title="Initiate Share")
 
-  def btnReports_click(self, **event_args):
-      """This method is called when the button is clicked"""
-      open_form('formGraphsReports')
+    def btnReports_click(self, **event_args):
+        """This method is called when the button is clicked"""
+        open_form('formGraphsReports')
 
-  def btnSettings_click(self, **event_args):
-      """This method is called when the button is clicked"""
-      alert(content=formSettings(),  # For now, the edit button will just use the new item form for simplicity, this may be changed later on
-            large=False,
-            buttons=[],
-            title="Settings")
-
+    def btnSettings_click(self, **event_args):
+        """This method is called when the button is clicked"""
+        alert(content=formSettings(),  # For now, the edit button will just use the new item form for simplicity, this may be changed later on
+              large=False,
+              buttons=[],
+              title="Settings")
     
 
     
