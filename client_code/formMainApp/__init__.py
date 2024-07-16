@@ -168,6 +168,10 @@ class formMainApp(formMainAppTemplate):
               large=False,
               buttons=[],
               title="Settings")
-    
+
+    def btnExport_click(self, **event_args):
+        """This method is called when the export button is clicked"""
+        txt_file = anvil.server.call('export_items_to_txt')
+        download(txt_file)
 
     

@@ -176,6 +176,7 @@ components:
     properties: {text: Export, icon: 'fa:save'}
     type: Button
     layout_properties: {}
+    event_bindings: {click: btnExport_click}
   - name: spacerListBottomButtons
     properties: {height: 32}
     type: Spacer

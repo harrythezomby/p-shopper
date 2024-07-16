@@ -4,6 +4,14 @@ import anvil.tables.query as q
 from anvil.tables import app_tables
 import anvil.server
 
+# For exports
+import io
+import csv
+import anvil.media
+
+# For graphs and reports
+import datetime
+
 @anvil.server.callable
 def get_all_items():
   rows = app_tables.tblitems.search()
@@ -120,6 +128,92 @@ def check_off_item(item_id, purchase_date, expiry_date, price):
 
     # Delete item from tblItems
     item.delete()
+
+"""
+   __   _     __    ____                    __ 
+  / /  (_)__ / /_  / __/_ __ ___  ___  ____/ /_
+ / /__/ (_-</ __/ / _/ \ \ // _ \/ _ \/ __/ __/
+/____/_/___/\__/ /___//_\_\/ .__/\___/_/  \__/ 
+                          /_/                  
+"""
+
+
+@anvil.server.callable
+def export_items_to_txt():
+    # Fetch data from tblItems
+    rows = app_tables.tblitems.search()
+    
+    # Create an in-memory string buffer
+    output = io.StringIO()
+    
+    # Write headers (excluding item_id)
+    headers = [col for col in app_tables.tblitems.list_columns() if col != 'item_id']
+    output.write('\t'.join(headers) + '\n')
+    
+    # Write data rows
+    for row in rows:
+        row_data = []
+        for col in headers:
+            if isinstance(row[col], dict):  # Handle related tables (e.g., category_id)
+                if 'category_name' in row[col]:
+                    row_data.append(row[col]['category_name'])
+                else:
+                    row_data.append(str(row[col]))
+            elif isinstance(row[col], list):  # Handle list fields
+                row_data.append(','.join(str(item) for item in row[col]))
+            else:
+                row_data.append(str(row[col]))
+        output.write('\t'.join(row_data) + '\n')
+    
+    # Get text data from buffer
+    text_data = output.getvalue()
+    
+    # Create a Media object for the text file
+    media = anvil.BlobMedia("text/plain", text_data.encode("utf-8"), name="items.txt")
+    
+    return media
+
+"""
+  _____              __         ____      ___                    __    
+ / ___/______ ____  / /  ___   / __/___  / _ \___ ___  ___  ____/ /____
+/ (_ / __/ _ `/ _ \/ _ \(_-<   > _/_ _/ / , _/ -_) _ \/ _ \/ __/ __(_-<
+\___/_/  \_,_/ .__/_//_/___/  |_____/  /_/|_|\__/ .__/\___/_/  \__/___/
+            /_/                                /_/                     
+"""
+@anvil.server.callable
+def get_all_categories_for_graphs():
+    categories = app_tables.tblcategories.search()
+    return [{'category_id': cat['category_id'], 'category_name': cat['category_name']} for cat in categories]
+
+@anvil.server.callable
+def get_category_consumption_data(category_id, timeframe):
+    from dateutil.relativedelta import relativedelta
+    
+    now = datetime.datetime.now()
+
+    if timeframe == 'week':
+        start_date = now - datetime.timedelta(weeks=1)
+    elif timeframe == 'month':
+        start_date = now - relativedelta(months=1)
+    elif timeframe == 'year':
+        start_date = now - relativedelta(years=1)
+    else:
+        raise ValueError("Invalid timeframe")
+
+    category_row = app_tables.tblcategories.get(category_id=category_id)
+    
+    rows = app_tables.tbllongtermhistory.search(
+        category_id=category_row,
+        purchase_date=q.greater_than_or_equal_to(start_date)
+    )
+
+    data = []
+    for row in rows:
+        data.append({'date': row['purchase_date'], 'quantity': row['quantity']})
+
+    data.sort(key=lambda x: x['date'])
+    return data
+
 
 
 
