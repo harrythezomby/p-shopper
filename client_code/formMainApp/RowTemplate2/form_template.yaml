@@ -58,6 +58,7 @@ components:
       properties: {text: '', icon: 'fa:shopping-basket'}
       type: Button
       layout_properties: {}
+      event_bindings: {click: btnCheck_click}
 - name: dataRowPanelWriteView
   properties: {visible: false}
   type: DataRowPanel

@@ -94,6 +94,13 @@ db_schema:
     - name: expiry_date
       admin_ui: {width: 200, order: 4}
       type: date
+    - name: category_id
+      admin_ui: {order: 1.5, width: 200}
+      type: link_single
+      target: tblcategories
+    - name: quantity
+      admin_ui: {order: 1.75, width: 200}
+      type: number
     title: tblLongTermHistory
   tblitems:
     client: none

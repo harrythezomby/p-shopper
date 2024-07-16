@@ -6,6 +6,7 @@ import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
 from ...State import categories as CATEGORIES
+from ..formCheckItem import formCheckItem
 
 
 class RowTemplate2(RowTemplate2Template):
@@ -58,4 +59,18 @@ class RowTemplate2(RowTemplate2Template):
         anvil.server.call('delete_item', self.item)
         self.parent.parent.parent.refresh_data_grid()
 
+  def btnCheckItem_click(self, item_id, **event_args):
+      """This method is called when the check button is clicked"""
+      alert(content=formCheckItem(item_id),
+            large=True,
+            buttons=[],
+            title="Check Off Item")
+
+  def btnCheck_click(self, **event_args):
+    """This method is called when the check-off button is clicked"""
+    item_id = self.item['item_id']
+    alert(content=formCheckItem(item_id),
+          large=True,
+          buttons=[],
+          title="Check Off Item")
 

@@ -1,4 +1,4 @@
-ddddddddwwwwwwwwwwwwwwwwwwwwwwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafrom ._anvil_designer import formMainAppTemplate
+from ._anvil_designer import formMainAppTemplate
 from anvil import *
 import anvil.server
 import anvil.tables as tables
@@ -7,7 +7,6 @@ from anvil.tables import app_tables
 import anvil.users
 from .formInitiateShare import formInitiateShare
 from .formSettings import formSettings
-
 
 class formMainApp(formMainAppTemplate):
   def __init__(self, **properties):
