@@ -53,16 +53,6 @@ components:
     properties: {height: 32}
     type: Spacer
     layout_properties: {width: 247.3830625, expand: true}
-  - name: btnCheckItem
-    properties: {text: Check, icon: 'fa:shopping-basket'}
-    type: Button
-    layout_properties: {}
-    event_bindings: {click: btnCheckItem_click}
-  - name: btnDeleteItem
-    properties: {text: Delete, icon: 'fa:close'}
-    type: Button
-    layout_properties: {}
-    event_bindings: {click: btnDeleteItem_click}
 - name: spacerListTop
   properties: {height: 10}
   type: Spacer
@@ -78,8 +68,43 @@ components:
     - {id: AKPEWB, data_key: aisle, title: Aisle, expand: true}
     - {id: QCBSKP, data_key: column_1, title: '', expand: false, width: '127'}
     wrap_on: never
+    auto_header: false
   type: DataGrid
   components:
+  - name: rowHeaders
+    properties: {}
+    type: DataRowPanel
+    components:
+    - name: linkCategory
+      properties: {text: Category}
+      type: Link
+      layout_properties: {column: BYPHYZ}
+      event_bindings: {click: linkCategory_click}
+    - name: linkItemName
+      properties: {text: Item Name}
+      type: Link
+      layout_properties: {column: UJCSTL}
+      event_bindings: {click: linkItemName_click}
+    - name: linkQuantity
+      properties: {text: Quantity}
+      type: Link
+      layout_properties: {column: QHNMEC}
+      event_bindings: {click: linkQuantity_click}
+    - name: linkBrand
+      properties: {text: Brand}
+      type: Link
+      layout_properties: {column: QEVMHQ}
+      event_bindings: {click: linkBrand_click}
+    - name: linkStore
+      properties: {text: Store}
+      type: Link
+      layout_properties: {column: GOPKWM}
+      event_bindings: {click: linkStore_click}
+    - name: linkAisle
+      properties: {text: Aisle}
+      type: Link
+      layout_properties: {column: AKPEWB}
+      event_bindings: {click: linkAisle_click}
   - name: rowButtons
     properties: {}
     type: DataRowPanel
@@ -114,9 +139,10 @@ components:
       layout_properties: {column: QCBSKP}
       event_bindings: {click: btnCreateItem_click}
   - name: repeatListItems
-    properties: {item_template: formMainApp.RowTemplate2}
+    properties: {item_template: formMainApp.RowTemplate2, border: ''}
     type: RepeatingPanel
     data_bindings: []
+    layout_properties: {}
   layout_properties: {slot: default}
 - name: spacerListBottom
   properties: {height: 9}
