@@ -93,6 +93,10 @@ class formMainApp(formMainAppTemplate):
         alert("Item added successfully.")
         self.refresh_data_grid()
 
+        # Clearing the previous input fields after the item is added
+        self.tbNewItemName.text = ""
+        self.tbcate
+
     def sort_by_column(self, column):
         # Determine the current sort direction and toggle it
         if self.current_sort_column == column:

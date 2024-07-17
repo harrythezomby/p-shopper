@@ -48,3 +48,29 @@ components:
     type: Button
     layout_properties: {grid_position: 'FSNSAI,OKXBIW'}
     event_bindings: {click: btnExport_click}
+  - name: textExplaination
+    properties:
+      content: |
+        ### Item Expiry Report
+
+        **Overview:**
+
+        This report in P-Shopper shows items that will expire in the future and items that have recently expired. You can select a timeframe (week, month, year) to filter the items. Additionally, the main form alerts you if any items are expiring in the next two days.
+
+        **How It Works:**
+
+        - **Select a Timeframe:** Choose whether you want to see items expiring in the future or recently expired items for the week, month, or year using the radio buttons.
+        - **View the Report:** The report will display items that will expire in the future along with their expiry dates and items that have recently expired along with their expiry dates.
+        - **Expiry Alert:** If any items are expiring in the next two days, the main form will show a label alerting you about these items.
+
+        **Calculations:**
+
+        - P-Shopper identifies items that will expire within the selected timeframe.
+        - It also identifies items that have expired within the selected timeframe.
+        - If any items are expiring in the next two days, it alerts you on the main form.
+
+        **Example:**
+
+        If you choose "Month," you'll see a list of items expiring in the next month and items that expired in the past month, along with their expiry dates. If any items are expiring in the next two days, you'll see an alert on the main form.
+    type: RichText
+    layout_properties: {grid_position: 'FUOMSA,DDGIYB'}

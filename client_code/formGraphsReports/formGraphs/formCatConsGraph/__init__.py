@@ -74,3 +74,7 @@ class formCatConsGraph(formCatConsGraphTemplate):
             self.timeframe = 'year'
             self.plot_graph()
 
+    def btnExport_click(self, **event_args):
+      """This method is called when the button is clicked"""
+      pass
+

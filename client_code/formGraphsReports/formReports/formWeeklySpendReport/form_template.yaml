@@ -7,19 +7,43 @@ components:
   properties: {}
   name: content_panel
   layout_properties: {slot: default}
-  components: []
-- name: textReport
-  properties:
-    content: |-
-      ### Weekly Spending Comparison Report
+  components:
+  - name: textReport
+    properties:
+      content: |-
+        ### Weekly Spending Comparison Report
 
-      | Week | Total Spending | Change | % Change |
-      | --- | --- | --- | --- |
-      | {week} | ${total_spending} | {change} | {percent_change}% |
-  type: RichText
-  layout_properties: {slot: default}
-- name: btnExport
-  properties: {text: '', icon: 'fa:download'}
-  type: Button
-  layout_properties: {slot: default}
-  event_bindings: {click: btnExport_click}
+        | Week | Total Spending | Change | % Change |
+        | --- | --- | --- | --- |
+        | {week} | ${total_spending} | {change} | {percent_change}% |
+    type: RichText
+    layout_properties: {grid_position: 'BVAEBM,AMYKUU'}
+  - name: btnExport
+    properties: {text: '', icon: 'fa:download'}
+    type: Button
+    layout_properties: {grid_position: 'FBBKAN,XPQIIK'}
+    event_bindings: {click: btnExport_click}
+  - name: textExplaination
+    properties:
+      content: |
+        ### Weekly Spending Comparison Report
+
+        **Overview:**
+
+        This report in P-Shopper provides a week-by-week comparison of your spending over the past year. It helps you see how your spending changes from week to week, noting any increases or decreases.
+
+        **How It Works:**
+
+        - **View the Report:** The report will display your spending for each week, showing the total spending, the change in spending from the previous week, and the percentage change.
+
+        **Calculations:**
+
+        - P-Shopper sums up the prices of all items you bought each week.
+        - It calculates the difference in total spending between the current week and the previous week.
+        - It determines the percentage change in spending from the previous week.
+
+        **Example:**
+
+        If you look at the report, you'll see your total spending for each week, along with the changes in spending and percentage changes compared to the previous week.
+    type: RichText
+    layout_properties: {grid_position: 'IISHEK,VRAKRR'}
