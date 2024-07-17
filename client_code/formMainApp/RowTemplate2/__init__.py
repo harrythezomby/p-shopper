@@ -8,16 +8,12 @@ from anvil.tables import app_tables
 from ...State import categories as CATEGORIES
 from ..formCheckItem import formCheckItem
 
-
 class RowTemplate2(RowTemplate2Template):
-  def __init__(self, **properties):
-    # Set Form properties and Data Bindings.
-    self.init_components(**properties)
+    def __init__(self, **properties):
+        self.init_components(**properties)
+        self.ddCategory.items = CATEGORIES
 
-    self.ddCategory.items = CATEGORIES
-
-  def edit_item(self):
-    # Convert the selected category name back to category_id
+    def edit_item(self):
         selected_category_name = self.ddCategory.selected_value
         category = anvil.server.call('get_category_by_name', selected_category_name)
         anvil.server.call(
@@ -25,51 +21,32 @@ class RowTemplate2(RowTemplate2Template):
             item_id=self.item['item_id'],
             item_name=self.tbItemName.text,
             quantity=int(self.tbQuantity.text),
-            category_id=category['category_id'],  # Convert category name back to category_id
+            category_id=category['category_id'],
             brand=self.tbBrand.text,
             store=self.tbStore.text,
-            aisle=self.tbAisle.text)
+            aisle=self.tbAisle.text
+        )
 
-  def btnEdit_click(self, **event_args):
-    """This method is called when the button is clicked"""
-    self.dataRowPanelWriteView.visible = True
-    self.dataRowPanelReadView.visible = False
+    def btnEdit_click(self, **event_args):
+        self.dataRowPanelWriteView.visible = True
+        self.dataRowPanelReadView.visible = False
 
-
-
-  def btnSaveEdits_click(self, **event_args):
-    """This method is called when the button is clicked"""
-    self.dataRowPanelReadView.visible = True
-    self.dataRowPanelWriteView.visible = False
-    
-    self.edit_item()
-    self.refresh_data_bindings()
-    self.parent.parent.parent.refresh_data_grid()
-
-  def btnDelete_click(self, **event_args):
-    """This method is called when the delete button is clicked"""
-    item_name = self.item['item_name']
-    confirmation = anvil.alert(
-        f"Are you sure you want to delete '{item_name}'? This item won't be included in data tracking such as graphs and reports. Please check the item off for this functionality instead.",
-        title="Confirm Deletion",
-        buttons=["Cancel", "Delete"]
-    )
-
-    if confirmation == "Delete":
-        anvil.server.call('delete_item', self.item)
+    def btnSaveEdits_click(self, **event_args):
+        self.dataRowPanelReadView.visible = True
+        self.dataRowPanelWriteView.visible = False
+        self.edit_item()
+        self.refresh_data_bindings()
         self.parent.parent.parent.refresh_data_grid()
 
-  def btnCheckItem_click(self, item_id, **event_args):
-      """This method is called when the check button is clicked"""
-      alert(content=formCheckItem(item_id),
-            large=True,
-            buttons=[],
-            title="Check Off Item")
+    def btnDelete_click(self, **event_args):
+        list_item_id = self.item['list_item_id']
+        confirm_delete = confirm("Are you sure you want to delete this item?")
+        if confirm_delete:
+            anvil.server.call('delete_item', list_item_id)
+            alert("Item deleted successfully.")
+            self.parent.parent.parent.refresh_data_grid()
 
-  def btnCheck_click(self, **event_args):
-    """This method is called when the check-off button is clicked"""
-    item_id = self.item['item_id']
-    alert(content=formCheckItem(item_id),
-          large=True,
-          buttons=[],
-          title="Check Off Item")
+    def btnCheck_click(self, **event_args):
+        list_item_id = self.item['list_item_id']
+        content = formCheckItem(list_item_id)
+        alert(content=content, large=True, buttons=[], title="Check Off Item")

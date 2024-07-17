@@ -7,12 +7,13 @@ from anvil.tables import app_tables
 import anvil.users
 from .formInitiateShare import formInitiateShare
 from .formSettings import formSettings
+from .formCheckItem import formCheckItem
 
 class formMainApp(formMainAppTemplate):
     def __init__(self, **properties):
-        # Set Form properties and Data Bindings.
         self.init_components(**properties)
-
+        self.set_event_handler('x-refresh-data', self.refresh_data_grid)
+        
         # Initialize data and headers
         self.data = []
         self.headers = {
@@ -23,13 +24,13 @@ class formMainApp(formMainAppTemplate):
             'store': self.linkStore,
             'aisle': self.linkAisle
         }
-
+        
         # Set default sorting to item_name in ascending order
         self.current_sort_column = 'item_name'
         self.current_sort_reverse = False  # Start with ascending
 
-        self.refresh_data_grid()
-
+        self.populate_lists_dropdown()
+        
         # Populate the category dropdown
         categories = anvil.server.call('get_all_categories')
         self.ddCategorySelector.items = [('All Categories', None)] + [(r['category_name'], r['category_id']) for r in categories]
@@ -39,6 +40,21 @@ class formMainApp(formMainAppTemplate):
         self.filter()
 
         self.update_expiry_warning()
+
+    def populate_lists_dropdown(self):
+        lists = anvil.server.call('get_all_lists')
+        self.ddListSelector.items = [(l['list_name'], l['list_id']) for l in lists if l['list_name']]
+        if lists:
+            max_list_id = max(l['list_id'] for l in lists)
+            self.ddListSelector.selected_value = max_list_id
+            self.refresh_data_grid()
+        else:
+            self.ddListSelector.selected_value = None
+            self.data = []  # Clear the data if there are no lists
+            self.apply_filter_and_sort()
+
+    def ddListSelector_change(self, **event_args):
+        self.refresh_data_grid()
 
     def filter(self, **event_args):
         self.apply_filter_and_sort()
@@ -55,58 +71,51 @@ class formMainApp(formMainAppTemplate):
             self.lblExpiryWarning.visible = False
 
     def refresh_data_grid(self, **event_args):
-        self.data = anvil.server.call('get_all_items')
-        self.apply_filter_and_sort()  # Apply filter and sort after fetching data
+        selected_list_id = self.ddListSelector.selected_value
+        if selected_list_id:
+            self.data = anvil.server.call('get_all_items', selected_list_id)
+            self.apply_filter_and_sort(search_query=self.tbSearchList.text)  # Ensure the search term is applied
+        else:
+            self.data = []
+            self.apply_filter_and_sort()
 
     def btnCreateItem_click(self, **event_args):
-        """This method is called when the button is clicked"""
         item_name = self.tbNewItemName.text
         category_id = self.ddNewItemCategory.selected_value
-
-        # If quantity is blank, assume 1
+        list_id = self.ddListSelector.selected_value
+    
         if self.tbNewItemQuantity.text == 0 or None:
             quantity = 1
         else:
             quantity = self.tbNewItemQuantity.text
+    
+        none = "None"
 
-        none = "None"  # Assuming blank/N/A value, can be changed to whatever here easily
-
-        # If brand is empty assume no brand
         if self.tbNewItemBrand.text == "" or None:
             brand = none
         else:
             brand = self.tbNewItemBrand.text
-
-        # If store is empty assume no store
+    
         if self.tbNewItemStore.text == "" or None:
             store = none
         else:
             store = self.tbNewItemStore.text
-
-        # If aisle is empty assume no aisle
+    
         if self.tbNewItemAisle.text == "" or None:
             aisle = none
         else:
             aisle = self.tbNewItemAisle.text
-
-        anvil.server.call('add_item', item_name, quantity, category_id, brand, store, aisle)
+    
+        anvil.server.call('add_item', item_name, quantity, category_id, brand, store, aisle, list_id)
         alert("Item added successfully.")
         self.refresh_data_grid()
 
-        # Clearing the previous input fields after the item is added
-        self.tbNewItemName.text = ""
-        self.tbNewItemQuantity.text = ""
-        self.tbNewItemBrand.text = ""
-        self.tbNewItemStore.text = ""
-        self.tbNewItemAisle.text = ""
-
     def sort_by_column(self, column):
-        # Determine the current sort direction and toggle it
         if self.current_sort_column == column:
             self.current_sort_reverse = not self.current_sort_reverse
         else:
             self.current_sort_column = column
-            self.current_sort_reverse = False  # Start with ascending
+            self.current_sort_reverse = False
 
         self.apply_filter_and_sort()
 
@@ -126,23 +135,19 @@ class formMainApp(formMainAppTemplate):
         return sorted_data
 
     def apply_filter_and_sort(self, search_query=None):
-        # Apply filter
         selected_category = self.ddCategorySelector.selected_value
         if selected_category:
             filtered_data = [item for item in self.data if item['category_id']['category_id'] == selected_category]
         else:
             filtered_data = self.data
 
-        # Apply search filter
         if search_query:
             filtered_data = [item for item in filtered_data if search_query.lower() in item['item_name'].lower()]
 
-        # Apply sorting
         sorted_data = self.sort_data(filtered_data)
 
         self.repeatListItems.items = sorted_data
 
-        # Update arrow direction
         for key, link in self.headers.items():
             if key == self.current_sort_column:
                 link.icon = 'fa:caret-up' if self.current_sort_reverse else 'fa:caret-down'
@@ -168,27 +173,40 @@ class formMainApp(formMainAppTemplate):
         self.sort_by_column('aisle')
 
     def btnShare_click(self, **event_args):
-        """This method is called when the button is clicked"""
-        # Alert to display the form in a popup
-        alert(content=formInitiateShare(),  # For now, the edit button will just use the new item form for simplicity, this may be changed later on
-              large=False,
-              buttons=[],
-              title="Initiate Share")
+        alert(content=formInitiateShare(), large=False, buttons=[], title="Initiate Share")
 
     def btnReports_click(self, **event_args):
-        """This method is called when the button is clicked"""
         open_form('formGraphsReports')
 
     def btnSettings_click(self, **event_args):
-        """This method is called when the button is clicked"""
-        alert(content=formSettings(),  # For now, the edit button will just use the new item form for simplicity, this may be changed later on
-              large=False,
-              buttons=[],
-              title="Settings")
+        alert(content=formSettings(), large=False, buttons=[], title="Settings")
+
+    def btnRenameList_click(self, **event_args):
+        content = TextBox()
+        current_list_name = self.ddListSelector.selected_value
+        content.text = current_list_name
+        result = alert("Enter new name for the list:", buttons=[("OK", "ok")], content=content, title="Rename List")
+        if result == "ok":
+            new_name = content.text
+            if new_name:
+                selected_list_id = self.ddListSelector.selected_value
+                anvil.server.call('rename_list', selected_list_id, new_name)
+                self.populate_lists_dropdown()
+
+    def btnNewList_click(self, **event_args):
+        content = TextBox()
+        result = alert("Enter name for the new list:", buttons=[("OK", "ok")], content=content, title="Create New List")
+        if result == "ok":
+            new_name = content.text
+            if new_name:
+                anvil.server.call('create_new_list', new_name)
+                self.populate_lists_dropdown()
 
     def btnExport_click(self, **event_args):
-        """This method is called when the export button is clicked"""
-        csv_file = anvil.server.call('export_items_to_csv')
+        selected_list_id = self.ddListSelector.selected_value
+        csv_file = anvil.server.call('export_items_to_csv', selected_list_id)
         download(csv_file)
 
-    
+    def check_off_item(self, list_item_id, **event_args):
+        content = formCheckItem(list_item_id)
+        alert(content=content, large=True, buttons=[], title="Check Off Item")

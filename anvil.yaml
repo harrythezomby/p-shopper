@@ -41,17 +41,16 @@ db_schema:
     server: full
     columns:
     - name: list_item_id
-      admin_ui: {width: 200, order: 0}
+      admin_ui: {order: 3, width: 200}
       type: number
     - name: list_id
-      admin_ui: {order: -0.25, width: 200}
-      type: number
+      admin_ui: {width: 200, order: 1}
+      type: link_single
+      target: tbllists
     - name: item_id
-      admin_ui: {order: -0.5, width: 200}
-      type: number
-    - name: checked
-      admin_ui: {width: 200, order: -1}
-      type: bool
+      admin_ui: {width: 200, order: 2}
+      type: link_single
+      target: tblitems
     title: tblListItems
   tblcategories:
     client: none

@@ -13,10 +13,22 @@ components:
     type: Label
   - name: ddListSelector
     properties:
-      items: [Placeholder 1, Placeholder 2, Placeholder 3]
-      placeholder: Select List
+      items: []
+      placeholder: ''
       include_placeholder: true
     type: DropDown
+    event_bindings: {change: ddListSelector_change}
+    layout_properties: {}
+  - name: btnNewList
+    properties: {text: New List, icon: 'fa:plus'}
+    type: Button
+    layout_properties: {}
+    event_bindings: {click: btnNewList_click}
+  - name: btnRenameList
+    properties: {text: Rename, icon: 'fa:font'}
+    type: Button
+    layout_properties: {}
+    event_bindings: {click: btnRenameList_click}
   - name: spacerListSelector
     properties: {height: 32}
     type: Spacer

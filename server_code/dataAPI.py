@@ -27,10 +27,24 @@ import datetime
                                /___/      
 """
 @anvil.server.callable
-def get_all_items():
-  rows = app_tables.tblitems.search()
-  return rows # Not a good practice, since can be a security risk. In a more security oriented situation consider exporting as a different object.
-
+def get_all_items(list_id):
+    list_row = app_tables.tbllists.get(list_id=list_id)
+    list_items = app_tables.tbllistitems.search(list_id=list_row)
+    items = [
+        {
+            'item_id': li['item_id']['item_id'],
+            'item_name': li['item_id']['item_name'],
+            'quantity': li['item_id']['quantity'],
+            'category_id': li['item_id']['category_id'],
+            'brand': li['item_id']['brand'],
+            'store': li['item_id']['store'],
+            'aisle': li['item_id']['aisle'],
+            'list_item_id': li['list_item_id']
+        }
+        for li in list_items
+    ]
+    return items
+  
 @anvil.server.callable
 def get_all_categories():
     return [dict(row) for row in app_tables.tblcategories.search()]
@@ -69,17 +83,14 @@ def filter_items(selected_category):
     return result
 
 @anvil.server.callable
-def add_item(item_name, quantity, category_id, brand, store, aisle):
-    # Get the last item_id and increment by 1
-    items = list(app_tables.tblitems.search(tables.order_by("item_id", ascending=False)))
-    if items:
-        last_item = items[0]
-        new_item_id = last_item['item_id'] + 1
+def add_item(item_name, quantity, category_id, brand, store, aisle, list_id):
+    last_item = list(app_tables.tblitems.search(tables.order_by("item_id", ascending=False)))
+    if last_item:
+        new_item_id = last_item[0]['item_id'] + 1
     else:
-        new_item_id = 1  # Start at 1 if the table is empty
-    
-    # Add the new item
-    app_tables.tblitems.add_row(
+        new_item_id = 1
+
+    new_item = app_tables.tblitems.add_row(
         item_id=new_item_id,
         item_name=item_name,
         quantity=quantity,
@@ -88,6 +99,20 @@ def add_item(item_name, quantity, category_id, brand, store, aisle):
         store=store,
         aisle=aisle
     )
+
+    last_list_item = list(app_tables.tbllistitems.search(tables.order_by("list_item_id", ascending=False)))
+    if last_list_item:
+        new_list_item_id = last_list_item[0]['list_item_id'] + 1
+    else:
+        new_list_item_id = 1
+
+    app_tables.tbllistitems.add_row(
+        list_id=app_tables.tbllists.get(list_id=list_id),
+        item_id=new_item,
+        list_item_id=new_list_item_id
+    )
+
+
 
 @anvil.server.callable
 def edit_item(item_id, item_name, quantity, category_id, brand, store, aisle):
@@ -104,8 +129,19 @@ def edit_item(item_id, item_name, quantity, category_id, brand, store, aisle):
         )
 
 @anvil.server.callable
-def delete_item(item):
-    item.delete()
+def delete_item(list_item_id):
+    list_item_row = app_tables.tbllistitems.get(list_item_id=list_item_id)
+    if not list_item_row:
+        raise ValueError("Item not found in list")
+
+    item_row = list_item_row['item_id']
+    if not item_row:
+        raise ValueError("Item data is corrupted")
+
+    list_item_row.delete()
+
+    if not app_tables.tbllistitems.search(item_id=item_row):
+        item_row.delete()
 
 @anvil.server.callable
 def get_items_expiring_soon():
@@ -123,6 +159,43 @@ def get_items_expiring_soon():
     return alert_items
 
 """
+   __  ___     ____  _      __      __   _     __    
+  /  |/  /_ __/ / /_(_)__  / /__   / /  (_)__ / /____
+ / /|_/ / // / / __/ / _ \/ / -_) / /__/ (_-</ __(_-<
+/_/  /_/\_,_/_/\__/_/ .__/_/\__/ /____/_/___/\__/___/
+                   /_/                               
+"""
+@anvil.server.callable
+def get_all_lists():
+    return app_tables.tbllists.search(tables.order_by("list_id", ascending=True))
+
+@anvil.server.callable
+def create_new_list(list_name):
+    last_list = app_tables.tbllists.search(tables.order_by("list_id", ascending=False), limit=1)
+    if last_list:
+        new_list_id = last_list[0]['list_id'] + 1
+    else:
+        new_list_id = 1
+    app_tables.tbllists.add_row(list_id=new_list_id, list_name=list_name)
+
+@anvil.server.callable
+def rename_list(list_id, new_name):
+    list_row = app_tables.tbllists.get(list_id=list_id)
+    if list_row:
+        list_row['list_name'] = new_name
+
+@anvil.server.callable
+def get_item_details(list_item_id):
+    list_item = app_tables.tbllistitems.get(list_item_id=list_item_id)
+    item = list_item['item_id']
+    category = item['category_id']
+    return {
+        'item_name': item['item_name'],
+        'category_name': category['category_name'],
+        'quantity': item['quantity']
+    }
+
+"""
   _______           __     ____  ______  __             _    
  / ___/ /  ___ ____/ /__  / __ \/ _/ _/ / /  ___  ___ _(_)___
 / /__/ _ \/ -_) __/  '_/ / /_/ / _/ _/ / /__/ _ \/ _ `/ / __/
@@ -130,33 +203,30 @@ def get_items_expiring_soon():
                                                 /___/        
 """
 @anvil.server.callable
-def get_item_details(item_id):
-    item = app_tables.tblitems.get(item_id=item_id)
-    return item
+def check_off_item(list_item_id, purchase_date, expiry_date, price):
+    list_item = app_tables.tbllistitems.get(list_item_id=list_item_id)
+    item = list_item['item_id']
 
-@anvil.server.callable
-def check_off_item(item_id, purchase_date, expiry_date, price):
-    item = app_tables.tblitems.get(item_id=item_id)
-    
-    if not item:
-        raise Exception("Item not found")
+    # Find the maximum long_term_id currently in the table
+    last_item = list(app_tables.tbllongtermhistory.search(tables.order_by("long_term_id", ascending=False)))
+    if last_item:
+        new_long_term_id = last_item[0]['long_term_id'] + 1
+    else:
+        new_long_term_id = 1
 
-    # Increment long_term_id
-    last_entry = list(app_tables.tbllongtermhistory.search(tables.order_by('long_term_id', ascending=False)))[:1]
-    next_id = last_entry[0]['long_term_id'] + 1 if last_entry else 1
-
+    # Add to long-term history
     app_tables.tbllongtermhistory.add_row(
-        long_term_id=next_id,
-        item_name=item['item_name'],  # Store the item name instead of item ID
-        price=price,
+        long_term_id=new_long_term_id,
+        item_name=item['item_name'],
+        category_id=item['category_id'],
+        quantity=list_item['quantity'],
         purchase_date=purchase_date,
         expiry_date=expiry_date,
-        category_id=item['category_id'],
-        quantity=item['quantity']
+        price=price
     )
-
-    # Delete item from tblItems
-    item.delete()
+    
+    # Delete the item from the current list
+    list_item.delete()
 
 """
    __   _     __    ____                    __ 
@@ -165,45 +235,39 @@ def check_off_item(item_id, purchase_date, expiry_date, price):
 /____/_/___/\__/ /___//_\_\/ .__/\___/_/  \__/ 
                           /_/                  
 """
-
-
-
-
 @anvil.server.callable
-def export_items_to_csv():
-    # Fetch data from tblItems
-    rows = app_tables.tblitems.search()
+def export_items_to_csv(list_id):
+    list_row = app_tables.tbllists.get(list_id=list_id)
+    list_items = app_tables.tbllistitems.search(list_id=list_row)
+    items = [li['item_id'] for li in list_items]
 
-    # Create an in-memory string buffer
     output = io.StringIO()
     writer = csv.writer(output)
 
-    # Write headers (excluding item_id)
-    headers = [col for col in app_tables.tblitems.list_columns() if col != 'item_id']
+    headers = ["Item Name", "Category", "Quantity", "Brand", "Store", "Aisle"]
     writer.writerow(headers)
 
-    # Write data rows
-    for row in rows:
+    for row in items:
         row_data = []
-        for col in headers:
-            cell_value = row.get(col)
-            if isinstance(cell_value, dict):  # Handle related tables (e.g., category_id)
+        for col in ["item_name", "category_id", "quantity", "brand", "store", "aisle"]:
+            if col == "category_id":
+                cell_value = row[col]['category_name'] if row[col] else "Unknown Category"
+            else:
+                cell_value = row[col]
+              
+            if isinstance(cell_value, dict):
                 cell_value = ', '.join([f"{k}: {v}" for k, v in cell_value.items()])
-            elif isinstance(cell_value, list):  # Handle list fields
+            elif isinstance(cell_value, list):
                 cell_value = ','.join(str(item) for item in cell_value)
             else:
                 cell_value = str(cell_value)
             row_data.append(cell_value)
         writer.writerow(row_data)
 
-    # Get CSV data from buffer
     csv_data = output.getvalue()
-
-    # Create a Media object for the CSV file
     media = anvil.BlobMedia("text/csv", csv_data.encode("utf-8"), name="items.csv")
 
     return media
-
 """
   _____              __         ____      ___                    __    
  / ___/______ ____  / /  ___   / __/___  / _ \___ ___  ___  ____/ /____
