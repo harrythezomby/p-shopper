@@ -180,6 +180,7 @@ def export_items_to_txt():
 \___/_/  \_,_/ .__/_//_/___/  |_____/  /_/|_|\__/ .__/\___/_/  \__/___/
             /_/                                /_/                     
 """
+# Functions for the category consumption graph
 @anvil.server.callable
 def get_all_categories_for_graphs():
     categories = app_tables.tblcategories.search()
@@ -187,19 +188,18 @@ def get_all_categories_for_graphs():
 
 @anvil.server.callable
 def get_category_consumption_data(category_id, timeframe):
-    import datetime
     from dateutil.relativedelta import relativedelta
     import collections
-    
+
     now = datetime.datetime.now()
 
     if timeframe == 'week':
         start_date = now - datetime.timedelta(weeks=52)  # Past year
-        date_format = "%Y-%U"  # Year-Week format
+        date_format = "%U"  # Week format
         increment = datetime.timedelta(weeks=1)
     elif timeframe == 'month':
         start_date = now - relativedelta(years=1)  # Past year
-        date_format = "%Y-%m"  # Year-Month format
+        date_format = "%b"  # Month format (e.g., Jan, Feb)
         increment = relativedelta(months=1)
     elif timeframe == 'year':
         start_date = now - relativedelta(years=5)  # Past 5 years
@@ -225,5 +225,127 @@ def get_category_consumption_data(category_id, timeframe):
     sorted_data = [{'date': date, 'quantity': quantity} for date, quantity in sorted(aggregated_data.items())]
     return sorted_data
 
+# Functions for the item quantity consumption graph
+@anvil.server.callable
+def get_all_items_for_graphs():
+    items = app_tables.tbllongtermhistory.search()
+    unique_items = {item['item_name'] for item in items}
+    return [{'item_name': name} for name in unique_items]
+
+@anvil.server.callable
+def get_item_consumption_data(item_name, timeframe):
+    import datetime
+    from dateutil.relativedelta import relativedelta
+    import collections
+
+    now = datetime.datetime.now()
+
+    if timeframe == 'week':
+        start_date = now - datetime.timedelta(weeks=52)  # Past year
+        date_format = "%U"  # Week format
+        increment = datetime.timedelta(weeks=1)
+    elif timeframe == 'month':
+        start_date = now - relativedelta(years=1)  # Past year
+        date_format = "%b"  # Month format (e.g., Jan, Feb)
+        increment = relativedelta(months=1)
+    elif timeframe == 'year':
+        start_date = now - relativedelta(years=5)  # Past 5 years
+        date_format = "%Y"  # Year format
+        increment = relativedelta(years=1)
+    else:
+        raise ValueError("Invalid timeframe")
+
+    rows = app_tables.tbllongtermhistory.search(
+        item_name=item_name,
+        purchase_date=q.greater_than_or_equal_to(start_date)
+    )
+
+    # Aggregate data
+    aggregated_data = collections.defaultdict(int)
+    for row in rows:
+        date_key = row['purchase_date'].strftime(date_format)
+        aggregated_data[date_key] += row['quantity']
+
+    # Convert to sorted list of dictionaries
+    sorted_data = [{'date': date, 'quantity': quantity} for date, quantity in sorted(aggregated_data.items())]
+    return sorted_data
+
+# Functions for money spent history graph
+@anvil.server.callable
+def get_money_spent_data(timeframe):
+    import datetime
+    from dateutil.relativedelta import relativedelta
+    import collections
+
+    now = datetime.datetime.now()
+
+    if timeframe == 'week':
+        start_date = now - datetime.timedelta(weeks=52)  # Past year
+        date_format = "%U"  # Week format
+        increment = datetime.timedelta(weeks=1)
+    elif timeframe == 'month':
+        start_date = now - relativedelta(years=1)  # Past year
+        date_format = "%b"  # Month format (e.g., Jan, Feb)
+        increment = relativedelta(months=1)
+    elif timeframe == 'year':
+        start_date = now - relativedelta(years=5)  # Past 5 years
+        date_format = "%Y"  # Year format
+        increment = relativedelta(years=1)
+    else:
+        raise ValueError("Invalid timeframe")
+
+    rows = app_tables.tbllongtermhistory.search(
+        purchase_date=q.greater_than_or_equal_to(start_date)
+    )
+
+    # Aggregate data
+    aggregated_data = collections.defaultdict(float)
+    for row in rows:
+        date_key = row['purchase_date'].strftime(date_format)
+        aggregated_data[date_key] += row['price']
+
+    # Convert to sorted list of dictionaries
+    sorted_data = [{'date': date, 'amount_spent': amount} for date, amount in sorted(aggregated_data.items())]
+    return sorted_data
+
+# Functions for Item price history graph
+@anvil.server.callable
+def get_item_price_history_data(item_name, timeframe):
+    import datetime
+    from dateutil.relativedelta import relativedelta
+    import collections
+
+    now = datetime.datetime.now()
+
+    if timeframe == 'week':
+        start_date = now - datetime.timedelta(weeks=52)  # Past year
+        date_format = "%U"  # Week format
+    elif timeframe == 'month':
+        start_date = now - relativedelta(years=1)  # Past year
+        date_format = "%b"  # Month format (e.g., Jan, Feb)
+    elif timeframe == 'year':
+        start_date = now - relativedelta(years=5)  # Past 5 years
+        date_format = "%Y"  # Year format
+    else:
+        raise ValueError("Invalid timeframe")
+
+    rows = app_tables.tbllongtermhistory.search(
+        item_name=item_name,
+        purchase_date=q.greater_than_or_equal_to(start_date)
+    )
+
+    # Aggregate data
+    aggregated_data = collections.defaultdict(list)
+    for row in rows:
+        date_key = row['purchase_date'].strftime(date_format)
+        price_per_quantity = row['price'] / row['quantity']
+        aggregated_data[date_key].append(price_per_quantity)
+
+    # Calculate the average price per quantity for each date key
+    average_data = {date: sum(prices) / len(prices) for date, prices in aggregated_data.items()}
+
+    # Convert to sorted list of dictionaries
+    sorted_data = [{'date': date, 'price': price} for date, price in sorted(average_data.items())]
+    return sorted_data
 
 
