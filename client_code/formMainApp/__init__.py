@@ -38,11 +38,21 @@ class formMainApp(formMainAppTemplate):
         # Perform initial filter to show all items
         self.filter()
 
+        self.update_expiry_warning()
+
     def filter(self, **event_args):
         self.apply_filter_and_sort()
 
     def search(self, **event_args):
         self.apply_filter_and_sort(search_query=self.tbSearchList.text)
+
+    def update_expiry_warning(self):
+        expiring_soon_items = anvil.server.call('get_items_expiring_soon')
+        if expiring_soon_items:
+            self.lblExpiryWarning.text = f"The following item(s) are expiring soon: {', '.join(expiring_soon_items)}"
+            self.lblExpiryWarning.visible = True
+        else:
+            self.lblExpiryWarning.visible = False
 
     def refresh_data_grid(self, **event_args):
         self.data = anvil.server.call('get_all_items')

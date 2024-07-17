@@ -7,28 +7,19 @@ components:
   properties: {}
   name: content_panel
   layout_properties: {slot: default}
-  components:
-  - name: lblTitle
-    properties: {text: Weekly Spending Report}
-    type: Label
-    layout_properties: {grid_position: 'CPQHSA,PDYWNM'}
-  - name: lblTimeframeSelector
-    properties: {text: 'Select Timeframe:'}
-    type: Label
-    layout_properties: {grid_position: 'PONESQ,QEBUMA'}
-  - name: btnWeek
-    properties: {text: Week}
-    type: Button
-    layout_properties: {grid_position: 'TQNNIF,BIMRGH'}
-  - name: btnMonth
-    properties: {text: Month}
-    type: Button
-    layout_properties: {grid_position: 'TQNNIF,OTVVGJ'}
-  - name: btnYear
-    properties: {text: Year}
-    type: Button
-    layout_properties: {grid_position: 'TQNNIF,RJRERB'}
-  - name: taReport
-    properties: {placeholder: Report will appear here once generation/loading is complete..., auto_expand: true}
-    type: TextArea
-    layout_properties: {grid_position: 'WFOTJS,KGMGSU'}
+  components: []
+- name: textReport
+  properties:
+    content: |-
+      ### Weekly Spending Comparison Report
+
+      | Week | Total Spending | Change | % Change |
+      | --- | --- | --- | --- |
+      | {week} | ${total_spending} | {change} | {percent_change}% |
+  type: RichText
+  layout_properties: {slot: default}
+- name: btnExport
+  properties: {text: '', icon: 'fa:download'}
+  type: Button
+  layout_properties: {slot: default}
+  event_bindings: {click: btnExport_click}

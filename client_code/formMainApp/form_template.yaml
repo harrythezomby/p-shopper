@@ -186,3 +186,7 @@ components:
     type: Button
     layout_properties: {}
     event_bindings: {click: btnSettings_click}
+- name: lblExpiryWarning
+  properties: {}
+  type: Label
+  layout_properties: {slot: default}

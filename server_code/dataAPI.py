@@ -1,3 +1,10 @@
+"""
+   ____                    __    
+  /  _/_ _  ___  ___  ____/ /____
+ _/ //  ' \/ _ \/ _ \/ __/ __(_-<
+/___/_/_/_/ .__/\___/_/  \__/___/
+         /_/                     
+"""
 import anvil.users
 import anvil.tables as tables
 import anvil.tables.query as q
@@ -12,6 +19,13 @@ import anvil.media
 # For graphs and reports
 import datetime
 
+"""
+   __  ___     _        ___               
+  /  |/  /__ _(_)__    / _ \___ ____ ____ 
+ / /|_/ / _ `/ / _ \  / ___/ _ `/ _ `/ -_)
+/_/  /_/\_,_/_/_//_/ /_/   \_,_/\_, /\__/ 
+                               /___/      
+"""
 @anvil.server.callable
 def get_all_items():
   rows = app_tables.tblitems.search()
@@ -92,6 +106,21 @@ def edit_item(item_id, item_name, quantity, category_id, brand, store, aisle):
 @anvil.server.callable
 def delete_item(item):
     item.delete()
+
+@anvil.server.callable
+def get_items_expiring_soon():
+    import datetime
+
+    now = datetime.date.today()
+    alert_items = []
+
+    rows = app_tables.tbllongtermhistory.search()
+    for row in rows:
+        expiry_date = row['expiry_date']
+        if expiry_date and now <= expiry_date <= (now + datetime.timedelta(days=2)):
+            alert_items.append(row['item_name'])
+
+    return alert_items
 
 """
   _______           __     ____  ______  __             _    
@@ -347,5 +376,143 @@ def get_item_price_history_data(item_name, timeframe):
     # Convert to sorted list of dictionaries
     sorted_data = [{'date': date, 'price': price} for date, price in sorted(average_data.items())]
     return sorted_data
+
+# Functions for item comparison report
+@anvil.server.callable
+def get_item_comparison_report_data(timeframe):
+    import datetime
+    from dateutil.relativedelta import relativedelta
+    import collections
+
+    now = datetime.datetime.now()
+
+    if timeframe == 'week':
+        start_date = now - datetime.timedelta(weeks=1)  # Past week
+    elif timeframe == 'month':
+        start_date = now - relativedelta(months=1)  # Past month
+    elif timeframe == 'year':
+        start_date = now - relativedelta(years=1)  # Past year
+    else:
+        raise ValueError("Invalid timeframe")
+
+    rows = app_tables.tbllongtermhistory.search(
+        purchase_date=q.greater_than_or_equal_to(start_date)
+    )
+
+    # Initialize counters and aggregators
+    item_count = collections.Counter()
+    category_count = collections.Counter()
+    date_count = collections.Counter()
+    total_quantity = 0
+    total_spending = 0
+
+    for row in rows:
+        item_count[row['item_name']] += row['quantity']
+        category_count[row['category_id']['category_name']] += row['quantity']
+        date_key = row['purchase_date'].strftime("%Y-%m-%d")
+        date_count[date_key] += row['quantity']
+        total_quantity += row['quantity']
+        total_spending += row['price']
+
+    # Find the most bought item, date, and category
+    most_bought_item = item_count.most_common(1)[0] if item_count else ("N/A", 0)
+    most_bought_date = date_count.most_common(1)[0] if date_count else ("N/A", 0)
+    most_bought_category = category_count.most_common(1)[0] if category_count else ("N/A", 0)
+
+    # Prepare the report data
+    report_data = {
+        'most_bought_item': most_bought_item,
+        'most_bought_date': most_bought_date,
+        'most_bought_category': most_bought_category,
+        'total_quantity': total_quantity,
+        'total_spending': total_spending,
+        'start_date': start_date.strftime("%Y-%m-%d"),
+        'end_date': now.strftime("%Y-%m-%d")
+    }
+
+    return report_data
+
+# Functions for weekly spending report
+@anvil.server.callable
+def get_weekly_spending_report():
+    import datetime
+    from dateutil.relativedelta import relativedelta
+    import collections
+
+    now = datetime.datetime.now()
+    start_date = now - datetime.timedelta(weeks=52)  # Past year
+
+    rows = app_tables.tbllongtermhistory.search(
+        purchase_date=q.greater_than_or_equal_to(start_date)
+    )
+
+    # Initialize weekly spending dictionary
+    weekly_spending = collections.defaultdict(float)
+    week_dates = {}
+
+    for row in rows:
+        week_key = row['purchase_date'].strftime("%Y-%U")
+        week_start = row['purchase_date'] - datetime.timedelta(days=row['purchase_date'].weekday())
+        week_end = week_start + datetime.timedelta(days=6)
+        week_dates[week_key] = (week_start.strftime("%Y-%m-%d"), week_end.strftime("%Y-%m-%d"))
+        weekly_spending[week_key] += row['price']
+
+    # Convert to sorted list of tuples
+    sorted_spending = sorted(weekly_spending.items())
+
+    # Calculate increases and decreases
+    spending_changes = []
+    for i in range(1, len(sorted_spending)):
+        current_week = sorted_spending[i]
+        previous_week = sorted_spending[i - 1]
+        change = current_week[1] - previous_week[1]
+        percent_change = (change / previous_week[1]) * 100 if previous_week[1] != 0 else 0
+        week_range = week_dates[current_week[0]]
+        spending_changes.append((current_week[0], current_week[1], change, percent_change, week_range))
+
+    return spending_changes
+
+# Expiry Report
+@anvil.server.callable
+def get_expiry_report(timeframe):
+    import datetime
+    from dateutil.relativedelta import relativedelta
+
+    now = datetime.date.today()
+
+    if timeframe == 'week':
+        future_end_date = now + datetime.timedelta(weeks=1)
+        expired_start_date = now - datetime.timedelta(weeks=1)
+    elif timeframe == 'month':
+        future_end_date = now + relativedelta(months=1)
+        expired_start_date = now - relativedelta(months=1)
+    elif timeframe == 'year':
+        future_end_date = now + relativedelta(years=1)
+        expired_start_date = now - relativedelta(years=1)
+    else:
+        raise ValueError("Invalid timeframe")
+
+    future_items = []
+    expired_items = []
+    alert_items = []
+
+    rows = app_tables.tbllongtermhistory.search()
+    for row in rows:
+        expiry_date = row['expiry_date']
+        if expiry_date:
+            if now <= expiry_date <= future_end_date:
+                future_items.append({
+                    'item_name': row['item_name'],
+                    'expiry_date': expiry_date.strftime("%Y-%m-%d")
+                })
+                if (expiry_date - now).days <= 2:
+                    alert_items.append(row['item_name'])
+            elif expired_start_date <= expiry_date < now:
+                expired_items.append({
+                    'item_name': row['item_name'],
+                    'expiry_date': expiry_date.strftime("%Y-%m-%d")
+                })
+
+    return future_items, expired_items, alert_items
 
 
