@@ -224,7 +224,7 @@ def check_off_item(list_item_id, purchase_date, expiry_date, price):
         expiry_date=expiry_date,
         price=price
     )
-    
+
     # Delete the item from the current list
     list_item.delete()
 
