@@ -187,16 +187,24 @@ def get_all_categories_for_graphs():
 
 @anvil.server.callable
 def get_category_consumption_data(category_id, timeframe):
+    import datetime
     from dateutil.relativedelta import relativedelta
+    import collections
     
     now = datetime.datetime.now()
 
     if timeframe == 'week':
-        start_date = now - datetime.timedelta(weeks=1)
+        start_date = now - datetime.timedelta(weeks=52)  # Past year
+        date_format = "%Y-%U"  # Year-Week format
+        increment = datetime.timedelta(weeks=1)
     elif timeframe == 'month':
-        start_date = now - relativedelta(months=1)
+        start_date = now - relativedelta(years=1)  # Past year
+        date_format = "%Y-%m"  # Year-Month format
+        increment = relativedelta(months=1)
     elif timeframe == 'year':
-        start_date = now - relativedelta(years=1)
+        start_date = now - relativedelta(years=5)  # Past 5 years
+        date_format = "%Y"  # Year format
+        increment = relativedelta(years=1)
     else:
         raise ValueError("Invalid timeframe")
 
@@ -207,13 +215,15 @@ def get_category_consumption_data(category_id, timeframe):
         purchase_date=q.greater_than_or_equal_to(start_date)
     )
 
-    data = []
+    # Aggregate data
+    aggregated_data = collections.defaultdict(int)
     for row in rows:
-        data.append({'date': row['purchase_date'], 'quantity': row['quantity']})
+        date_key = row['purchase_date'].strftime(date_format)
+        aggregated_data[date_key] += row['quantity']
 
-    data.sort(key=lambda x: x['date'])
-    return data
-
+    # Convert to sorted list of dictionaries
+    sorted_data = [{'date': date, 'quantity': quantity} for date, quantity in sorted(aggregated_data.items())]
+    return sorted_data
 
 
 

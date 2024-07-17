@@ -22,12 +22,12 @@ class formCatConsGraph(formCatConsGraphTemplate):
     def plot_graph(self):
         category_id = self.ddCatSelector.selected_value
         timeframe = self.timeframe
-
+    
         data = anvil.server.call('get_category_consumption_data', category_id, timeframe)
         
         x = [item['date'] for item in data]
         y = [item['quantity'] for item in data]
-
+    
         self.plotGraphCatCons.data = [go.Scatter(x=x, y=y, mode='lines+markers', name='Consumption')]
         self.plotGraphCatCons.layout.title = f"Category Consumption ({self.ddCatSelector.selected_value})"
         self.plotGraphCatCons.layout.xaxis.title = 'Date'
