@@ -70,4 +70,4 @@ components:
         **Example**:
         - If you choose "Milk" and "Month," you'll see the average price per quantity of milk each month over the past year.
     type: RichText
-    layout_properties: {grid_position: 'UPHQRM,XMAMEO'}
+    layout_properties: {grid_position: 'UCCWQC,MEMVRN'}

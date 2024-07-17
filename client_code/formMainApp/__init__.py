@@ -93,6 +93,13 @@ class formMainApp(formMainAppTemplate):
         alert("Item added successfully.")
         self.refresh_data_grid()
 
+        # Clearing the previous input fields after the item is added
+        self.tbNewItemName.text = ""
+        self.tbNewItemQuantity.text = ""
+        self.tbNewItemBrand.text = ""
+        self.tbNewItemStore.text = ""
+        self.tbNewItemAisle.text = ""
+
     def sort_by_column(self, column):
         # Determine the current sort direction and toggle it
         if self.current_sort_column == column:
@@ -181,7 +188,7 @@ class formMainApp(formMainAppTemplate):
 
     def btnExport_click(self, **event_args):
         """This method is called when the export button is clicked"""
-        txt_file = anvil.server.call('export_items_to_txt')
-        download(txt_file)
+        csv_file = anvil.server.call('export_items_to_csv')
+        download(csv_file)
 
     

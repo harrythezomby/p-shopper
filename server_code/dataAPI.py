@@ -167,39 +167,41 @@ def check_off_item(item_id, purchase_date, expiry_date, price):
 """
 
 
+
+
 @anvil.server.callable
-def export_items_to_txt():
+def export_items_to_csv():
     # Fetch data from tblItems
     rows = app_tables.tblitems.search()
-    
+
     # Create an in-memory string buffer
     output = io.StringIO()
-    
+    writer = csv.writer(output)
+
     # Write headers (excluding item_id)
     headers = [col for col in app_tables.tblitems.list_columns() if col != 'item_id']
-    output.write('\t'.join(headers) + '\n')
-    
+    writer.writerow(headers)
+
     # Write data rows
     for row in rows:
         row_data = []
         for col in headers:
-            if isinstance(row[col], dict):  # Handle related tables (e.g., category_id)
-                if 'category_name' in row[col]:
-                    row_data.append(row[col]['category_name'])
-                else:
-                    row_data.append(str(row[col]))
-            elif isinstance(row[col], list):  # Handle list fields
-                row_data.append(','.join(str(item) for item in row[col]))
+            cell_value = row.get(col)
+            if isinstance(cell_value, dict):  # Handle related tables (e.g., category_id)
+                cell_value = ', '.join([f"{k}: {v}" for k, v in cell_value.items()])
+            elif isinstance(cell_value, list):  # Handle list fields
+                cell_value = ','.join(str(item) for item in cell_value)
             else:
-                row_data.append(str(row[col]))
-        output.write('\t'.join(row_data) + '\n')
-    
-    # Get text data from buffer
-    text_data = output.getvalue()
-    
-    # Create a Media object for the text file
-    media = anvil.BlobMedia("text/plain", text_data.encode("utf-8"), name="items.txt")
-    
+                cell_value = str(cell_value)
+            row_data.append(cell_value)
+        writer.writerow(row_data)
+
+    # Get CSV data from buffer
+    csv_data = output.getvalue()
+
+    # Create a Media object for the CSV file
+    media = anvil.BlobMedia("text/csv", csv_data.encode("utf-8"), name="items.csv")
+
     return media
 
 """
