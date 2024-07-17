@@ -58,6 +58,12 @@ def get_categories_simple():
 def get_category_by_name(category_name):
     return app_tables.tblcategories.get(category_name=category_name)
 
+@anvil.server.callable
+def get_categories_for_list(list_id):
+    list_items = app_tables.tbllistitems.search(list_id=app_tables.tbllists.get(list_id=list_id))
+    categories = {item['item_id']['category_id'] for item in list_items if item['item_id']['category_id']}
+    return [{'category_id': cat['category_id'], 'category_name': cat['category_name']} for cat in categories]
+
 # Search function for a list
 @anvil.server.callable
 def search_items(query):
@@ -158,6 +164,31 @@ def get_items_expiring_soon():
 
     return alert_items
 
+@anvil.server.callable
+def create_new_category(category_name):
+    last_category = list(app_tables.tblcategories.search(tables.order_by("category_id", ascending=False)))
+    if last_category:
+        new_category_id = last_category[0]['category_id'] + 1
+    else:
+        new_category_id = 1
+    app_tables.tblcategories.add_row(category_id=new_category_id, category_name=category_name)
+
+@anvil.server.callable
+def remove_category(category_name):
+    category = app_tables.tblcategories.get(category_name=category_name)
+    if not category:
+        return f"Category '{category_name}' does not exist."
+
+    # Check if the category is used in tblItems or tblLongTermHistory
+    in_use_items = app_tables.tblitems.search(category_id=category)
+    in_use_history = app_tables.tbllongtermhistory.search(category_id=category)
+    
+    if len(in_use_items) > 0 or len(in_use_history) > 0:
+        return f"Category '{category_name}' is in use and cannot be deleted."
+
+    category.delete()
+    return f"Category '{category_name}' has been successfully deleted."
+
 """
    __  ___     ____  _      __      __   _     __    
   /  |/  /_ __/ / /_(_)__  / /__   / /  (_)__ / /____
@@ -171,7 +202,7 @@ def get_all_lists():
 
 @anvil.server.callable
 def create_new_list(list_name):
-    last_list = app_tables.tbllists.search(tables.order_by("list_id", ascending=False), limit=1)
+    last_list = app_tables.tbllists.search(tables.order_by("list_id", ascending=False))
     if last_list:
         new_list_id = last_list[0]['list_id'] + 1
     else:
@@ -219,7 +250,7 @@ def check_off_item(list_item_id, purchase_date, expiry_date, price):
         long_term_id=new_long_term_id,
         item_name=item['item_name'],
         category_id=item['category_id'],
-        quantity=list_item['quantity'],
+        quantity=item['quantity'],  # Change to get quantity from tblItems
         purchase_date=purchase_date,
         expiry_date=expiry_date,
         price=price

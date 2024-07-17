@@ -8,6 +8,7 @@ from anvil.tables import app_tables
 from ...State import categories as CATEGORIES
 from ..formCheckItem import formCheckItem
 
+
 class RowTemplate2(RowTemplate2Template):
     def __init__(self, **properties):
         self.init_components(**properties)
@@ -48,5 +49,5 @@ class RowTemplate2(RowTemplate2Template):
 
     def btnCheck_click(self, **event_args):
         list_item_id = self.item['list_item_id']
-        content = formCheckItem(list_item_id)
+        content = formCheckItem(list_item_id, parent_form=self.parent.parent.parent)
         alert(content=content, large=True, buttons=[], title="Check Off Item")

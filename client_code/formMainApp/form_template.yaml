@@ -3,72 +3,65 @@ container:
   type: HtmlTemplate
   properties: {html: '@theme:standard-page.html'}
 components:
-- name: flowListSelector
-  properties: {align: left}
-  type: FlowPanel
+- name: lblListTitle
+  properties: {text: List Title, align: center, font_size: 25, bold: true}
+  type: Label
   layout_properties: {slot: default}
-  components:
-  - name: lblListSelector
-    properties: {text: 'List Selector:'}
-    type: Label
-  - name: ddListSelector
-    properties:
-      items: []
-      placeholder: ''
-      include_placeholder: true
-    type: DropDown
-    event_bindings: {change: ddListSelector_change}
-    layout_properties: {}
-  - name: btnNewList
-    properties: {text: New List, icon: 'fa:plus'}
-    type: Button
-    layout_properties: {}
-    event_bindings: {click: btnNewList_click}
-  - name: btnRenameList
-    properties: {text: Rename, icon: 'fa:font'}
-    type: Button
-    layout_properties: {}
-    event_bindings: {click: btnRenameList_click}
-  - name: spacerListSelector
-    properties: {height: 32}
-    type: Spacer
-    layout_properties: {width: 264, expand: true}
-  - name: lblListTitle
-    properties: {text: List Placeholder}
-    type: Label
-  - name: lblTitleMainApp
-    properties: {text: P-Shopper, align: center}
-    type: Label
-- name: flowListTopButtons
+- name: flowListTopControls
   properties: {}
   type: FlowPanel
   layout_properties: {slot: default}
   components:
-  - name: tbSearchList
-    properties: {placeholder: Enter Search Term}
-    type: TextBox
-    layout_properties: {}
-    event_bindings: {pressed_enter: search}
-  - name: btnSearch
-    properties: {text: ' Search', icon: 'fa:search'}
-    type: Button
-    layout_properties: {}
-    event_bindings: {click: search}
-  - name: ddCategorySelector
-    properties:
-      items: [Categories]
-      placeholder: Category
-      include_placeholder: false
-    type: DropDown
-    event_bindings: {change: filter}
-  - name: spacerListTopButtons
+  - name: flowListControls
+    properties: {}
+    type: FlowPanel
+    components:
+    - name: lblListSelector
+      properties: {text: 'List:'}
+      type: Label
+    - name: ddListSelector
+      properties:
+        items: [Lists]
+        placeholder: ''
+        include_placeholder: false
+      type: DropDown
+      event_bindings: {change: ddListSelector_change}
+    - name: btnNewList
+      properties: {text: '', icon: 'fa:plus'}
+      type: Button
+      event_bindings: {click: btnNewList_click}
+    - name: btnRenameList
+      properties: {text: '', icon: 'fa:font'}
+      type: Button
+      event_bindings: {click: btnRenameList_click}
+  - name: spacerListTop
     properties: {height: 32}
     type: Spacer
-    layout_properties: {width: 247.3830625, expand: true}
-- name: spacerListTop
-  properties: {height: 10}
-  type: Spacer
-  layout_properties: {slot: default}
+    layout_properties: {width: 243, expand: true}
+  - name: flowSearch
+    properties: {align: right, visible: true, spacing: tiny}
+    type: FlowPanel
+    components:
+    - name: tbSearchList
+      properties: {placeholder: Enter Search Term, spacing_below: none, spacing_above: none}
+      type: TextBox
+      layout_properties: {}
+      event_bindings: {pressed_enter: search, change: search}
+    - name: btnSearch
+      properties: {text: '', icon: 'fa:search', align: center, spacing_above: none, spacing_below: none}
+      type: Button
+      layout_properties: {}
+      event_bindings: {click: search}
+    - name: ddCategorySelector
+      properties:
+        items: [Categories]
+        placeholder: Category
+        include_placeholder: false
+        spacing_below: none
+        spacing_above: none
+      type: DropDown
+      event_bindings: {change: filter}
+      layout_properties: {}
 - name: gridList
   properties:
     columns:
@@ -129,6 +122,7 @@ components:
       properties: {}
       type: DropDown
       layout_properties: {column: BYPHYZ}
+      event_bindings: {change: ddNewItemCategory_change}
     - name: tbNewItemQuantity
       properties: {type: number}
       type: TextBox
@@ -155,10 +149,6 @@ components:
         type: Button
         layout_properties: {}
         event_bindings: {click: btnCreateItem_click}
-      - name: lblNew
-        properties: {text: New, spacing_below: none, spacing_above: none}
-        type: Label
-        layout_properties: {expand: false}
   - name: repeatListItems
     properties: {item_template: formMainApp.RowTemplate2, border: ''}
     type: RepeatingPanel
@@ -199,6 +189,10 @@ components:
     layout_properties: {}
     event_bindings: {click: btnSettings_click}
 - name: lblExpiryWarning
-  properties: {}
+  properties: {icon: 'fa:warning', text: Items Expiring Soon Will Appear Here}
+  type: Label
+  layout_properties: {slot: default}
+- name: lblPShopper
+  properties: {text: P-Shopper v0.1a, align: center}
   type: Label
   layout_properties: {slot: default}
