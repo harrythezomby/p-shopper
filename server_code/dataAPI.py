@@ -26,6 +26,14 @@ def get_all_categories(user):
     return []
 
 @anvil.server.callable
+def get_category_by_name(category_id):
+    user = anvil.users.get_user()
+    category = app_tables.tblcategories.get(category_id=category_id, user=user)
+    if category:
+        return {'category_id': category['category_id'], 'category_name': category['category_name']}
+    return None
+
+@anvil.server.callable
 def get_categories_for_list(list_id):
     list_items = app_tables.tbllistitems.search(list_id=app_tables.tbllists.get(list_id=list_id))
     categories = {item['item_id']['category_id'] for item in list_items if item['item_id']['category_id']}
