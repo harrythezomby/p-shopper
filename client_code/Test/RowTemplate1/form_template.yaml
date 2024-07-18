@@ -1,0 +1,15 @@
+is_package: true
+container: {type: DataRowPanel}
+components:
+- name: label_1
+  properties: {}
+  type: Label
+  layout_properties: {column: RPIEHV}
+  data_bindings:
+  - {property: text, code: 'self.item[''item_id'']', writeback: false}
+- name: label_2
+  properties: {}
+  type: Label
+  layout_properties: {column: RJXAJP}
+  data_bindings:
+  - {property: text, code: 'self.item[''item_name'']', writeback: false}

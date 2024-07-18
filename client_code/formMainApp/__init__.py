@@ -11,44 +11,38 @@ from .formCheckItem import formCheckItem
 
 class formMainApp(formMainAppTemplate):
     def __init__(self, **properties):
-      self.init_components(**properties)
-      self.set_event_handler('x-refresh-data', self.refresh_data_grid)
-      
-      # Initialize data and headers
-      self.data = []
-      self.headers = {
-          'item_name': self.linkItemName,
-          'quantity': self.linkQuantity,
-          'category_id': self.linkCategory,
-          'brand': self.linkBrand,
-          'store': self.linkStore,
-          'aisle': self.linkAisle
-      }
-      
-      # Set default sorting to item_name in ascending order
-      self.current_sort_column = 'item_name'
-      self.current_sort_reverse = False  # Start with ascending
-  
-      self.populate_lists_dropdown()
-      
-      # Populate the category dropdown
-      self.populate_category_dropdown()
-  
-      # Perform initial filter to show all items
-      self.filter()
-  
-      self.update_expiry_warning()
-      self.update_list_title()
+        self.init_components(**properties)
+        self.set_event_handler('x-refresh-data', self.refresh_data_grid)
+        
+        self.data = []
+        self.headers = {
+            'item_name': self.linkItemName,
+            'quantity': self.linkQuantity,
+            'category_id': self.linkCategory,
+            'brand': self.linkBrand,
+            'store': self.linkStore,
+            'aisle': self.linkAisle
+        }
+        
+        self.current_sort_column = 'item_name'
+        self.current_sort_reverse = False
+        
+        self.populate_lists_dropdown()
+        self.populate_category_dropdown()
+        self.filter()
+        self.update_expiry_warning()
+        self.update_list_title()
 
     def populate_lists_dropdown(self):
-        lists = anvil.server.call('get_all_lists')
+        user = anvil.users.get_user()
+        lists = anvil.server.call('get_all_lists', user)
         self.ddListSelector.items = [(l['list_name'], l['list_id']) for l in lists if l['list_name']]
         if lists:
             self.ddListSelector.selected_value = lists[0]['list_id']
             self.refresh_data_grid()
         else:
             self.ddListSelector.selected_value = None
-            self.data = []  # Clear the data if there are no lists
+            self.data = []
             self.apply_filter_and_sort()
             self.lblIsEmpty.text = "The currently selected list is empty."
             self.lblIsEmpty.visible = True
@@ -121,12 +115,12 @@ class formMainApp(formMainAppTemplate):
         selected_list_id = self.ddListSelector.selected_value
         if selected_list_id:
             self.data = anvil.server.call('get_all_items', selected_list_id)
-            self.apply_filter_and_sort(search_query=self.tbSearchList.text)  # Ensure the search term is applied
-            self.populate_category_dropdown()  # Refresh category dropdowns
+            self.apply_filter_and_sort(search_query=self.tbSearchList.text)
+            self.populate_category_dropdown()
         else:
             self.data = []
             self.apply_filter_and_sort()
-            self.populate_category_dropdown()  # Refresh category dropdowns
+            self.populate_category_dropdown()
 
     def btnCreateItem_click(self, **event_args):
         item_name = self.tbNewItemName.text
@@ -238,8 +232,8 @@ class formMainApp(formMainAppTemplate):
 
     def btnRenameList_click(self, **event_args):
         selected_list_id = self.ddListSelector.selected_value
-        current_list_name = [item[0] for item in self.ddListSelector.items if item[1] == selected_list_id][0]  # Get the current list name
-        content = TextBox(text=current_list_name)  # Set the default value to the current list name
+        current_list_name = [item[0] for item in self.ddListSelector.items if item[1] == selected_list_id][0]
+        content = TextBox(text=current_list_name)
         result = alert("Enter new name for the list:", buttons=[("OK", "ok")], content=content, title="Rename List")
         if result == "ok":
             new_name = content.text
@@ -252,7 +246,7 @@ class formMainApp(formMainAppTemplate):
         content = TextBox()
         result = alert("Enter name for the new list:", buttons=[("OK", "ok")], content=content, title="Create New List")
         if result == "ok":
-            new_name = content.text.strip().title()  # Capitalize the name
+            new_name = content.text.strip().title()
             if new_name:
                 user = anvil.users.get_user()
                 anvil.server.call('create_new_list', new_name, user)

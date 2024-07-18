@@ -7,7 +7,6 @@ import anvil.tables.query as q
 from anvil.tables import app_tables
 from ..formCheckItem import formCheckItem
 
-
 class RowTemplate2(RowTemplate2Template):
     def __init__(self, **properties):
         self.init_components(**properties)
