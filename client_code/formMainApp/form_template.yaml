@@ -73,7 +73,7 @@ components:
     - {id: AKPEWB, data_key: aisle, title: Aisle, expand: true}
     - {id: QCBSKP, data_key: column_1, title: '', expand: false, width: '127'}
     wrap_on: never
-    auto_header: false
+    auto_header: true
   type: DataGrid
   components:
   - name: rowHeaders
@@ -149,6 +149,10 @@ components:
         type: Button
         layout_properties: {}
         event_bindings: {click: btnCreateItem_click}
+    - name: label_1
+      properties: {}
+      type: Label
+      layout_properties: {}
   - name: repeatListItems
     properties: {item_template: formMainApp.RowTemplate2, border: ''}
     type: RepeatingPanel

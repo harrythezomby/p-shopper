@@ -1,9 +1,12 @@
-is_package: true
-container:
-  type: HtmlTemplate
-  properties: {html: '@theme:standard-page.html'}
+container: {type: ColumnPanel}
 components:
-- type: ColumnPanel
-  properties: {}
-  name: content_panel
-  layout_properties: {slot: default}
+- name: label_1
+  properties: {text: hello}
+  type: Label
+  layout_properties: {grid_position: 'DWVSGB,EMKXQJ'}
+- name: btnOpen
+  properties: {text: button_1}
+  type: Button
+  layout_properties: {grid_position: 'MVODTI,AROHQA'}
+  event_bindings: {click: btnOpen_click}
+is_package: true

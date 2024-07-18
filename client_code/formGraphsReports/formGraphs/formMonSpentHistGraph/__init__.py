@@ -1,5 +1,6 @@
 from ._anvil_designer import formMonSpentHistGraphTemplate
 from anvil import *
+import anvil.users
 import anvil.server
 import plotly.graph_objs as go
 import datetime
