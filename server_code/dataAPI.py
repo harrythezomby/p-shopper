@@ -12,6 +12,9 @@ import anvil.media
 # For graphs and reports
 import datetime
 
+# For sharing
+import uuid
+
 @anvil.server.callable
 def get_all_items(list_id):
     list_row = app_tables.tbllists.get(list_id=list_id)
@@ -594,9 +597,9 @@ def get_share_url(list_id):
 def share_list(list_id):
     list_row = app_tables.tbllists.get(list_id=list_id)
     if list_row:
-        share_url = f"https://your-app-url/#?list_id={list_id}"
+        share_url = str(uuid.uuid4())  # Generate a unique share URL
         list_row['share_url'] = share_url
-        return share_url
+        return f"https://pshopper.anvil.app/#?share_url={share_url}"
     return None
 
 @anvil.server.callable
@@ -604,5 +607,12 @@ def unshare_list(list_id):
     list_row = app_tables.tbllists.get(list_id=list_id)
     if list_row and list_row['share_url']:
         list_row['share_url'] = None
+
+@anvil.server.callable
+def get_list_by_share_url(share_url):
+    list_row = app_tables.tbllists.get(share_url=share_url)
+    if list_row:
+        return list_row
+    return None
 
 

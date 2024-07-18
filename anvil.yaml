@@ -1,6 +1,6 @@
 allow_embedding: false
 package_name: P_Shopper
-startup: {type: form, module: formMainApp}
+startup: {type: form, module: formLogin}
 name: P-Shopper
 startup_form: null
 runtime_options: {version: 2, client_version: '3', server_version: python3-full, server_spec: null}
@@ -59,6 +59,9 @@ db_schema:
       admin_ui: {width: 200}
       type: link_single
       target: users
+    - name: share_url
+      admin_ui: {width: 200, order: 3}
+      type: string
   tbllongtermhistory:
     title: tblLongTermHistory
     client: none
