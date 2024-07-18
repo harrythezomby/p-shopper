@@ -34,6 +34,10 @@ def get_category_by_name(category_id):
     return None
 
 @anvil.server.callable
+def get_category_by_id(category_id):
+    return app_tables.tblcategories.get(category_id=category_id)
+
+@anvil.server.callable
 def get_categories_for_list(list_id):
     list_items = app_tables.tbllistitems.search(list_id=app_tables.tbllists.get(list_id=list_id))
     categories = {item['item_id']['category_id'] for item in list_items if item['item_id']['category_id']}
@@ -84,16 +88,23 @@ def edit_item(item_id, item_name, quantity, category_id, brand, store, aisle):
         )
 
 @anvil.server.callable
-def delete_item(item_id, list_id):
-    list_row = app_tables.tbllists.get(list_id=list_id)
+def delete_item(item_id):
+    # Fetch the item row from tblItems
     item_row = app_tables.tblitems.get(item_id=item_id)
-    list_item_row = app_tables.tbllistitems.get(item_id=item_row, list_id=list_row)
-    if list_item_row:
-        list_item_row.delete()
-        if not app_tables.tbllistitems.search(item_id=item_row):
-            item_row.delete()
-    else:
+    if not item_row:
+        raise ValueError("Item not found in items table")
+
+    # Fetch the list_item row from tblListItems using the item row
+    list_item_row = app_tables.tbllistitems.get(item_id=item_row)
+    if not list_item_row:
         raise ValueError("Item not found in list")
+
+    # Delete the item from the list
+    list_item_row.delete()
+
+    # Check if there are no other references to the item_row in tblListItems
+    if len(list(app_tables.tbllistitems.search(item_id=item_row))) == 0:
+        item_row.delete()
 
 @anvil.server.callable
 def get_items_expiring_soon():
