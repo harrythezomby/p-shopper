@@ -1,0 +1,25 @@
+is_package: true
+container:
+  type: HtmlTemplate
+  properties: {html: '@theme:standard-page.html'}
+components:
+- type: ColumnPanel
+  properties: {}
+  name: content_panel
+  layout_properties: {slot: default}
+- name: data_grid_1
+  properties:
+    columns:
+    - {id: RPIEHV, data_key: item_id, title: item_id}
+    - {id: RJXAJP, data_key: item_name, title: item_name}
+    - {id: LLXNSE, data_key: category_id, title: category_id}
+    - {id: BMVNUP, data_key: quantity, title: quantity}
+    - {id: WYRVPB, data_key: brand, title: brand}
+    - {id: CSLFQJ, data_key: store, title: store}
+    - {id: QKHSWO, data_key: aisle, title: aisle}
+  type: DataGrid
+  components:
+  - name: repeating_panel_1
+    properties: {item_template: Test.RowTemplate3}
+    type: RepeatingPanel
+  layout_properties: {slot: default}

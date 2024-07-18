@@ -1,0 +1,29 @@
+is_package: true
+container: {type: DataRowPanel}
+components:
+- name: lblCategory
+  properties: {}
+  type: Label
+  layout_properties: {column: LLXNSE}
+- name: lblItemName
+  properties: {}
+  type: Label
+  layout_properties: {column: RJXAJP}
+  data_bindings:
+  - {property: text, code: 'self.item[''item_id'']', writeback: false}
+- name: lblQuantity
+  properties: {}
+  type: Label
+  layout_properties: {column: BMVNUP}
+- name: lblBrand
+  properties: {}
+  type: Label
+  layout_properties: {column: WYRVPB}
+- name: lblStore
+  properties: {}
+  type: Label
+  layout_properties: {column: CSLFQJ}
+- name: lblAisle
+  properties: {}
+  type: Label
+  layout_properties: {column: QKHSWO}
