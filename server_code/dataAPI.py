@@ -129,7 +129,12 @@ def get_items_expiring_soon():
     import datetime
     now = datetime.date.today()
     alert_items = []
-    rows = app_tables.tbllongtermhistory.search()
+    user = anvil.users.get_user()
+    
+    if not user:
+        return alert_items
+    
+    rows = app_tables.tbllongtermhistory.search(user=user)
     for row in rows:
         expiry_date = row['expiry_date']
         if expiry_date and now <= expiry_date <= (now + datetime.timedelta(days=2)):
