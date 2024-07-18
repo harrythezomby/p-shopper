@@ -1,5 +1,6 @@
 from ._anvil_designer import formCheckItemTemplate
 from anvil import *
+import anvil.users
 import anvil.server
 
 class formCheckItem(formCheckItemTemplate):

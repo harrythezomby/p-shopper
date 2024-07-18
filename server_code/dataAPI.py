@@ -1,11 +1,5 @@
-"""
-   ____                    __    
-  /  _/_ _  ___  ___  ____/ /____
- _/ //  ' \/ _ \/ _ \/ __/ __(_-<
-/___/_/_/_/ .__/\___/_/  \__/___/
-         /_/                     
-"""
 import anvil.users
+
 import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
@@ -30,24 +24,12 @@ import datetime
 def get_all_items(list_id):
     list_row = app_tables.tbllists.get(list_id=list_id)
     list_items = app_tables.tbllistitems.search(list_id=list_row)
-    items = [
-        {
-            'item_id': li['item_id']['item_id'],
-            'item_name': li['item_id']['item_name'],
-            'quantity': li['item_id']['quantity'],
-            'category_id': li['item_id']['category_id'],
-            'brand': li['item_id']['brand'],
-            'store': li['item_id']['store'],
-            'aisle': li['item_id']['aisle'],
-            'list_item_id': li['list_item_id']
-        }
-        for li in list_items
-    ]
+    items = [li['item_id'] for li in list_items]
     return items
   
 @anvil.server.callable
-def get_all_categories():
-    return [dict(row) for row in app_tables.tblcategories.search()]
+def get_all_categories(user):
+    return [dict(row) for row in app_tables.tblcategories.search(user=user)]
 
 # Simple version of category getter used for editting a list category dropdown
 @anvil.server.callable
@@ -119,7 +101,6 @@ def add_item(item_name, quantity, category_id, brand, store, aisle, list_id):
     )
 
 
-
 @anvil.server.callable
 def edit_item(item_id, item_name, quantity, category_id, brand, store, aisle):
     item = app_tables.tblitems.get(item_id=item_id)
@@ -144,8 +125,10 @@ def delete_item(list_item_id):
     if not item_row:
         raise ValueError("Item data is corrupted")
 
+    # Delete the item from the list
     list_item_row.delete()
 
+    # Optionally, you can delete the item from the items table if no other list references it
     if not app_tables.tbllistitems.search(item_id=item_row):
         item_row.delete()
 
@@ -166,28 +149,35 @@ def get_items_expiring_soon():
 
 @anvil.server.callable
 def create_new_category(category_name):
-    last_category = list(app_tables.tblcategories.search(tables.order_by("category_id", ascending=False)))
-    if last_category:
-        new_category_id = last_category[0]['category_id'] + 1
-    else:
+    user = anvil.users.get_user()
+    if user:
+        last_category = app_tables.tblcategories.search(tables.order_by("category_id", ascending=False))
         new_category_id = 1
-    app_tables.tblcategories.add_row(category_id=new_category_id, category_name=category_name)
+        if last_category:
+            new_category_id = last_category[0]['category_id'] + 1
+        app_tables.tblcategories.add_row(category_id=new_category_id, category_name=category_name, user=user)
+        return True
+    return False
 
 @anvil.server.callable
 def remove_category(category_name):
-    category = app_tables.tblcategories.get(category_name=category_name)
-    if not category:
-        return f"Category '{category_name}' does not exist."
+    user = anvil.users.get_user()
+    category_row = app_tables.tblcategories.get(category_name=category_name, user=user)
+    if category_row:
+        if not (app_tables.tblitems.search(category_id=category_row) or app_tables.tbllongtermhistory.search(category_id=category_row)):
+            category_row.delete()
+            return True, "Category removed successfully."
+        else:
+            return False, "Category cannot be removed as it is currently in use."
+    return False, "Category does not exist."
 
-    # Check if the category is used in tblItems or tblLongTermHistory
-    in_use_items = app_tables.tblitems.search(category_id=category)
-    in_use_history = app_tables.tbllongtermhistory.search(category_id=category)
-    
-    if len(in_use_items) > 0 or len(in_use_history) > 0:
-        return f"Category '{category_name}' is in use and cannot be deleted."
-
-    category.delete()
-    return f"Category '{category_name}' has been successfully deleted."
+@anvil.server.callable
+def get_category_id_by_name(category_name):
+    user = anvil.users.get_user()
+    category = app_tables.tblcategories.get(category_name=category_name, user=user)
+    if category:
+        return category['category_id']
+    return None
 
 """
    __  ___     ____  _      __      __   _     __    
@@ -198,16 +188,19 @@ def remove_category(category_name):
 """
 @anvil.server.callable
 def get_all_lists():
-    return app_tables.tbllists.search(tables.order_by("list_id", ascending=True))
+    user = anvil.users.get_user()
+    if user:
+        return app_tables.tbllists.search(user=user)
+    return []
 
 @anvil.server.callable
-def create_new_list(list_name):
-    last_list = app_tables.tbllists.search(tables.order_by("list_id", ascending=False))
-    if last_list:
-        new_list_id = last_list[0]['list_id'] + 1
-    else:
+def create_new_list(list_name, user):
+    if user:
+        last_list = app_tables.tbllists.search(tables.order_by("list_id", ascending=False))
         new_list_id = 1
-    app_tables.tbllists.add_row(list_id=new_list_id, list_name=list_name)
+        if last_list:
+            new_list_id = max([l['list_id'] for l in last_list]) + 1
+        app_tables.tbllists.add_row(list_id=new_list_id, list_name=list_name, user=user)
 
 @anvil.server.callable
 def rename_list(list_id, new_name):
@@ -227,6 +220,32 @@ def get_item_details(list_item_id):
     }
 
 """
+  __  __                  ____             _    
+ / / / /__ ___ _______  _/_/ /  ___  ___ _(_)__ 
+/ /_/ (_-</ -_) __(_-<_/_// /__/ _ \/ _ `/ / _ \
+\____/___/\__/_/ /___/_/ /____/\___/\_, /_/_//_/
+                                   /___/        
+"""
+@anvil.server.callable
+def user_has_lists(user):
+    return len(list(app_tables.tbllists.search(user=user))) > 0
+
+@anvil.server.callable
+def create_default_list(user):
+    last_list = list(app_tables.tbllists.search(tables.order_by("list_id", ascending=False)))
+    new_list_id = last_list[0]['list_id'] + 1 if last_list else 1
+    app_tables.tbllists.add_row(list_id=new_list_id, list_name='New List', user=user)
+
+@anvil.server.callable
+def get_user_lists():
+    user = anvil.users.get_user()
+    if user:
+        return app_tables.tbllists.search(user=user)
+    else:
+        return []
+
+
+"""
   _______           __     ____  ______  __             _    
  / ___/ /  ___ ____/ /__  / __ \/ _/ _/ / /  ___  ___ _(_)___
 / /__/ _ \/ -_) __/  '_/ / /_/ / _/ _/ / /__/ _ \/ _ `/ / __/
@@ -237,11 +256,11 @@ def get_item_details(list_item_id):
 def check_off_item(list_item_id, purchase_date, expiry_date, price):
     list_item = app_tables.tbllistitems.get(list_item_id=list_item_id)
     item = list_item['item_id']
-
+    
     # Find the maximum long_term_id currently in the table
-    last_item = list(app_tables.tbllongtermhistory.search(tables.order_by("long_term_id", ascending=False)))
-    if last_item:
-        new_long_term_id = last_item[0]['long_term_id'] + 1
+    last_long_term = list(app_tables.tbllongtermhistory.search(tables.order_by("long_term_id", ascending=False)))
+    if last_long_term:
+        new_long_term_id = last_long_term[0]['long_term_id'] + 1
     else:
         new_long_term_id = 1
 
@@ -250,10 +269,11 @@ def check_off_item(list_item_id, purchase_date, expiry_date, price):
         long_term_id=new_long_term_id,
         item_name=item['item_name'],
         category_id=item['category_id'],
-        quantity=item['quantity'],  # Change to get quantity from tblItems
+        quantity=item['quantity'],
         purchase_date=purchase_date,
         expiry_date=expiry_date,
-        price=price
+        price=price,
+        user=item['user']
     )
 
     # Delete the item from the current list
