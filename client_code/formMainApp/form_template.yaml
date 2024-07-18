@@ -149,6 +149,10 @@ components:
         type: Button
         layout_properties: {}
         event_bindings: {click: btnCreateItem_click}
+    - name: lblIsEmpty
+      properties: {}
+      type: Label
+      layout_properties: {}
   - name: repeatListItems
     properties: {item_template: formMainApp.RowTemplate2, border: ''}
     type: RepeatingPanel

@@ -14,6 +14,7 @@ class formMainApp(formMainAppTemplate):
         self.init_components(**properties)
         self.set_event_handler('x-refresh-data', self.refresh_data_grid)
         
+        # Initialize data and headers
         self.data = []
         self.headers = {
             'item_name': self.linkItemName,
@@ -24,10 +25,18 @@ class formMainApp(formMainAppTemplate):
             'aisle': self.linkAisle
         }
         
+        # Set default sorting to item_name in ascending order
         self.current_sort_column = 'item_name'
-        self.current_sort_reverse = False
-  
+        self.current_sort_reverse = False  # Start with ascending
+
         self.populate_lists_dropdown()
+
+        # Populate the category dropdown
+        self.populate_category_dropdown()
+
+        # Perform initial filter to show all items
+        self.refresh_data_grid()
+
         self.update_expiry_warning()
         self.update_list_title()
 
@@ -90,10 +99,6 @@ class formMainApp(formMainAppTemplate):
         user = anvil.users.get_user()
         categories = anvil.server.call('get_all_categories', user)
         self.ddNewItemCategory.items = [(r['category_name'], r['category_id']) for r in categories] + [("New Category", "New Category"), ("Remove Category", "Remove Category")]
-        selected_list_id = self.ddListSelector.selected_value
-        if selected_list_id:
-            categories = anvil.server.call('get_categories_for_list', selected_list_id)
-            self.ddCategorySelector.items = [('All Categories', None)] + [(r['category_name'], r['category_id']) for r in categories]
 
     def ddListSelector_change(self, **event_args):
         self.refresh_data_grid()
@@ -114,15 +119,22 @@ class formMainApp(formMainAppTemplate):
             self.lblExpiryWarning.visible = False
 
     def refresh_data_grid(self, **event_args):
-        selected_list_id = self.ddListSelector.selected_value
-        if selected_list_id:
-            self.data = anvil.server.call('get_all_items', selected_list_id)
-            self.apply_filter_and_sort(search_query=self.tbSearchList.text)
-            self.populate_category_dropdown()
-        else:
-            self.data = []
-            self.apply_filter_and_sort()
-            self.populate_category_dropdown()
+      selected_list_id = self.ddListSelector.selected_value
+      if selected_list_id:
+          self.data = anvil.server.call('get_all_items', selected_list_id)
+          self.apply_filter_and_sort(search_query=self.tbSearchList.text)  # Ensure the search term is applied
+          self.populate_category_dropdown()  # Refresh category dropdowns
+          if not self.data:
+              self.lblIsEmpty.text = "The currently selected list is empty."
+              self.lblIsEmpty.visible = True
+          else:
+              self.lblIsEmpty.visible = False
+      else:
+          self.data = []
+          self.apply_filter_and_sort()
+          self.populate_category_dropdown()  # Refresh category dropdowns
+          self.lblIsEmpty.text = "No list selected."
+          self.lblIsEmpty.visible = True
 
     def btnCreateItem_click(self, **event_args):
         item_name = self.tbNewItemName.text
@@ -191,13 +203,13 @@ class formMainApp(formMainAppTemplate):
             filtered_data = [item for item in self.data if item['category_id']['category_id'] == selected_category]
         else:
             filtered_data = self.data
-
+    
         if search_query:
             filtered_data = [item for item in filtered_data if search_query.lower() in item['item_name'].lower()]
-
+    
         sorted_data = self.sort_data(filtered_data)
         self.repeatListItems.items = sorted_data
-
+    
         for key, link in self.headers.items():
             if key == self.current_sort_column:
                 link.icon = 'fa:caret-up' if self.current_sort_reverse else 'fa:caret-down'

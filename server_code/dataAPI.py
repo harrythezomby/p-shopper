@@ -16,14 +16,24 @@ import datetime
 def get_all_items(list_id):
     list_row = app_tables.tbllists.get(list_id=list_id)
     list_items = app_tables.tbllistitems.search(list_id=list_row)
-    items = [dict(li['item_id']) for li in list_items]
-    return items
+    items = [li['item_id'] for li in list_items]
+    return [dict(item) for item in items]
   
 @anvil.server.callable
 def get_all_categories(user):
     if user:
         return app_tables.tblcategories.search(user=user)
     return []
+
+@anvil.server.callable
+def get_category_by_name(category_name):
+    user = anvil.users.get_user()
+    return app_tables.tblcategories.get(category_name=category_name, user=user)
+
+@anvil.server.callable
+def get_category_by_id(category_id):
+    user = anvil.users.get_user()
+    return app_tables.tblcategories.get(category_id=category_id, user=user)
 
 @anvil.server.callable
 def get_categories_for_list(list_id):
@@ -77,15 +87,35 @@ def edit_item(item_id, item_name, quantity, category_id, brand, store, aisle):
 
 @anvil.server.callable
 def delete_item(item_id, list_id):
-    list_row = app_tables.tbllists.get(list_id=list_id)
-    item_row = app_tables.tblitems.get(item_id=item_id)
-    list_item_row = app_tables.tbllistitems.get(item_id=item_row, list_id=list_row)
+    list_item_row = app_tables.tbllistitems.get(item_id=app_tables.tblitems.get(item_id=item_id), list_id=app_tables.tbllists.get(list_id=list_id))
     if list_item_row:
         list_item_row.delete()
-        if not app_tables.tbllistitems.search(item_id=item_row):
-            item_row.delete()
-    else:
-        raise ValueError("Item not found in list")
+    item_row = app_tables.tblitems.get(item_id=item_id)
+    if item_row:
+        item_row.delete()
+
+@anvil.server.callable
+def check_off_item(list_item_id, purchase_date, expiry_date, price):
+    list_item = app_tables.tbllistitems.get(list_item_id=list_item_id)
+    item = list_item['item_id']
+    
+    last_long_term = list(app_tables.tbllongtermhistory.search(tables.order_by("long_term_id", ascending=False)))
+    new_long_term_id = last_long_term[0]['long_term_id'] + 1 if last_long_term else 1
+
+    user = anvil.users.get_user()
+
+    app_tables.tbllongtermhistory.add_row(
+        long_term_id=new_long_term_id,
+        item_name=item['item_name'],
+        category_id=item['category_id'],
+        quantity=item['quantity'],
+        purchase_date=purchase_date,
+        expiry_date=expiry_date,
+        price=price,
+        user=user
+    )
+
+    list_item.delete()
 
 @anvil.server.callable
 def get_items_expiring_soon():
@@ -114,7 +144,7 @@ def remove_category(category_name):
     user = anvil.users.get_user()
     category = app_tables.tblcategories.get(category_name=category_name, user=user)
     if category:
-        category_in_use = len(list(app_tables.tblitems.search(category_id=category))) > 0 or len(list(app_tables.tbllongtermhistory.search(category_id=category))) > 0
+        category_in_use = len(app_tables.tblitems.search(category_id=category)) > 0 or len(app_tables.tbllongtermhistory.search(category_id=category)) > 0
         if not category_in_use:
             category.delete()
             return True, "Category removed successfully."
@@ -169,35 +199,7 @@ def get_user_lists():
     else:
         return []
 
-@anvil.server.callable
-def check_off_item(item_id, list_id, purchase_date, expiry_date, price):
-    list_row = app_tables.tbllists.get(list_id=list_id)
-    item_row = app_tables.tblitems.get(item_id=item_id)
-    list_item_row = app_tables.tbllistitems.get(item_id=item_row, list_id=list_row)
-    
-    if not list_item_row:
-        raise Exception("Item not found in the list")
 
-    user = anvil.users.get_user()
-    
-    # Find the maximum long_term_id currently in the table
-    last_long_term = list(app_tables.tbllongtermhistory.search(tables.order_by("long_term_id", ascending=False)))
-    new_long_term_id = last_long_term[0]['long_term_id'] + 1 if last_long_term else 1
-
-    # Add to long-term history
-    app_tables.tbllongtermhistory.add_row(
-        long_term_id=new_long_term_id,
-        item_name=item_row['item_name'],
-        category_id=item_row['category_id'],
-        quantity=item_row['quantity'],
-        purchase_date=purchase_date,
-        expiry_date=expiry_date,
-        price=price,
-        user=user
-    )
-
-    # Delete the item from the current list
-    list_item_row.delete()
 
 @anvil.server.callable
 def export_items_to_csv(list_id):
