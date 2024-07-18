@@ -59,6 +59,14 @@ class RowTemplate2(RowTemplate2Template):
 
     def btnCheck_click(self, **event_args):
         item_id = self.item['item_id']
-        list_id = self.item['list_id']
-        content = formCheckItem(item_id=item_id, list_id=list_id, parent_form=self)
-        alert(content=content, large=True, buttons=[], title="Check Off Item")
+        
+        # Call the server function to get the list item row
+        list_item_row = anvil.server.call('get_list_item_row', item_id)
+        if list_item_row:
+            list_item_id = list_item_row['list_item_id']
+            content = formCheckItem(item_id=item_id, list_item_id=list_item_id, parent_form=self)
+            alert(content=content, large=True, buttons=[], title="Check Off Item")
+        else:
+            alert("Error: List item not found.")
+        self.refresh_data_bindings()
+        self.parent.parent.parent.refresh_data_grid()
