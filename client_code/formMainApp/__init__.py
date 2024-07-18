@@ -122,11 +122,20 @@ class formMainApp(formMainAppTemplate):
             self.data = anvil.server.call('get_all_items', selected_list_id)
             self.apply_filter_and_sort(search_query=self.tbSearchList.text)
             self.populate_category_dropdown()
+            self.update_empty_label()
         else:
             self.data = []
             self.apply_filter_and_sort()
             self.populate_category_dropdown()
+            self.update_empty_label()
 
+    def update_empty_label(self):
+        if not self.data:
+            self.lblIsEmpty.text = "The currently selected list is empty."
+            self.lblIsEmpty.visible = True
+        else:
+            self.lblIsEmpty.visible = False
+  
     def btnCreateItem_click(self, **event_args):
         item_name = self.tbNewItemName.text
         category_id = self.ddNewItemCategory.selected_value
@@ -194,13 +203,15 @@ class formMainApp(formMainAppTemplate):
             filtered_data = [item for item in self.data if item['category_id']['category_id'] == selected_category]
         else:
             filtered_data = self.data
-
+    
         if search_query:
             filtered_data = [item for item in filtered_data if search_query.lower() in item['item_name'].lower()]
-
+    
         sorted_data = self.sort_data(filtered_data)
         self.repeatListItems.items = sorted_data
-
+    
+        self.update_empty_label()  # Update the empty label after filtering and sorting
+    
         for key, link in self.headers.items():
             if key == self.current_sort_column:
                 link.icon = 'fa:caret-up' if self.current_sort_reverse else 'fa:caret-down'
