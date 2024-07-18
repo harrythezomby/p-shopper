@@ -1,19 +1,13 @@
 is_package: true
 container:
   type: DataRowPanel
-  properties: {visible: true, auto_display_data: false}
+  properties: {visible: true, auto_display_data: false, underline: true}
 components:
 - name: dataRowPanelReadView
   properties: {}
   type: DataRowPanel
   layout_properties: {}
   components:
-  - name: lblItemName
-    properties: {}
-    type: Label
-    layout_properties: {column: UJCSTL}
-    data_bindings:
-    - {property: text, code: 'self.item[''item_name'']', writeback: false}
   - name: lblCategory
     properties: {}
     type: Label
@@ -59,6 +53,12 @@ components:
       type: Button
       layout_properties: {}
       event_bindings: {click: btnCheck_click}
+  - name: lblItemName
+    properties: {}
+    type: Label
+    layout_properties: {column: UJCSTL}
+    data_bindings:
+    - {property: text, code: 'self.item[''item_name'']', writeback: false}
 - name: dataRowPanelWriteView
   properties: {visible: false}
   type: DataRowPanel

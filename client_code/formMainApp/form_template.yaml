@@ -62,54 +62,40 @@ components:
       type: DropDown
       event_bindings: {change: filter}
       layout_properties: {}
-- name: gridList
-  properties:
-    columns:
-    - {id: UJCSTL, data_key: item_name, title: Item Name, expand: true}
-    - {id: BYPHYZ, data_key: category_id, title: Category, expand: true}
-    - {id: QHNMEC, data_key: quantity, title: Quantity, expand: true}
-    - {id: QEVMHQ, data_key: brand, title: Brand, expand: true}
-    - {id: GOPKWM, data_key: store, title: Store, expand: true}
-    - {id: AKPEWB, data_key: aisle, title: Aisle, expand: true}
-    - {id: QCBSKP, data_key: column_1, title: '', expand: false, width: '127'}
-    wrap_on: never
-    auto_header: false
-  type: DataGrid
+- name: rowHeaders
+  properties: {}
+  type: DataRowPanel
   components:
-  - name: rowHeaders
-    properties: {}
-    type: DataRowPanel
-    components:
-    - name: linkCategory
-      properties: {text: Category}
-      type: Link
-      layout_properties: {column: BYPHYZ}
-      event_bindings: {click: linkCategory_click}
-    - name: linkItemName
-      properties: {text: Item Name}
-      type: Link
-      layout_properties: {column: UJCSTL}
-      event_bindings: {click: linkItemName_click}
-    - name: linkQuantity
-      properties: {text: Quantity}
-      type: Link
-      layout_properties: {column: QHNMEC}
-      event_bindings: {click: linkQuantity_click}
-    - name: linkBrand
-      properties: {text: Brand}
-      type: Link
-      layout_properties: {column: QEVMHQ}
-      event_bindings: {click: linkBrand_click}
-    - name: linkStore
-      properties: {text: Store}
-      type: Link
-      layout_properties: {column: GOPKWM}
-      event_bindings: {click: linkStore_click}
-    - name: linkAisle
-      properties: {text: Aisle}
-      type: Link
-      layout_properties: {column: AKPEWB}
-      event_bindings: {click: linkAisle_click}
+  - name: linkCategory
+    properties: {text: Category}
+    type: Link
+    layout_properties: {column: BYPHYZ}
+    event_bindings: {click: linkCategory_click}
+  - name: linkItemName
+    properties: {text: Item Name}
+    type: Link
+    layout_properties: {column: UJCSTL}
+    event_bindings: {click: linkItemName_click}
+  - name: linkQuantity
+    properties: {text: Quantity}
+    type: Link
+    layout_properties: {column: QHNMEC}
+    event_bindings: {click: linkQuantity_click}
+  - name: linkBrand
+    properties: {text: Brand}
+    type: Link
+    layout_properties: {column: QEVMHQ}
+    event_bindings: {click: linkBrand_click}
+  - name: linkStore
+    properties: {text: Store}
+    type: Link
+    layout_properties: {column: GOPKWM}
+    event_bindings: {click: linkStore_click}
+  - name: linkAisle
+    properties: {text: Aisle}
+    type: Link
+    layout_properties: {column: AKPEWB}
+    event_bindings: {click: linkAisle_click}
   - name: rowButtons
     properties: {}
     type: DataRowPanel
@@ -149,15 +135,20 @@ components:
         type: Button
         layout_properties: {}
         event_bindings: {click: btnCreateItem_click}
+    layout_properties: {}
   - name: lblIsEmpty
     properties: {align: center}
     type: Label
-    layout_properties: {}
-  - name: repeatListItems
-    properties: {item_template: formMainApp.RowTemplate2, border: ''}
+    layout_properties: {column: 'null'}
+  layout_properties: {slot: default}
+- name: data_grid_1
+  properties:
+    columns: []
+  type: DataGrid
+  components:
+  - name: repeating_panel_1
+    properties: {item_template: formMainApp.RowTemplate1}
     type: RepeatingPanel
-    data_bindings: []
-    layout_properties: {}
   layout_properties: {slot: default}
 - name: spacerListBottom
   properties: {height: 9}
