@@ -30,6 +30,9 @@ class formMainApp(formMainAppTemplate):
         self.populate_lists_dropdown()
         self.update_expiry_warning()
         self.update_list_title()
+        
+        # Refresh data grid after initial population
+        self.refresh_data_grid()
 
     def populate_lists_dropdown(self):
         user = anvil.users.get_user()
@@ -37,7 +40,7 @@ class formMainApp(formMainAppTemplate):
         self.ddListSelector.items = [(l['list_name'], l['list_id']) for l in lists if l['list_name']]
         if lists:
             self.ddListSelector.selected_value = lists[0]['list_id']
-            self.refresh_data_grid()
+            self.refresh_data_grid()  # Ensure the data grid is refreshed on initial load
         else:
             self.ddListSelector.selected_value = None
             self.data = []
