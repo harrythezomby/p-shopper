@@ -286,3 +286,20 @@ class formMainApp(formMainAppTemplate):
         anvil.users.logout()
         open_form('formLogin')
 
+    def btnDeleteList_click(self, **event_args):
+        selected_list_id = self.ddListSelector.selected_value
+        if not selected_list_id:
+            alert("No list selected to delete.")
+            return
+    
+        # Get the name of the selected list for the confirmation alert
+        selected_list_name = [item[0] for item in self.ddListSelector.items if item[1] == selected_list_id][0]
+    
+        confirm_delete = confirm(f"Are you sure you want to delete the list '{selected_list_name}'? This action cannot be undone.")
+        if confirm_delete:
+            anvil.server.call('delete_list', selected_list_id)
+            alert(f"List '{selected_list_name}' and its items have been deleted successfully.")
+            self.populate_lists_dropdown()
+            self.update_list_title()
+            self.refresh_data_grid()
+

@@ -564,4 +564,22 @@ def get_expiry_report(timeframe):
 
     return future_items, expired_items, alert_items
 
+@anvil.server.callable
+def delete_list(list_id):
+    list_row = app_tables.tbllists.get(list_id=list_id)
+    if not list_row:
+        raise ValueError("List not found")
+
+    # Get all items associated with the list
+    list_items = app_tables.tbllistitems.search(list_id=list_row)
+    for list_item in list_items:
+        item_row = list_item['item_id']
+        list_item.delete()  # Delete from tblListItems
+        
+        # Check if the item is linked to other lists
+        if not app_tables.tbllistitems.search(item_id=item_row):
+            item_row.delete()  # Delete from tblItems if not linked to other lists
+
+    list_row.delete()  # Finally, delete the list itself
+
 

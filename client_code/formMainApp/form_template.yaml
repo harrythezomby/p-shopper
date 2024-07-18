@@ -34,6 +34,11 @@ components:
       properties: {text: '', icon: 'fa:font'}
       type: Button
       event_bindings: {click: btnRenameList_click}
+    - name: btnDeleteList
+      properties: {text: '', icon: 'fa:trash'}
+      type: Button
+      layout_properties: {}
+      event_bindings: {click: btnDeleteList_click}
   - name: spacerListTop
     properties: {height: 32}
     type: Spacer
