@@ -48,11 +48,12 @@ class RowTemplate2(RowTemplate2Template):
         self.parent.parent.parent.refresh_data_grid()
 
     def btnDelete_click(self, **event_args):
+        item_name = self.item['item_name']
         item_id = self.item['item_id']
-        confirm_delete = confirm("Are you sure you want to delete this item?")
+        confirm_delete = confirm(f"Are you sure you want to delete the item '{item_name}'?")
         if confirm_delete:
             anvil.server.call('delete_item', item_id)
-            alert("Item deleted successfully.")
+            alert(f"Item '{item_name}' deleted successfully.")
             self.raise_event('x-refresh-data')
             self.refresh_data_bindings()
             self.parent.parent.parent.refresh_data_grid()

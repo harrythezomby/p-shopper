@@ -26,13 +26,28 @@ class formMainApp(formMainAppTemplate):
         
         self.current_sort_column = 'item_name'
         self.current_sort_reverse = False
-  
-        self.populate_lists_dropdown()
-        self.update_expiry_warning()
-        self.update_list_title()
-        
-        # Refresh data grid after initial population
-        self.refresh_data_grid()
+
+        # For sharing
+        url_hash = anvil.get_url_hash()
+        list_id = self.get_list_id_from_url(url_hash)
+        if list_id:
+            self.ddListSelector.selected_value = int(list_id)
+            self.refresh_data_grid()
+            self.update_list_title()
+        else:
+            self.populate_lists_dropdown()
+            self.update_expiry_warning()
+            self.update_list_title()
+            
+            # Refresh data grid after initial population
+            self.refresh_data_grid()
+
+    def get_list_id_from_url(self, url_hash):
+      params = url_hash.split('&')
+      for param in params:
+          if param.startswith('list_id='):
+              return param.split('=')[1]
+      return None
 
     def populate_lists_dropdown(self):
         user = anvil.users.get_user()
@@ -242,7 +257,25 @@ class formMainApp(formMainAppTemplate):
         self.sort_by_column('aisle')
 
     def btnShare_click(self, **event_args):
-        alert(content=formInitiateShare(), large=False, buttons=[], title="Initiate Share")
+        selected_list_id = self.ddListSelector.selected_value
+        if not selected_list_id:
+            alert("No list selected to share.")
+            return
+        
+        # Check if the list is already shared
+        share_url = anvil.server.call('get_share_url', selected_list_id)
+        if share_url:
+            unshare_confirm = confirm(f"This list is already shared. Would you like to unshare it? {share_url}")
+            if unshare_confirm:
+                anvil.server.call('unshare_list', selected_list_id)
+                alert("List has been unshared.")
+            else:
+                alert(f"Share URL: {share_url}")
+        else:
+            share_confirm = confirm("Do you want to create a shareable URL for this list?")
+            if share_confirm:
+                share_url = anvil.server.call('share_list', selected_list_id)
+                alert(f"Share URL: {share_url}")
 
     def btnReports_click(self, **event_args):
         open_form('formGraphsReports')

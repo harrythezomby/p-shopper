@@ -582,4 +582,27 @@ def delete_list(list_id):
 
     list_row.delete()  # Finally, delete the list itself
 
+# Sharing
+@anvil.server.callable
+def get_share_url(list_id):
+    list_row = app_tables.tbllists.get(list_id=list_id)
+    if list_row and list_row['share_url']:
+        return list_row['share_url']
+    return None
+
+@anvil.server.callable
+def share_list(list_id):
+    list_row = app_tables.tbllists.get(list_id=list_id)
+    if list_row:
+        share_url = f"https://your-app-url/#?list_id={list_id}"
+        list_row['share_url'] = share_url
+        return share_url
+    return None
+
+@anvil.server.callable
+def unshare_list(list_id):
+    list_row = app_tables.tbllists.get(list_id=list_id)
+    if list_row and list_row['share_url']:
+        list_row['share_url'] = None
+
 
