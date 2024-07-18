@@ -17,14 +17,16 @@ class RowTemplate2(RowTemplate2Template):
         self.ddCategory.items = [(r['category_name'], r['category_id']) for r in categories]
 
     def btnEdit_click(self, **event_args):
-        self.dataRowPanelWriteView.visible = True
-        self.dataRowPanelReadView.visible = False
+        self.dataRowPanelWriteView.visible = False
+        self.dataRowPanelReadView.visible = True
         self.populate_category_dropdown()
         selected_category = self.item['category_id']
         if selected_category:
             self.ddCategory.selected_value = selected_category['category_id']
         else:
             self.ddCategory.selected_value = None
+        self.dataRowPanelWriteView.visible = True
+        self.dataRowPanelReadView.visible = False
 
     def btnSaveEdits_click(self, **event_args):
         self.dataRowPanelReadView.visible = True
