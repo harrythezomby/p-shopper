@@ -10,15 +10,6 @@ from ..formCheckItem import formCheckItem
 class RowTemplate2(RowTemplate2Template):
     def __init__(self, **properties):
         self.init_components(**properties)
-        self.set_data_bindings()
-
-    def set_data_bindings(self):
-        self.lblItemName.text = self.item['item_name']
-        self.lblQuantity.text = str(self.item['quantity'])
-        self.lblCategory.text = self.item['category_id']['category_name'] if self.item['category_id'] else "None"
-        self.lblBrand.text = self.item['brand']
-        self.lblStore.text = self.item['store']
-        self.lblAisle.text = self.item['aisle']
 
     def btnEdit_click(self, **event_args):
         self.dataRowPanelWriteView.visible = True
@@ -43,14 +34,17 @@ class RowTemplate2(RowTemplate2Template):
         self.parent.parent.parent.refresh_data_grid()
 
     def btnDelete_click(self, **event_args):
-        list_item_id = self.item['list_item_id']
+        item_id = self.item['item_id']
+        list_id = self.item['list_id']
         confirm_delete = confirm("Are you sure you want to delete this item?")
         if confirm_delete:
-            anvil.server.call('delete_item', list_item_id)
+            anvil.server.call('delete_item', item_id, list_id)
             alert("Item deleted successfully.")
             self.raise_event('x-refresh-data')
 
     def btnCheck_click(self, **event_args):
-        list_item_id = self.item['list_item_id']
-        content = formCheckItem(list_item_id, parent_form=self)
+        item_id = self.item['item_id']
+        list_id = self.item['list_id']
+        content = formCheckItem(item_id=item_id, list_id=list_id, parent_form=self)
         alert(content=content, large=True, buttons=[], title="Check Off Item")
+

@@ -14,11 +14,11 @@ import datetime
 
 @anvil.server.callable
 def get_all_items(list_id):
-    list_row = app_tables.tbllists.get(list_id=int(list_id))
+    list_row = app_tables.tbllists.get(list_id=list_id)
     list_items = app_tables.tbllistitems.search(list_id=list_row)
     items = [dict(li['item_id']) for li in list_items]
     return items
-
+  
 @anvil.server.callable
 def get_all_categories(user):
     if user:
@@ -26,42 +26,10 @@ def get_all_categories(user):
     return []
 
 @anvil.server.callable
-def get_categories_simple():
-    return app_tables.tblcategories.search(tables.order_by("category_id", ascending=False))
-
-@anvil.server.callable
-def get_category_by_name(category_name):
-    user = anvil.users.get_user()
-    return app_tables.tblcategories.get(category_name=category_name, user=user)
-
-@anvil.server.callable
 def get_categories_for_list(list_id):
     list_items = app_tables.tbllistitems.search(list_id=app_tables.tbllists.get(list_id=list_id))
     categories = {item['item_id']['category_id'] for item in list_items if item['item_id']['category_id']}
     return [{'category_id': cat['category_id'], 'category_name': cat['category_name']} for cat in categories]
-
-@anvil.server.callable
-def search_items(query):
-    result = app_tables.tblitems.search()
-    if query:
-        query = query.lower()
-        result = [
-            x for x in result
-            if query in x['item_name'].lower()
-            or query in x['brand'].lower()
-            or query in x['store'].lower()
-            or query in x['aisle'].lower()
-        ]
-    return result
-
-@anvil.server.callable
-def filter_items(selected_category):
-    if selected_category is not None:
-        category_row = app_tables.tblcategories.get(category_id=selected_category)
-        result = app_tables.tblitems.search(category_id=category_row)
-    else:
-        result = app_tables.tblitems.search()
-    return result
 
 @anvil.server.callable
 def add_item(item_name, quantity, category_id, brand, store, aisle, list_id):
@@ -108,31 +76,27 @@ def edit_item(item_id, item_name, quantity, category_id, brand, store, aisle):
         )
 
 @anvil.server.callable
-def delete_item(list_item_id):
-    list_item_row = app_tables.tbllistitems.get(list_item_id=list_item_id)
-    if not list_item_row:
+def delete_item(item_id, list_id):
+    list_row = app_tables.tbllists.get(list_id=list_id)
+    item_row = app_tables.tblitems.get(item_id=item_id)
+    list_item_row = app_tables.tbllistitems.get(item_id=item_row, list_id=list_row)
+    if list_item_row:
+        list_item_row.delete()
+        if not app_tables.tbllistitems.search(item_id=item_row):
+            item_row.delete()
+    else:
         raise ValueError("Item not found in list")
-
-    item_row = list_item_row['item_id']
-    if not item_row:
-        raise ValueError("Item data is corrupted")
-
-    list_item_row.delete()
-
-    if not app_tables.tbllistitems.search(item_id=item_row):
-        item_row.delete()
 
 @anvil.server.callable
 def get_items_expiring_soon():
+    import datetime
     now = datetime.date.today()
     alert_items = []
-
     rows = app_tables.tbllongtermhistory.search()
     for row in rows:
         expiry_date = row['expiry_date']
         if expiry_date and now <= expiry_date <= (now + datetime.timedelta(days=2)):
             alert_items.append(row['item_name'])
-
     return alert_items
 
 @anvil.server.callable
@@ -150,21 +114,13 @@ def remove_category(category_name):
     user = anvil.users.get_user()
     category = app_tables.tblcategories.get(category_name=category_name, user=user)
     if category:
-        category_in_use = app_tables.tblitems.search(category_id=category).exists() or app_tables.tbllongtermhistory.search(category_id=category).exists()
+        category_in_use = len(list(app_tables.tblitems.search(category_id=category))) > 0 or len(list(app_tables.tbllongtermhistory.search(category_id=category))) > 0
         if not category_in_use:
             category.delete()
             return True, "Category removed successfully."
         else:
             return False, "Category is in use and cannot be deleted."
     return False, "Category does not exist."
-
-@anvil.server.callable
-def get_category_id_by_name(category_name):
-    user = anvil.users.get_user()
-    category = app_tables.tblcategories.get(category_name=category_name, user=user)
-    if category:
-        return category['category_id']
-    return None
 
 @anvil.server.callable
 def get_all_lists(user):
@@ -214,25 +170,34 @@ def get_user_lists():
         return []
 
 @anvil.server.callable
-def check_off_item(list_item_id, purchase_date, expiry_date, price):
-    list_item = app_tables.tbllistitems.get(list_item_id=list_item_id)
-    item = list_item['item_id']
+def check_off_item(item_id, list_id, purchase_date, expiry_date, price):
+    list_row = app_tables.tbllists.get(list_id=list_id)
+    item_row = app_tables.tblitems.get(item_id=item_id)
+    list_item_row = app_tables.tbllistitems.get(item_id=item_row, list_id=list_row)
     
+    if not list_item_row:
+        raise Exception("Item not found in the list")
+
+    user = anvil.users.get_user()
+    
+    # Find the maximum long_term_id currently in the table
     last_long_term = list(app_tables.tbllongtermhistory.search(tables.order_by("long_term_id", ascending=False)))
     new_long_term_id = last_long_term[0]['long_term_id'] + 1 if last_long_term else 1
 
+    # Add to long-term history
     app_tables.tbllongtermhistory.add_row(
         long_term_id=new_long_term_id,
-        item_name=item['item_name'],
-        category_id=item['category_id'],
-        quantity=item['quantity'],
+        item_name=item_row['item_name'],
+        category_id=item_row['category_id'],
+        quantity=item_row['quantity'],
         purchase_date=purchase_date,
         expiry_date=expiry_date,
         price=price,
-        user=item['user']
+        user=user
     )
 
-    list_item.delete()
+    # Delete the item from the current list
+    list_item_row.delete()
 
 @anvil.server.callable
 def export_items_to_csv(list_id):
@@ -271,7 +236,8 @@ def export_items_to_csv(list_id):
 # Functions for the category consumption graph
 @anvil.server.callable
 def get_all_categories_for_graphs():
-    categories = app_tables.tblcategories.search()
+    user = anvil.users.get_user()
+    categories = app_tables.tblcategories.search(user=user)
     return [{'category_id': cat['category_id'], 'category_name': cat['category_name']} for cat in categories]
 
 @anvil.server.callable
@@ -279,28 +245,26 @@ def get_category_consumption_data(category_id, timeframe):
     from dateutil.relativedelta import relativedelta
     import collections
 
+    user = anvil.users.get_user()
     now = datetime.datetime.now()
 
     if timeframe == 'week':
-        start_date = now - datetime.timedelta(weeks=52)
-        date_format = "%U"
-        increment = datetime.timedelta(weeks=1)
+        start_date = now - datetime.timedelta(weeks=52)  # Past year
+        date_format = "%U"  # Week format
     elif timeframe == 'month':
-        start_date = now - relativedelta(years=1)
-        date_format = "%b"
-        increment = relativedelta(months=1)
+        start_date = now - relativedelta(years=1)  # Past year
+        date_format = "%b"  # Month format (e.g., Jan, Feb)
     elif timeframe == 'year':
-        start_date = now - relativedelta(years=5)
-        date_format = "%Y"
-        increment = relativedelta(years=1)
+        start_date = now - relativedelta(years=5)  # Past 5 years
+        date_format = "%Y"  # Year format
     else:
         raise ValueError("Invalid timeframe")
 
     category_row = app_tables.tblcategories.get(category_id=category_id)
-    
     rows = app_tables.tbllongtermhistory.search(
         category_id=category_row,
-        purchase_date=q.greater_than_or_equal_to(start_date)
+        purchase_date=q.greater_than_or_equal_to(start_date),
+        user=user
     )
 
     aggregated_data = collections.defaultdict(int)
@@ -311,38 +275,38 @@ def get_category_consumption_data(category_id, timeframe):
     sorted_data = [{'date': date, 'quantity': quantity} for date, quantity in sorted(aggregated_data.items())]
     return sorted_data
 
+# Functions for the item quantity consumption graph
 @anvil.server.callable
 def get_all_items_for_graphs():
-    items = app_tables.tbllongtermhistory.search()
+    user = anvil.users.get_user()
+    items = app_tables.tbllongtermhistory.search(user=user)
     unique_items = {item['item_name'] for item in items}
     return [{'item_name': name} for name in unique_items]
 
 @anvil.server.callable
 def get_item_consumption_data(item_name, timeframe):
-    import datetime
     from dateutil.relativedelta import relativedelta
     import collections
 
+    user = anvil.users.get_user()
     now = datetime.datetime.now()
 
     if timeframe == 'week':
-        start_date = now - datetime.timedelta(weeks=52)
-        date_format = "%U"
-        increment = datetime.timedelta(weeks=1)
+        start_date = now - datetime.timedelta(weeks=52)  # Past year
+        date_format = "%U"  # Week format
     elif timeframe == 'month':
-        start_date = now - relativedelta(years=1)
-        date_format = "%b"
-        increment = relativedelta(months=1)
+        start_date = now - relativedelta(years=1)  # Past year
+        date_format = "%b"  # Month format (e.g., Jan, Feb)
     elif timeframe == 'year':
-        start_date = now - relativedelta(years=5)
-        date_format = "%Y"
-        increment = relativedelta(years=1)
+        start_date = now - relativedelta(years=5)  # Past 5 years
+        date_format = "%Y"  # Year format
     else:
         raise ValueError("Invalid timeframe")
 
     rows = app_tables.tbllongtermhistory.search(
         item_name=item_name,
-        purchase_date=q.greater_than_or_equal_to(start_date)
+        purchase_date=q.greater_than_or_equal_to(start_date),
+        user=user
     )
 
     aggregated_data = collections.defaultdict(int)
@@ -353,31 +317,30 @@ def get_item_consumption_data(item_name, timeframe):
     sorted_data = [{'date': date, 'quantity': quantity} for date, quantity in sorted(aggregated_data.items())]
     return sorted_data
 
+# Functions for money spent history graph
 @anvil.server.callable
 def get_money_spent_data(timeframe):
-    import datetime
     from dateutil.relativedelta import relativedelta
     import collections
 
+    user = anvil.users.get_user()
     now = datetime.datetime.now()
 
     if timeframe == 'week':
-        start_date = now - datetime.timedelta(weeks=52)
-        date_format = "%U"
-        increment = datetime.timedelta(weeks=1)
+        start_date = now - datetime.timedelta(weeks=52)  # Past year
+        date_format = "%U"  # Week format
     elif timeframe == 'month':
-        start_date = now - relativedelta(years=1)
-        date_format = "%b"
-        increment = relativedelta(months=1)
+        start_date = now - relativedelta(years=1)  # Past year
+        date_format = "%b"  # Month format (e.g., Jan, Feb)
     elif timeframe == 'year':
-        start_date = now - relativedelta(years=5)
-        date_format = "%Y"
-        increment = relativedelta(years=1)
+        start_date = now - relativedelta(years=5)  # Past 5 years
+        date_format = "%Y"  # Year format
     else:
         raise ValueError("Invalid timeframe")
 
     rows = app_tables.tbllongtermhistory.search(
-        purchase_date=q.greater_than_or_equal_to(start_date)
+        purchase_date=q.greater_than_or_equal_to(start_date),
+        user=user
     )
 
     aggregated_data = collections.defaultdict(float)
@@ -388,29 +351,31 @@ def get_money_spent_data(timeframe):
     sorted_data = [{'date': date, 'amount_spent': amount} for date, amount in sorted(aggregated_data.items())]
     return sorted_data
 
+# Functions for Item price history graph
 @anvil.server.callable
 def get_item_price_history_data(item_name, timeframe):
-    import datetime
     from dateutil.relativedelta import relativedelta
     import collections
 
+    user = anvil.users.get_user()
     now = datetime.datetime.now()
 
     if timeframe == 'week':
-        start_date = now - datetime.timedelta(weeks=52)
-        date_format = "%U"
+        start_date = now - datetime.timedelta(weeks=52)  # Past year
+        date_format = "%U"  # Week format
     elif timeframe == 'month':
-        start_date = now - relativedelta(years=1)
-        date_format = "%b"
+        start_date = now - relativedelta(years=1)  # Past year
+        date_format = "%b"  # Month format (e.g., Jan, Feb)
     elif timeframe == 'year':
-        start_date = now - relativedelta(years=5)
-        date_format = "%Y"
+        start_date = now - relativedelta(years=5)  # Past 5 years
+        date_format = "%Y"  # Year format
     else:
         raise ValueError("Invalid timeframe")
 
     rows = app_tables.tbllongtermhistory.search(
         item_name=item_name,
-        purchase_date=q.greater_than_or_equal_to(start_date)
+        purchase_date=q.greater_than_or_equal_to(start_date),
+        user=user
     )
 
     aggregated_data = collections.defaultdict(list)
@@ -420,29 +385,30 @@ def get_item_price_history_data(item_name, timeframe):
         aggregated_data[date_key].append(price_per_quantity)
 
     average_data = {date: sum(prices) / len(prices) for date, prices in aggregated_data.items()}
-
     sorted_data = [{'date': date, 'price': price} for date, price in sorted(average_data.items())]
     return sorted_data
 
+# Functions for item comparison report
 @anvil.server.callable
 def get_item_comparison_report_data(timeframe):
-    import datetime
     from dateutil.relativedelta import relativedelta
     import collections
 
+    user = anvil.users.get_user()
     now = datetime.datetime.now()
 
     if timeframe == 'week':
-        start_date = now - datetime.timedelta(weeks=1)
+        start_date = now - datetime.timedelta(weeks=1)  # Past week
     elif timeframe == 'month':
-        start_date = now - relativedelta(months=1)
+        start_date = now - relativedelta(months=1)  # Past month
     elif timeframe == 'year':
-        start_date = now - relativedelta(years=1)
+        start_date = now - relativedelta(years=1)  # Past year
     else:
         raise ValueError("Invalid timeframe")
 
     rows = app_tables.tbllongtermhistory.search(
-        purchase_date=q.greater_than_or_equal_to(start_date)
+        purchase_date=q.greater_than_or_equal_to(start_date),
+        user=user
     )
 
     item_count = collections.Counter()
@@ -475,17 +441,19 @@ def get_item_comparison_report_data(timeframe):
 
     return report_data
 
+# Functions for weekly spending report
 @anvil.server.callable
 def get_weekly_spending_report():
-    import datetime
     from dateutil.relativedelta import relativedelta
     import collections
 
+    user = anvil.users.get_user()
     now = datetime.datetime.now()
-    start_date = now - datetime.timedelta(weeks=52)
+    start_date = now - datetime.timedelta(weeks=52)  # Past year
 
     rows = app_tables.tbllongtermhistory.search(
-        purchase_date=q.greater_than_or_equal_to(start_date)
+        purchase_date=q.greater_than_or_equal_to(start_date),
+        user=user
     )
 
     weekly_spending = collections.defaultdict(float)
@@ -511,9 +479,9 @@ def get_weekly_spending_report():
 
     return spending_changes
 
+# Expiry Report
 @anvil.server.callable
 def get_expiry_report(timeframe):
-    import datetime
     from dateutil.relativedelta import relativedelta
 
     now = datetime.date.today()
@@ -530,11 +498,12 @@ def get_expiry_report(timeframe):
     else:
         raise ValueError("Invalid timeframe")
 
+    user = anvil.users.get_user()
     future_items = []
     expired_items = []
     alert_items = []
 
-    rows = app_tables.tbllongtermhistory.search()
+    rows = app_tables.tbllongtermhistory.search(user=user)
     for row in rows:
         expiry_date = row['expiry_date']
         if expiry_date:

@@ -26,10 +26,8 @@ class formMainApp(formMainAppTemplate):
         
         self.current_sort_column = 'item_name'
         self.current_sort_reverse = False
-        
+  
         self.populate_lists_dropdown()
-        self.populate_category_dropdown()
-        self.filter()
         self.update_expiry_warning()
         self.update_list_title()
 
@@ -92,6 +90,10 @@ class formMainApp(formMainAppTemplate):
         user = anvil.users.get_user()
         categories = anvil.server.call('get_all_categories', user)
         self.ddNewItemCategory.items = [(r['category_name'], r['category_id']) for r in categories] + [("New Category", "New Category"), ("Remove Category", "Remove Category")]
+        selected_list_id = self.ddListSelector.selected_value
+        if selected_list_id:
+            categories = anvil.server.call('get_categories_for_list', selected_list_id)
+            self.ddCategorySelector.items = [('All Categories', None)] + [(r['category_name'], r['category_id']) for r in categories]
 
     def ddListSelector_change(self, **event_args):
         self.refresh_data_grid()
@@ -121,25 +123,6 @@ class formMainApp(formMainAppTemplate):
             self.data = []
             self.apply_filter_and_sort()
             self.populate_category_dropdown()
-    
-    def apply_filter_and_sort(self, search_query=None):
-        selected_category = self.ddCategorySelector.selected_value
-        if selected_category:
-            filtered_data = [item for item in self.data if item['category_id'] and item['category_id']['category_id'] == selected_category]
-        else:
-            filtered_data = self.data
-    
-        if search_query:
-            filtered_data = [item for item in filtered_data if search_query.lower() in item['item_name'].lower()]
-    
-        sorted_data = self.sort_data(filtered_data)
-        self.repeatListItems.items = sorted_data
-    
-        for key, link in self.headers.items():
-            if key == self.current_sort_column:
-                link.icon = 'fa:caret-up' if self.current_sort_reverse else 'fa:caret-down'
-            else:
-                link.icon = None
 
     def btnCreateItem_click(self, **event_args):
         item_name = self.tbNewItemName.text
@@ -202,6 +185,25 @@ class formMainApp(formMainAppTemplate):
             )
         return sorted_data
 
+    def apply_filter_and_sort(self, search_query=None):
+        selected_category = self.ddCategorySelector.selected_value
+        if selected_category:
+            filtered_data = [item for item in self.data if item['category_id']['category_id'] == selected_category]
+        else:
+            filtered_data = self.data
+
+        if search_query:
+            filtered_data = [item for item in filtered_data if search_query.lower() in item['item_name'].lower()]
+
+        sorted_data = self.sort_data(filtered_data)
+        self.repeatListItems.items = sorted_data
+
+        for key, link in self.headers.items():
+            if key == self.current_sort_column:
+                link.icon = 'fa:caret-up' if self.current_sort_reverse else 'fa:caret-down'
+            else:
+                link.icon = None
+
     def linkItemName_click(self, **event_args):
         self.sort_by_column('item_name')
 
@@ -256,8 +258,8 @@ class formMainApp(formMainAppTemplate):
         csv_file = anvil.server.call('export_items_to_csv', selected_list_id)
         download(csv_file)
 
-    def check_off_item(self, list_item_id, **event_args):
-        content = formCheckItem(list_item_id, parent_form=self)
+    def check_off_item(self, item_id, list_id, **event_args):
+        content = formCheckItem(item_id=item_id, list_id=list_id, parent_form=self)
         alert(content=content, large=True, buttons=[], title="Check Off Item")
 
     def update_list_title(self):
@@ -269,3 +271,4 @@ class formMainApp(formMainAppTemplate):
     def btnLogout_click(self, **event_args):
         anvil.users.logout()
         open_form('formLogin')
+
