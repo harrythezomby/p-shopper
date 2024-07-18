@@ -14,7 +14,7 @@ import datetime
 
 @anvil.server.callable
 def get_all_items(list_id):
-    list_row = app_tables.tbllists.get(list_id=list_id)
+    list_row = app_tables.tbllists.get(list_id=int(list_id))
     list_items = app_tables.tbllistitems.search(list_id=list_row)
     items = [dict(li['item_id']) for li in list_items]
     return items

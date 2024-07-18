@@ -121,6 +121,25 @@ class formMainApp(formMainAppTemplate):
             self.data = []
             self.apply_filter_and_sort()
             self.populate_category_dropdown()
+    
+    def apply_filter_and_sort(self, search_query=None):
+        selected_category = self.ddCategorySelector.selected_value
+        if selected_category:
+            filtered_data = [item for item in self.data if item['category_id'] and item['category_id']['category_id'] == selected_category]
+        else:
+            filtered_data = self.data
+    
+        if search_query:
+            filtered_data = [item for item in filtered_data if search_query.lower() in item['item_name'].lower()]
+    
+        sorted_data = self.sort_data(filtered_data)
+        self.repeatListItems.items = sorted_data
+    
+        for key, link in self.headers.items():
+            if key == self.current_sort_column:
+                link.icon = 'fa:caret-up' if self.current_sort_reverse else 'fa:caret-down'
+            else:
+                link.icon = None
 
     def btnCreateItem_click(self, **event_args):
         item_name = self.tbNewItemName.text
@@ -182,26 +201,6 @@ class formMainApp(formMainAppTemplate):
                 reverse=self.current_sort_reverse
             )
         return sorted_data
-
-    def apply_filter_and_sort(self, search_query=None):
-        selected_category = self.ddCategorySelector.selected_value
-        if selected_category:
-            filtered_data = [item for item in self.data if item['category_id']['category_id'] == selected_category]
-        else:
-            filtered_data = self.data
-
-        if search_query:
-            filtered_data = [item for item in filtered_data if search_query.lower() in item['item_name'].lower()]
-
-        sorted_data = self.sort_data(filtered_data)
-
-        self.repeatListItems.items = sorted_data
-
-        for key, link in self.headers.items():
-            if key == self.current_sort_column:
-                link.icon = 'fa:caret-up' if self.current_sort_reverse else 'fa:caret-down'
-            else:
-                link.icon = None
 
     def linkItemName_click(self, **event_args):
         self.sort_by_column('item_name')

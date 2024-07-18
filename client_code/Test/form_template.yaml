@@ -20,6 +20,6 @@ components:
   type: DataGrid
   components:
   - name: repeating_panel_1
-    properties: {item_template: Test.RowTemplate1}
+    properties: {item_template: Test.RowTemplate3}
     type: RepeatingPanel
   layout_properties: {slot: default}

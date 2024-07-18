@@ -10,6 +10,15 @@ from ..formCheckItem import formCheckItem
 class RowTemplate2(RowTemplate2Template):
     def __init__(self, **properties):
         self.init_components(**properties)
+        self.set_data_bindings()
+
+    def set_data_bindings(self):
+        self.lblItemName.text = self.item['item_name']
+        self.lblQuantity.text = str(self.item['quantity'])
+        self.lblCategory.text = self.item['category_id']['category_name'] if self.item['category_id'] else "None"
+        self.lblBrand.text = self.item['brand']
+        self.lblStore.text = self.item['store']
+        self.lblAisle.text = self.item['aisle']
 
     def btnEdit_click(self, **event_args):
         self.dataRowPanelWriteView.visible = True
