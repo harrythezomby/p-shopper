@@ -183,19 +183,24 @@ class formMainApp(formMainAppTemplate):
         self.apply_filter_and_sort()
 
     def sort_data(self, data):
-        if self.current_sort_column == 'category_id':
-            sorted_data = sorted(
-                data,
-                key=lambda x: x[self.current_sort_column]['category_name'].lower(),
-                reverse=self.current_sort_reverse
-            )
-        else:
-            sorted_data = sorted(
-                data,
-                key=lambda x: str(x[self.current_sort_column]).lower(),
-                reverse=self.current_sort_reverse
-            )
-        return sorted_data
+        try:
+            if self.current_sort_column == 'category_id':
+                sorted_data = sorted(
+                    data,
+                    key=lambda x: x[self.current_sort_column]['category_name'].lower() if x[self.current_sort_column] else "",
+                    reverse=self.current_sort_reverse
+                )
+            else:
+                sorted_data = sorted(
+                    data,
+                    key=lambda x: str(x[self.current_sort_column]).lower() if x[self.current_sort_column] else "",
+                    reverse=self.current_sort_reverse
+                )
+            return sorted_data
+        except Exception as e:
+            # Handle any exceptions that may occur during sorting
+            print(f"Error during sorting: {e}")
+            return data
 
     def apply_filter_and_sort(self, search_query=None):
         selected_category = self.ddCategorySelector.selected_value
