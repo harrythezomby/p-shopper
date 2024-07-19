@@ -1,4 +1,4 @@
-from ._anvil_designer import RowTemplate2Template
+from ._anvil_designer import rowListTemplate
 from anvil import *
 import anvil.server
 import anvil.tables as tables
@@ -6,7 +6,7 @@ import anvil.tables.query as q
 from anvil.tables import app_tables
 from ..formCheckItem import formCheckItem
 
-class RowTemplate2(RowTemplate2Template):
+class rowList(rowListTemplate):
     def __init__(self, **properties):
         self.init_components(**properties)
         

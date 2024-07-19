@@ -159,7 +159,7 @@ components:
       type: Label
       layout_properties: {}
   - name: repeatListItems
-    properties: {item_template: formMainApp.RowTemplate2, border: ''}
+    properties: {item_template: formMainApp.rowList, border: ''}
     type: RepeatingPanel
     data_bindings: []
     layout_properties: {}

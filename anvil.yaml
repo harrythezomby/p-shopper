@@ -146,3 +146,6 @@ db_schema:
     - name: signed_up
       admin_ui: {width: 200}
       type: datetime
+    - name: theme
+      admin_ui: {width: 200, order: 8}
+      type: string

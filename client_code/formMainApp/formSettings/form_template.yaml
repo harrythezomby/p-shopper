@@ -1,26 +1,5 @@
 container: {type: ColumnPanel}
 components:
-- name: columnLightDarkMode
-  properties: {}
-  type: ColumnPanel
-  layout_properties: {grid_position: 'QDSEAL,KJOPKQ'}
-  components:
-  - name: lblLightDarkMode
-    properties: {text: 'Light/Dark Mode Selector:'}
-    type: Label
-    layout_properties: {grid_position: 'XWGLVA,EZJKQW'}
-  - name: btnLightDarkAuto
-    properties: {text: Auto, icon: 'fa:envira'}
-    type: Button
-    layout_properties: {grid_position: 'WXCBFM,DNFOUX'}
-  - name: btnLightDarkLight
-    properties: {text: Light, icon: 'fa:sun-o'}
-    type: Button
-    layout_properties: {grid_position: 'WXCBFM,ZPKNQV'}
-  - name: btnLightDarkDark
-    properties: {text: Dark, icon: 'fa:moon-o'}
-    type: Button
-    layout_properties: {grid_position: 'WXCBFM,OGUOCU'}
 - name: columnColourTheme
   properties: {}
   type: ColumnPanel
@@ -30,14 +9,20 @@ components:
     properties: {text: 'Colour Theme:'}
     type: Label
     layout_properties: {grid_position: 'OQGZPT,RMSGMJ'}
-  - name: btnColourThemePlainish
-    properties: {text: Plainish, icon: 'fa:paper-plane-o'}
-    type: Button
-    layout_properties: {grid_position: 'CJBYXN,FKZSJA'}
   - name: btnColourThemeDefault
     properties: {text: Default, icon: 'fa:check'}
     type: Button
     layout_properties: {grid_position: 'CJBYXN,WUSUBN'}
+    event_bindings: {click: btnColourThemeDefault_click}
+  - name: btnColourThemeDark
+    properties: {text: Dark, icon: 'fa:moon-o'}
+    type: Button
+    layout_properties: {grid_position: 'CJBYXN,IJGGCZ'}
+    event_bindings: {click: btnColourThemeDark_click}
+  - name: btnColourThemePlainish
+    properties: {text: Plainish, icon: 'fa:paper-plane-o'}
+    type: Button
+    layout_properties: {grid_position: 'CJBYXN,SORZJD'}
   - name: btnColourThemeBerry
     properties: {text: Berry, icon: 'fa:diamond'}
     type: Button

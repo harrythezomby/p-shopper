@@ -26,7 +26,8 @@ class formMainApp(formMainAppTemplate):
         
         self.current_sort_column = 'item_name'
         self.current_sort_reverse = False
-  
+
+        self.apply_user_theme()
         self.populate_lists_dropdown()
         self.update_expiry_warning()
         self.update_list_title()
@@ -308,3 +309,19 @@ class formMainApp(formMainAppTemplate):
             self.update_list_title()
             self.refresh_data_grid()
 
+# Theming
+    def apply_user_theme(self):
+        user = anvil.users.get_user()
+        if user:
+            theme_name = anvil.server.call('get_user_theme', user)
+            self.apply_theme(theme_name)
+
+    def apply_theme(self, theme_name):
+        js_code = f"""
+        document.body.className = '';
+        document.body.classList.add('{theme_name}');
+        """
+        self.call_js(js_code)
+
+    def call_js(self, js_code):
+        anvil.js.window.eval(js_code)

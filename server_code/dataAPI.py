@@ -582,4 +582,13 @@ def delete_list(list_id):
 
     list_row.delete()  # Finally, delete the list itself
 
+# Theming
+@anvil.server.callable
+def get_user_theme(user):
+    return user['theme'] if 'theme' in user else 'default-theme'
+
+@anvil.server.callable
+def set_user_theme(user, theme_name):
+    user['theme'] = theme_name
+
 
