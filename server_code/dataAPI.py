@@ -202,6 +202,9 @@ def create_default_list(user):
     last_list = list(app_tables.tbllists.search(tables.order_by("list_id", ascending=False)))
     new_list_id = last_list[0]['list_id'] + 1 if last_list else 1
     app_tables.tbllists.add_row(list_id=new_list_id, list_name='New List', user=user)
+    
+    # Set default theme for the new user
+    user['theme'] = 'default-theme'
 
 @anvil.server.callable
 def get_user_lists():
@@ -584,11 +587,16 @@ def delete_list(list_id):
 
 # Theming
 @anvil.server.callable
-def get_user_theme(user):
-    return user['theme'] if 'theme' in user else 'default-theme'
+def get_user_theme():
+    user = anvil.users.get_user()
+    if user:
+        return user['theme']
+    return 'default-theme'
 
 @anvil.server.callable
-def set_user_theme(user, theme_name):
-    user['theme'] = theme_name
+def set_user_theme(theme):
+    user = anvil.users.get_user()
+    if user:
+        user['theme'] = theme
 
 

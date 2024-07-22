@@ -27,7 +27,8 @@ class formMainApp(formMainAppTemplate):
         self.current_sort_column = 'item_name'
         self.current_sort_reverse = False
 
-        self.apply_user_theme()
+        self.apply_user_theme()  # Apply the user's theme on startup
+      
         self.populate_lists_dropdown()
         self.update_expiry_warning()
         self.update_list_title()
@@ -249,7 +250,7 @@ class formMainApp(formMainAppTemplate):
         open_form('formGraphsReports')
 
     def btnSettings_click(self, **event_args):
-        alert(content=formSettings(), large=False, buttons=[], title="Settings")
+        alert(content=formSettings(), large=True, buttons=[], title="Settings")
 
     def btnRenameList_click(self, **event_args):
         selected_list_id = self.ddListSelector.selected_value
@@ -311,11 +312,9 @@ class formMainApp(formMainAppTemplate):
 
 # Theming
     def apply_user_theme(self):
-        user = anvil.users.get_user()
-        if user:
-            theme_name = anvil.server.call('get_user_theme', user)
-            self.apply_theme(theme_name)
-
+        theme = anvil.server.call('get_user_theme')
+        self.apply_theme(theme)
+    
     def apply_theme(self, theme_name):
         js_code = f"""
         document.body.className = '';
