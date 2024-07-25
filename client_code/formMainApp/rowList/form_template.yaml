@@ -5,7 +5,7 @@ container:
 components:
 - properties: {}
   type: DataRowPanel
-  layout_properties: {column: ''}
+  layout_properties: {column: n}
   name: dataRowPanelReadView
   components:
   - properties: {}
@@ -64,13 +64,6 @@ components:
   layout_properties: {column: 'null'}
   name: dataRowPanelWriteView
   components:
-  - properties: {role: textbox}
-    type: TextBox
-    layout_properties: {column: UJCSTL}
-    data_bindings:
-    - {code: 'self.item[''item_name'']', writeback: false, property: text}
-    event_bindings: {}
-    name: tbItemName
   - properties:
       items: []
       role: dropdown
@@ -122,3 +115,10 @@ components:
       type: Button
       event_bindings: {click: btnDelete_click}
       name: btnDelete
+  - properties: {role: textbox}
+    type: TextBox
+    layout_properties: {column: UJCSTL}
+    data_bindings:
+    - {code: 'self.item[''item_name'']', writeback: false, property: text}
+    event_bindings: {}
+    name: tbItemName

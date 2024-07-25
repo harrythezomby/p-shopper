@@ -2,3 +2,4 @@ roles:
 - {name: textbox}
 - {name: dropdown}
 - {name: radio}
+- {name: wide}

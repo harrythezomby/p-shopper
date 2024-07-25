@@ -36,6 +36,8 @@ class formMainApp(formMainAppTemplate):
         # Refresh data grid after initial population
         self.refresh_data_grid()
 
+
+    """Setting up (grabbing data from database, etc)"""
     def populate_lists_dropdown(self):
         user = anvil.users.get_user()
         lists = anvil.server.call('get_all_lists', user)
@@ -50,6 +52,18 @@ class formMainApp(formMainAppTemplate):
             self.lblIsEmpty.text = "The currently selected list is empty."
             self.lblIsEmpty.visible = True
 
+    def populate_category_dropdown(self):
+        user = anvil.users.get_user()
+        categories = anvil.server.call('get_all_categories', user)
+        self.ddNewItemCategory.items = [(r['category_name'], r['category_id']) for r in categories] + [("New Category", "New Category"), ("Remove Category", "Remove Category")]
+        selected_list_id = self.ddListSelector.selected_value
+        if selected_list_id:
+            categories = anvil.server.call('get_categories_for_list', selected_list_id)
+            self.ddCategorySelector.items = [('All Categories', None)] + [(r['category_name'], r['category_id']) for r in categories]
+
+
+
+    """Category interaction"""
     def ddNewItemCategory_change(self, **event_args):
         selected_value = self.ddNewItemCategory.selected_value
         if selected_value == "New Category":
@@ -64,46 +78,67 @@ class formMainApp(formMainAppTemplate):
         result = alert("Enter name for the new category:", buttons=[("OK", "ok")], content=content, title="Create New Category", large=True)
         if result == "ok":
             new_category_name = content.text.strip().title()
-            if new_category_name:
-                success = anvil.server.call('create_new_category', new_category_name)
-                if success:
-                    self.populate_category_dropdown()
-                    alert("New category created successfully.")
-                else:
-                    alert("Category creation failed.")
-        self.revert_category_selection()
+            
+            # Input validation: only allow English alphabetic characters and spaces
+            if not new_category_name.isalpha() and not all(char.isalpha() or char.isspace() for char in new_category_name):
+                alert("Invalid input. Please enter only English alphabetic characters and spaces.")
+                content.text = ""  # Clear the input field
+                self.revert_category_selection()
+                return
     
+            # Check for blank input
+            if not new_category_name:
+                alert("Category name cannot be blank.")
+                content.text = ""  # Clear the input field
+                self.revert_category_selection()
+                return
+            
+            # Call the server function to create a new category
+            success = anvil.server.call('create_new_category', new_category_name)
+            if success:
+                self.populate_category_dropdown()
+                alert("New category created successfully.")
+            else:
+                alert("Category creation failed.")
+        self.revert_category_selection()
+        
     def remove_category(self):
         content = TextBox()
         result = alert("Enter name of the category to remove:", buttons=[("OK", "ok")], content=content, title="Remove Category", large=True)
         if result == "ok":
             category_name = content.text.strip().title()
-            if category_name:
-                success, message = anvil.server.call('remove_category', category_name)
-                if success:
-                    self.populate_category_dropdown()
-                    alert("Category removed successfully.")
-                else:
-                    alert(message)
+    
+            # Input validation: only allow English alphabetic characters and spaces
+            if not category_name.isalpha() and not all(char.isalpha() or char.isspace() for char in category_name):
+                alert("Invalid input. Please enter only English alphabetic characters and spaces.")
+                content.text = ""  # Clear the input field
+                self.revert_category_selection()
+                return
+    
+            # Check for blank input
+            if not category_name:
+                alert("Category name cannot be blank.")
+                content.text = ""  # Clear the input field
+                self.revert_category_selection()
+                return
+    
+            # Call the server function to remove the category
+            success, message = anvil.server.call('remove_category', category_name)
+            if success:
+                self.populate_category_dropdown()
+                alert("Category removed successfully.")
+            else:
+                alert(message)
         self.revert_category_selection()
     
     def revert_category_selection(self):
         if self.ddNewItemCategory.items:
             self.ddNewItemCategory.selected_value = self.ddNewItemCategory.items[0][1]
     
-    def populate_category_dropdown(self):
-        user = anvil.users.get_user()
-        categories = anvil.server.call('get_all_categories', user)
-        self.ddNewItemCategory.items = [(r['category_name'], r['category_id']) for r in categories] + [("New Category", "New Category"), ("Remove Category", "Remove Category")]
-        selected_list_id = self.ddListSelector.selected_value
-        if selected_list_id:
-            categories = anvil.server.call('get_categories_for_list', selected_list_id)
-            self.ddCategorySelector.items = [('All Categories', None)] + [(r['category_name'], r['category_id']) for r in categories]
+    
 
-    def ddListSelector_change(self, **event_args):
-        self.refresh_data_grid()
-        self.update_list_title()
-
+    
+    """Searching and filtering"""
     def filter(self, **event_args):
         self.apply_filter_and_sort()
 
@@ -138,42 +173,7 @@ class formMainApp(formMainAppTemplate):
         else:
             self.lblIsEmpty.visible = False
   
-    def btnCreateItem_click(self, **event_args):
-        item_name = self.tbNewItemName.text
-        category_id = self.ddNewItemCategory.selected_value
-        list_id = self.ddListSelector.selected_value
     
-        if self.tbNewItemQuantity.text == 0 or None:
-            quantity = 1
-        else:
-            quantity = self.tbNewItemQuantity.text
-    
-        none = "None"
-    
-        if self.tbNewItemBrand.text == "" or None:
-            brand = none
-        else:
-            brand = self.tbNewItemBrand.text
-    
-        if self.tbNewItemStore.text == "" or None:
-            store = none
-        else:
-            store = self.tbNewItemStore.text
-    
-        if self.tbNewItemAisle.text == "" or None:
-            aisle = none
-        else:
-            aisle = self.tbNewItemAisle.text
-    
-        anvil.server.call('add_item', item_name, quantity, category_id, brand, store, aisle, list_id)
-        alert("Item added successfully.")
-        self.refresh_data_grid()
-    
-        self.tbNewItemName.text = ""
-        self.tbNewItemQuantity.text = ""
-        self.tbNewItemBrand.text = ""
-        self.tbNewItemStore.text = ""
-        self.tbNewItemAisle.text = ""
 
     def sort_by_column(self, column):
         if self.current_sort_column == column:
@@ -243,14 +243,109 @@ class formMainApp(formMainAppTemplate):
     def linkAisle_click(self, **event_args):
         self.sort_by_column('aisle')
 
-    def btnShare_click(self, **event_args):
-        alert(content=formInitiateShare(), large=False, buttons=[], title="Initiate Share")
 
+
+    """Other buttons"""
     def btnReports_click(self, **event_args):
         open_form('formGraphsReports')
 
-    def btnSettings_click(self, **event_args):
+    def btnThemes_click(self, **event_args):
         alert(content=formSettings(), large=True, buttons=[], title="Settings")
+
+    def btnLogout_click(self, **event_args):
+        anvil.users.logout()
+        open_form('formLogin')
+  
+    
+
+    
+
+    
+
+    def update_list_title(self):
+        selected_list_id = self.ddListSelector.selected_value
+        if selected_list_id:
+            list_name = [item[0] for item in self.ddListSelector.items if item[1] == selected_list_id][0]
+            self.lblListTitle.text = list_name
+
+    
+
+
+  
+    """Item Interaction"""
+    def check_off_item(self, item_id, list_id, **event_args):
+      content = formCheckItem(item_id=item_id, list_id=list_id, parent_form=self)
+      alert(content=content, large=True, buttons=[], title="Check Off Item")
+
+    def btnCreateItem_click(self, **event_args):
+        item_name = self.tbNewItemName.text
+        category_id = self.ddNewItemCategory.selected_value
+        list_id = self.ddListSelector.selected_value
+    
+        if self.tbNewItemQuantity.text == 0 or None:
+            quantity = 1
+        else:
+            quantity = self.tbNewItemQuantity.text
+    
+        none = "None"
+    
+        if self.tbNewItemBrand.text == "" or None:
+            brand = none
+        else:
+            brand = self.tbNewItemBrand.text
+    
+        if self.tbNewItemStore.text == "" or None:
+            store = none
+        else:
+            store = self.tbNewItemStore.text
+    
+        if self.tbNewItemAisle.text == "" or None:
+            aisle = none
+        else:
+            aisle = self.tbNewItemAisle.text
+    
+        anvil.server.call('add_item', item_name, quantity, category_id, brand, store, aisle, list_id)
+        alert("Item added successfully.")
+        self.refresh_data_grid()
+    
+        self.tbNewItemName.text = ""
+        self.tbNewItemQuantity.text = ""
+        self.tbNewItemBrand.text = ""
+        self.tbNewItemStore.text = ""
+        self.tbNewItemAisle.text = ""
+
+
+    """List Interaction"""
+    def ddListSelector_change(self, **event_args):
+      self.refresh_data_grid()
+      self.update_list_title()
+
+    def btnDeleteList_click(self, **event_args):
+      selected_list_id = self.ddListSelector.selected_value
+      if not selected_list_id:
+          alert("No list selected to delete.")
+          return
+  
+      # Get the name of the selected list for the confirmation alert
+      selected_list_name = [item[0] for item in self.ddListSelector.items if item[1] == selected_list_id][0]
+  
+      confirm_delete = confirm(f"Are you sure you want to delete the list '{selected_list_name}'? This action cannot be undone.")
+      if confirm_delete:
+          anvil.server.call('delete_list', selected_list_id)
+          alert(f"List '{selected_list_name}' and its items have been deleted successfully.")
+          self.populate_lists_dropdown()
+          self.update_list_title()
+          self.refresh_data_grid()
+
+    def btnNewList_click(self, **event_args):
+      content = TextBox()
+      result = alert("Enter name for the new list:", buttons=[("OK", "ok")], content=content, title="Create New List")
+      if result == "ok":
+          new_name = content.text.strip().title()
+          if new_name:
+              user = anvil.users.get_user()
+              anvil.server.call('create_new_list', new_name, user)
+              self.populate_lists_dropdown()
 
     def btnRenameList_click(self, **event_args):
         selected_list_id = self.ddListSelector.selected_value
@@ -263,57 +358,16 @@ class formMainApp(formMainAppTemplate):
                 anvil.server.call('rename_list', selected_list_id, new_name)
                 self.populate_lists_dropdown()
                 self.update_list_title()
-  
-    def btnNewList_click(self, **event_args):
-        content = TextBox()
-        result = alert("Enter name for the new list:", buttons=[("OK", "ok")], content=content, title="Create New List")
-        if result == "ok":
-            new_name = content.text.strip().title()
-            if new_name:
-                user = anvil.users.get_user()
-                anvil.server.call('create_new_list', new_name, user)
-                self.populate_lists_dropdown()
 
+
+    """Exporting"""
     def btnExport_click(self, **event_args):
-        selected_list_id = self.ddListSelector.selected_value
-        csv_file = anvil.server.call('export_items_to_csv', selected_list_id)
-        download(csv_file)
-
-    def check_off_item(self, item_id, list_id, **event_args):
-        content = formCheckItem(item_id=item_id, list_id=list_id, parent_form=self)
-        alert(content=content, large=True, buttons=[], title="Check Off Item")
-
-    def update_list_title(self):
-        selected_list_id = self.ddListSelector.selected_value
-        if selected_list_id:
-            list_name = [item[0] for item in self.ddListSelector.items if item[1] == selected_list_id][0]
-            self.lblListTitle.text = list_name
-
-    def btnLogout_click(self, **event_args):
-        anvil.users.logout()
-        open_form('formLogin')
-
-    def btnDeleteList_click(self, **event_args):
-        selected_list_id = self.ddListSelector.selected_value
-        if not selected_list_id:
-            alert("No list selected to delete.")
-            return
-    
-        # Get the name of the selected list for the confirmation alert
-        selected_list_name = [item[0] for item in self.ddListSelector.items if item[1] == selected_list_id][0]
-    
-        confirm_delete = confirm(f"Are you sure you want to delete the list '{selected_list_name}'? This action cannot be undone.")
-        if confirm_delete:
-            anvil.server.call('delete_list', selected_list_id)
-            alert(f"List '{selected_list_name}' and its items have been deleted successfully.")
-            self.populate_lists_dropdown()
-            self.update_list_title()
-            self.refresh_data_grid()
+          selected_list_id = self.ddListSelector.selected_value
+          csv_file = anvil.server.call('export_items_to_csv', selected_list_id)
+          download(csv_file)
 
 
-
-  
-# Theming
+    """Theming"""
     def apply_user_theme(self):
         theme = anvil.server.call('get_user_theme')
         self.apply_theme(theme)

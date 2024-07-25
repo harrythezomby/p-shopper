@@ -9,4 +9,20 @@ body.anvil-show-banner {
 	margin-top: 0px;
 }
 
+/* Wide */
+.anvil-role-wide .data-grid-child-panel {
+  overflow-x: auto;
+  display: block;
+  white-space: nowrap;
+}
 
+.anvil-role-wide .anvil-data-row-panel {
+  flex-wrap: nowrap;
+  min-width: 100%;
+}
+
+.anvil-role-wide .anvil-data-cell {
+  display: inline-block;
+  vertical-align: top;
+  white-space: normal;
+}
