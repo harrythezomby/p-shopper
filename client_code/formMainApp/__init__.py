@@ -366,14 +366,18 @@ class formMainApp(formMainAppTemplate):
                 alert(message)
 
     def btnNewList_click(self, **event_args):
-      content = TextBox()
-      result = alert("Enter name for the new list:", buttons=[("OK", "ok")], content=content, title="Create New List")
-      if result == "ok":
-          new_name = content.text.strip().title()
-          if new_name:
-              user = anvil.users.get_user()
-              anvil.server.call('create_new_list', new_name, user)
-              self.populate_lists_dropdown()
+        content = TextBox()
+        result = alert("Enter name for the new list:", buttons=[("OK", "ok")], content=content, title="Create New List")
+        if result == "ok":
+            new_name = content.text.strip().title()
+            if not new_name or not new_name.replace("'", "").replace(" ", "").isalnum():
+                alert("List name can only contain English alphanumeric characters, spaces, and apostrophes. Please try again.")
+                return
+            if new_name:
+                user = anvil.users.get_user()
+                anvil.server.call('create_new_list', new_name, user)
+                self.populate_lists_dropdown()
+                self.update_list_title()
 
     def btnRenameList_click(self, **event_args):
         selected_list_id = self.ddListSelector.selected_value
@@ -381,7 +385,10 @@ class formMainApp(formMainAppTemplate):
         content = TextBox(text=current_list_name)
         result = alert("Enter new name for the list:", buttons=[("OK", "ok")], content=content, title="Rename List")
         if result == "ok":
-            new_name = content.text
+            new_name = content.text.strip().title()
+            if not new_name or not new_name.replace("'", "").replace(" ", "").isalnum():
+                alert("List name can only contain English alphanumeric characters, spaces, and apostrophes. Please try again.")
+                return
             if new_name:
                 anvil.server.call('rename_list', selected_list_id, new_name)
                 self.populate_lists_dropdown()

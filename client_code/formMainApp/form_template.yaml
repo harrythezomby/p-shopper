@@ -180,11 +180,6 @@ components:
     type: Button
     layout_properties: {}
     event_bindings: {click: btnReports_click}
-  - name: btnShare
-    properties: {text: Share, icon: 'fa:share-alt'}
-    type: Button
-    layout_properties: {}
-    event_bindings: {click: btnShare_click}
   - name: btnExport
     properties: {text: Export, icon: 'fa:save'}
     type: Button
