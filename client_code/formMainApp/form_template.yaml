@@ -120,28 +120,28 @@ components:
     type: DataRowPanel
     components:
     - name: tbNewItemName
-      properties: {}
+      properties: {background: '', role: textbox}
       type: TextBox
       layout_properties: {column: UJCSTL}
     - name: ddNewItemCategory
-      properties: {}
+      properties: {role: dropdown}
       type: DropDown
       layout_properties: {column: BYPHYZ}
       event_bindings: {change: ddNewItemCategory_change}
     - name: tbNewItemQuantity
-      properties: {type: number}
+      properties: {type: number, role: textbox}
       type: TextBox
       layout_properties: {column: QHNMEC}
     - name: tbNewItemBrand
-      properties: {}
+      properties: {role: textbox}
       type: TextBox
       layout_properties: {column: QEVMHQ}
     - name: tbNewItemStore
-      properties: {}
+      properties: {role: textbox}
       type: TextBox
       layout_properties: {column: GOPKWM}
     - name: tbNewItemAisle
-      properties: {}
+      properties: {role: textbox}
       type: TextBox
       layout_properties: {column: AKPEWB}
     - name: flowNew

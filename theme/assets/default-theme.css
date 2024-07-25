@@ -1,0 +1,67 @@
+body.default-theme {
+    background: linear-gradient(to right, #d6e3ff, #e2d1ff);
+    color: #333;
+    font-family: Arial, sans-serif;
+}
+
+.default-theme .button, .default-theme .btn {
+    background: linear-gradient(to right, #4e79a7, #9e79a7);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.default-theme .button:hover, .default-theme .btn:hover {
+    background: linear-gradient(to right, #3a5a8b, #7a5a8b);
+}
+
+.default-theme .header {
+    background: linear-gradient(to right, #9e79a7, #4e79a7);
+    color: white;
+    padding: 10px;
+}
+
+.default-theme .footer {
+    background: linear-gradient(to right, #b4a0d8, #4e79a7);
+    color: white;
+    padding: 10px;
+}
+
+.default-theme .textbox, .default-theme .dropdown, .default-theme .radio {
+    background-color: white;
+    color: #333;
+    border: 1px solid #4e79a7;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.default-theme .alert {
+    background: linear-gradient(to right, #d6e3ff, #e2d1ff);
+    color: #333;
+    border-radius: 5px;
+    padding: 20px;
+    border: 1px solid #4e79a7;
+}
+
+.default-theme .markdown-table th {
+    background-color: #4e79a7;
+    color: white;
+}
+
+.default-theme .markdown-table td {
+    border: 1px solid #4e79a7;
+}
+
+.default-theme .plotly {
+    background-color: #f0f4f8;
+    color: #4e79a7;
+}
+
+
+

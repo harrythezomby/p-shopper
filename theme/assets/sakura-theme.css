@@ -1,0 +1,67 @@
+body.sakura-theme {
+    background-color: #fff0f5;
+    color: #8b0000;
+    font-family: 'Arial', sans-serif;
+}
+
+.sakura-theme .button, .sakura-theme .btn {
+    background-color: #ff69b4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.sakura-theme .button:hover, .sakura-theme .btn:hover {
+    background-color: #ffb6c1;
+}
+
+.sakura-theme .header {
+    background-color: #ff69b4;
+    color: white;
+    padding: 10px;
+}
+
+.sakura-theme .footer {
+    background-color: #ffb6c1;
+    color: white;
+    padding: 10px;
+}
+
+.sakura-theme .input, .sakura-theme .dropdown, .sakura-theme .textbox, .sakura-theme .radio {
+    background-color: white;
+    color: #8b0000;
+    border: 1px solid #ff69b4;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.sakura-theme .alert {
+    background-color: #fff0f5;
+    color: #8b0000;
+    border-radius: 5px;
+    padding: 20px;
+    border: 1px solid #ff69b4;
+}
+
+.sakura-theme .markdown-table th {
+    background-color: #ff69b4;
+    color: white;
+}
+
+.sakura-theme .markdown-table td {
+    border: 1px solid #ff69b4;
+}
+
+.sakura-theme .plotly {
+    background-color: #fff0f5;
+    color: #ff69b4;
+}
+
+
+

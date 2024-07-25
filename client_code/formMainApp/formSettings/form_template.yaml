@@ -23,14 +23,17 @@ components:
     properties: {text: Princess, icon: 'fa:paper-plane-o'}
     type: Button
     layout_properties: {grid_position: 'CJBYXN,SORZJD'}
+    event_bindings: {click: btnColourThemePrincess_click}
   - name: btnColourThemeSakura
     properties: {text: Sakura, icon: 'fa:diamond'}
     type: Button
     layout_properties: {grid_position: 'CJBYXN,YWUYUJ'}
+    event_bindings: {click: btnColourThemeSakura_click}
   - name: btnColourThemePlainish
     properties: {text: Plainish}
     type: Button
     layout_properties: {grid_position: 'CJBYXN,SFIQAX'}
+    event_bindings: {click: btnColourThemePlainish_click}
 - name: spacer_1
   properties: {height: 32}
   type: Spacer

@@ -1,0 +1,64 @@
+body.dark-theme {
+    background-color: #333;
+    color: #f0f4f8;
+    font-family: Arial, sans-serif;
+}
+
+.dark-theme .button, .dark-theme .btn {
+    background-color: #555;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.dark-theme .button:hover, .dark-theme .btn:hover {
+    background-color: #777;
+}
+
+.dark-theme .header {
+    background-color: #444;
+    color: white;
+    padding: 10px;
+}
+
+.dark-theme .footer {
+    background-color: #555;
+    color: white;
+    padding: 10px;
+}
+
+.dark-theme .input, .dark-theme .dropdown, .dark-theme .textbox, .dark-theme .radio {
+    background-color: #555;
+    color: #f0f4f8;
+    border: 1px solid #777;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.dark-theme .alert {
+    background-color: #333;
+    color: #f0f4f8;
+    border-radius: 5px;
+    padding: 20px;
+    border: 1px solid #555;
+}
+
+.dark-theme .markdown-table th {
+    background-color: #444;
+    color: white;
+}
+
+.dark-theme .markdown-table td {
+    border: 1px solid #444;
+}
+
+.dark-theme .plotly {
+    background-color: #333;
+    color: #f0f4f8;
+}

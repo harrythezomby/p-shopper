@@ -1,1 +1,4 @@
-roles: []
+roles:
+- {name: textbox}
+- {name: dropdown}
+- {name: radio}

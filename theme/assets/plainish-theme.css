@@ -1,0 +1,67 @@
+body.plainish-theme {
+    background-color: #f5f5f5;
+    color: #000000;
+    font-family: 'Helvetica', sans-serif;
+}
+
+.plainish-theme .button, .plainish-theme .btn {
+    background-color: #dcdcdc;
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.plainish-theme .button:hover, .plainish-theme .btn:hover {
+    background-color: #a9a9a9;
+}
+
+.plainish-theme .header {
+    background-color: #dcdcdc;
+    color: #000000;
+    padding: 10px;
+}
+
+.plainish-theme .footer {
+    background-color: #a9a9a9;
+    color: #000000;
+    padding: 10px;
+}
+
+.plainish-theme .input, .plainish-theme .dropdown, .plainish-theme .textbox, .plainish-theme .radio {
+    background-color: white;
+    color: #000000;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.plainish-theme .alert {
+    background-color: #f5f5f5;
+    color: #000000;
+    border-radius: 5px;
+    padding: 20px;
+    border: 1px solid #dcdcdc;
+}
+
+.plainish-theme .markdown-table th {
+    background-color: #dcdcdc;
+    color: #000000;
+}
+
+.plainish-theme .markdown-table td {
+    border: 1px solid #dcdcdc;
+}
+
+.plainish-theme .plotly {
+    background-color: #f5f5f5;
+    color: #dcdcdc;
+}
+
+
+

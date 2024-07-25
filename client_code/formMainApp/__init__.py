@@ -310,6 +310,9 @@ class formMainApp(formMainAppTemplate):
             self.update_list_title()
             self.refresh_data_grid()
 
+
+
+  
 # Theming
     def apply_user_theme(self):
         theme = anvil.server.call('get_user_theme')

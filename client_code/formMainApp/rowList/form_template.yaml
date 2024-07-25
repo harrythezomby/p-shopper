@@ -64,7 +64,7 @@ components:
   layout_properties: {column: 'null'}
   name: dataRowPanelWriteView
   components:
-  - properties: {}
+  - properties: {role: textbox}
     type: TextBox
     layout_properties: {column: UJCSTL}
     data_bindings:
@@ -73,34 +73,35 @@ components:
     name: tbItemName
   - properties:
       items: []
+      role: dropdown
     type: DropDown
     layout_properties: {column: BYPHYZ}
     data_bindings:
     - {code: 'self.item[''category_id''][''category_name'']', writeback: false, property: selected_value}
     event_bindings: {}
     name: ddCategory
-  - properties: {}
+  - properties: {role: textbox}
     type: TextBox
     layout_properties: {column: QHNMEC}
     data_bindings:
     - {code: 'self.item[''quantity'']', writeback: false, property: text}
     event_bindings: {}
     name: tbQuantity
-  - properties: {}
+  - properties: {role: textbox}
     type: TextBox
     layout_properties: {column: QEVMHQ}
     data_bindings:
     - {code: 'self.item[''brand'']', writeback: false, property: text}
     event_bindings: {}
     name: tbBrand
-  - properties: {}
+  - properties: {role: textbox}
     type: TextBox
     layout_properties: {column: GOPKWM}
     data_bindings:
     - {code: 'self.item[''store'']', writeback: false, property: text}
     event_bindings: {}
     name: tbStore
-  - properties: {}
+  - properties: {role: textbox}
     type: TextBox
     layout_properties: {column: AKPEWB}
     data_bindings:

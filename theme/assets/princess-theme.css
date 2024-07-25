@@ -1,0 +1,67 @@
+body.princess-theme {
+    background-color: #ffe4e1;
+    color: #4b0082;
+    font-family: 'Cursive', serif;
+}
+
+.princess-theme .button, .princess-theme .btn {
+    background-color: #ff69b4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.princess-theme .button:hover, .princess-theme .btn:hover {
+    background-color: #ffb6c1;
+}
+
+.princess-theme .header {
+    background-color: #ff69b4;
+    color: white;
+    padding: 10px;
+}
+
+.princess-theme .footer {
+    background-color: #add8e6;
+    color: white;
+    padding: 10px;
+}
+
+.princess-theme .input, .princess-theme .dropdown, .princess-theme .textbox, .princess-theme .radio {
+    background-color: white;
+    color: #4b0082;
+    border: 1px solid #ff69b4;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.princess-theme .alert {
+    background-color: #ffe4e1;
+    color: #4b0082;
+    border-radius: 5px;
+    padding: 20px;
+    border: 1px solid #ff69b4;
+}
+
+.princess-theme .markdown-table th {
+    background-color: #ff69b4;
+    color: white;
+}
+
+.princess-theme .markdown-table td {
+    border: 1px solid #ff69b4;
+}
+
+.princess-theme .plotly {
+    background-color: #ffe4e1;
+    color: #ff69b4;
+}
+
+
+
