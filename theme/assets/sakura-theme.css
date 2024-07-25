@@ -1,67 +1,139 @@
 body.sakura-theme {
-    background-color: #fff0f5;
-    color: #8b0000;
-    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to right, #ffd1dc, #ffd1d1);
+    color: #333;
+    font-family: 'Sakura', sans-serif;
 }
 
 .sakura-theme .button, .sakura-theme .btn {
-    background-color: #ff69b4;
+    background: linear-gradient(to right, #ff79a7, #ffa7a7);
     color: white;
     border: none;
     border-radius: 5px;
     padding: 10px 15px;
     font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background 0.3s;
 }
 
 .sakura-theme .button:hover, .sakura-theme .btn:hover {
-    background-color: #ffb6c1;
+    background: linear-gradient(to right, #ff5a8b, #ff8b8b);
 }
 
 .sakura-theme .header {
-    background-color: #ff69b4;
+    background: linear-gradient(to right, #ff79a7, #ffa7a7);
     color: white;
     padding: 10px;
 }
 
 .sakura-theme .footer {
-    background-color: #ffb6c1;
+    background: linear-gradient(to right, #ff79a7, #ffa7a7);
     color: white;
     padding: 10px;
 }
 
-.sakura-theme .input, .sakura-theme .dropdown, .sakura-theme .textbox, .sakura-theme .radio {
-    background-color: white;
-    color: #8b0000;
-    border: 1px solid #ff69b4;
+.sakura-theme .anvil-component .form-control:not(select), .sakura-theme .anvil-component.form-control, .sakura-theme .form-inline .form-control {
+    background-color: #ffd1dc;
+    color: #333;
+    border: 1px solid #ff79a7;
     border-radius: 5px;
     padding: 10px;
     font-size: 16px;
     margin-bottom: 10px;
 }
 
-.sakura-theme .alert {
-    background-color: #fff0f5;
-    color: #8b0000;
-    border-radius: 5px;
-    padding: 20px;
-    border: 1px solid #ff69b4;
+.sakura-theme .textbox:focus, .sakura-theme .form-inline .form-control:focus, .sakura-theme .anvil-component .form-control:not(select):focus, .sakura-theme .anvil-component.form-control:focus {
+    border-color: #ffa7a7;
 }
 
-.sakura-theme .markdown-table th {
-    background-color: #ff69b4;
+.sakura-theme .link-text {
+    color: #ff79a7;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.sakura-theme .link-text:hover {
+    color: #ffa7a7;
+}
+
+.sakura-theme .modal-content {
+    background: linear-gradient(to right, #ffd1dc, #ffd1d1);
+    color: #333;
+}
+
+.sakura-theme .radio {
+    display: inline-block;
+    margin-right: 10px;
+    position: relative;
+}
+
+.sakura-theme .radio input[type="radio"] {
+    opacity: 100;
+    position: absolute;
+    cursor: pointer;
+}
+
+.sakura-theme .radio .radio-label {
+    padding: 10px 15px;
+    background: linear-gradient(to right, #ff79a7, #ffa7a7);
+    border: 2px solid transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s, border-color 0.3s;
+}
+
+.sakura-theme .radio input[type="radio"]:checked + .radio-label {
+    border-color: #333;
+}
+
+.sakura-theme .number-stepper {
+    background: #ffd1dc;
+    border: 1px solid #ff79a7;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    color: #333;
+    transition: border-color 0.3s;
+}
+
+.sakura-theme .number-stepper:focus {
+    border-color: #ffa7a7;
+}
+
+.sakura-theme .dropdown-menu {
+    background-color: #ffd1dc;
+    border: 1px solid #ff79a7;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+}
+
+.sakura-theme .dropdown-item {
+    padding: 10px;
+    transition: background 0.3s;
+}
+
+.sakura-theme .dropdown-item:hover {
+    background: #ffd1dc;
+}
+
+.sakura-theme .plotly-graph {
+    background: linear-gradient(to right, #ffd1dc, #ffd1d1);
+    color: #333;
+}
+
+/* Sakura Theme */
+.sakura-theme .tab-button {
+    background: #ffe6e6;
+    color: #333;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+}
+
+.sakura-theme .tab-button.active {
+    background: #ff9999;
     color: white;
 }
-
-.sakura-theme .markdown-table td {
-    border: 1px solid #ff69b4;
-}
-
-.sakura-theme .plotly {
-    background-color: #fff0f5;
-    color: #ff69b4;
-}
-
-
 

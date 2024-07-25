@@ -1,64 +1,140 @@
 body.dark-theme {
-    background-color: #333;
-    color: #f0f4f8;
-    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #2b2b2b, #1b1b1b);
+    color: #ccc;
+    font-family: 'Arial', sans-serif;
 }
 
 .dark-theme .button, .dark-theme .btn {
-    background-color: #555;
+    background: linear-gradient(to right, #555555, #444444);
     color: white;
     border: none;
     border-radius: 5px;
     padding: 10px 15px;
     font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background 0.3s;
 }
 
 .dark-theme .button:hover, .dark-theme .btn:hover {
-    background-color: #777;
+    background: linear-gradient(to right, #777777, #666666);
 }
 
 .dark-theme .header {
-    background-color: #444;
+    background: linear-gradient(to right, #333333, #222222);
     color: white;
     padding: 10px;
 }
 
 .dark-theme .footer {
-    background-color: #555;
+    background: linear-gradient(to right, #444444, #333333);
     color: white;
     padding: 10px;
 }
 
-.dark-theme .input, .dark-theme .dropdown, .dark-theme .textbox, .dark-theme .radio {
-    background-color: #555;
-    color: #f0f4f8;
-    border: 1px solid #777;
+.dark-theme .anvil-component .form-control:not(select), .dark-theme .anvil-component.form-control, .dark-theme .form-inline .form-control {
+    background-color: #444;
+    color: #ccc;
+    border: 1px solid #555;
     border-radius: 5px;
     padding: 10px;
     font-size: 16px;
     margin-bottom: 10px;
 }
 
-.dark-theme .alert {
-    background-color: #333;
-    color: #f0f4f8;
-    border-radius: 5px;
-    padding: 20px;
-    border: 1px solid #555;
+.dark-theme .textbox:focus, .dark-theme .form-inline .form-control:focus, .dark-theme .anvil-component .form-control:not(select):focus, .dark-theme .anvil-component.form-control:focus {
+    border-color: #777;
 }
 
-.dark-theme .markdown-table th {
+.dark-theme .link-text {
+    color: #ccc;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.dark-theme .link-text:hover {
+    color: #fff;
+}
+
+.dark-theme .modal-content {
+    background: linear-gradient(to right, #2b2b2b, #1b1b1b);
+    color: #ccc;
+}
+
+.dark-theme .radio {
+    display: inline-block;
+    margin-right: 10px;
+    position: relative;
+}
+
+.dark-theme .radio input[type="radio"] {
+    opacity: 100;
+    position: absolute;
+    cursor: pointer;
+}
+
+.dark-theme .radio .radio-label {
+    padding: 10px 15px;
+    background: linear-gradient(to right, #555555, #444444);
+    border: 2px solid transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s, border-color 0.3s;
+}
+
+.dark-theme .radio input[type="radio"]:checked + .radio-label {
+    border-color: #ccc;
+}
+
+.dark-theme .number-stepper {
+    background: #444;
+    border: 1px solid #555;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    color: #ccc;
+    transition: border-color 0.3s;
+}
+
+.dark-theme .number-stepper:focus {
+    border-color: #777;
+}
+
+.dark-theme .dropdown-menu {
     background-color: #444;
+    border: 1px solid #555;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #ccc;
+}
+
+.dark-theme .dropdown-item {
+    padding: 10px;
+    transition: background 0.3s;
+}
+
+.dark-theme .dropdown-item:hover {
+    background: #666;
+}
+
+.dark-theme .plotly-graph {
+    background: linear-gradient(to right, #2b2b2b, #1b1b1b);
+    color: #ccc;
+}
+
+.dark-theme .tab-button {
+    background: #333;
+    color: #ccc;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+}
+
+.dark-theme .tab-button.active {
+    background: #4e79a7;
     color: white;
 }
 
-.dark-theme .markdown-table td {
-    border: 1px solid #444;
-}
 
-.dark-theme .plotly {
-    background-color: #333;
-    color: #f0f4f8;
-}
+

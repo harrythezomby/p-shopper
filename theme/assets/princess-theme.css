@@ -1,67 +1,140 @@
 body.princess-theme {
-    background-color: #ffe4e1;
-    color: #4b0082;
-    font-family: 'Cursive', serif;
+    background: linear-gradient(to right, #f8c8dc, #c8d4f8);
+    color: #333;
+    font-family: 'Great Vibes', cursive;
 }
 
 .princess-theme .button, .princess-theme .btn {
-    background-color: #ff69b4;
+    background: linear-gradient(to right, #ff79a7, #79a7ff);
     color: white;
     border: none;
     border-radius: 5px;
     padding: 10px 15px;
     font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background 0.3s;
 }
 
 .princess-theme .button:hover, .princess-theme .btn:hover {
-    background-color: #ffb6c1;
+    background: linear-gradient(to right, #ff5a8b, #5a8bff);
 }
 
 .princess-theme .header {
-    background-color: #ff69b4;
+    background: linear-gradient(to right, #ff79a7, #79a7ff);
     color: white;
     padding: 10px;
 }
 
 .princess-theme .footer {
-    background-color: #add8e6;
+    background: linear-gradient(to right, #ff79a7, #79a7ff);
     color: white;
     padding: 10px;
 }
 
-.princess-theme .input, .princess-theme .dropdown, .princess-theme .textbox, .princess-theme .radio {
-    background-color: white;
-    color: #4b0082;
-    border: 1px solid #ff69b4;
+.princess-theme .anvil-component .form-control:not(select), .princess-theme .anvil-component.form-control, .princess-theme .form-inline .form-control {
+    background-color: #f8c8dc;
+    color: #333;
+    border: 1px solid #ff79a7;
     border-radius: 5px;
     padding: 10px;
     font-size: 16px;
     margin-bottom: 10px;
 }
 
-.princess-theme .alert {
-    background-color: #ffe4e1;
-    color: #4b0082;
-    border-radius: 5px;
-    padding: 20px;
-    border: 1px solid #ff69b4;
+.princess-theme .textbox:focus, .princess-theme .form-inline .form-control:focus, .princess-theme .anvil-component .form-control:not(select):focus, .princess-theme .anvil-component.form-control:focus {
+    border-color: #79a7ff;
 }
 
-.princess-theme .markdown-table th {
-    background-color: #ff69b4;
+.princess-theme .link-text {
+    color: #ff79a7;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.princess-theme .link-text:hover {
+    color: #79a7ff;
+}
+
+.princess-theme .modal-content {
+    background: linear-gradient(to right, #f8c8dc, #c8d4f8);
+    color: #333;
+}
+
+.princess-theme .radio {
+    display: inline-block;
+    margin-right: 10px;
+    position: relative;
+}
+
+.princess-theme .radio input[type="radio"] {
+    opacity: 100;
+    position: absolute;
+    cursor: pointer;
+}
+
+.princess-theme .radio .radio-label {
+    padding: 10px 15px;
+    background: linear-gradient(to right, #ff79a7, #79a7ff);
+    border: 2px solid transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s, border-color 0.3s;
+}
+
+.princess-theme .radio input[type="radio"]:checked + .radio-label {
+    border-color: #333;
+}
+
+.princess-theme .number-stepper {
+    background: #f8c8dc;
+    border: 1px solid #ff79a7;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    color: #333;
+    transition: border-color 0.3s;
+}
+
+.princess-theme .number-stepper:focus {
+    border-color: #79a7ff;
+}
+
+.princess-theme .dropdown-menu {
+    background-color: #f8c8dc;
+    border: 1px solid #ff79a7;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+}
+
+.princess-theme .dropdown-item {
+    padding: 10px;
+    transition: background 0.3s;
+}
+
+.princess-theme .dropdown-item:hover {
+    background: #f8c8dc;
+}
+
+.princess-theme .plotly-graph {
+    background: linear-gradient(to right, #f8c8dc, #c8d4f8);
+    color: #333;
+}
+
+/* Princess Theme */
+.princess-theme .tab-button {
+    background: #ffccf9;
+    color: #333;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+}
+
+.princess-theme .tab-button.active {
+    background: #ff66b2;
     color: white;
 }
-
-.princess-theme .markdown-table td {
-    border: 1px solid #ff69b4;
-}
-
-.princess-theme .plotly {
-    background-color: #ffe4e1;
-    color: #ff69b4;
-}
-
 
 

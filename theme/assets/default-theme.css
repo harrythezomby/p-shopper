@@ -1,7 +1,7 @@
 body.default-theme {
     background: linear-gradient(to right, #d6e3ff, #e2d1ff);
     color: #333;
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 .default-theme .button, .default-theme .btn {
@@ -31,8 +31,8 @@ body.default-theme {
     padding: 10px;
 }
 
-.default-theme .textbox, .default-theme .dropdown, .default-theme .radio {
-    background-color: white;
+.default-theme .anvil-component .form-control:not(select), .default-theme .anvil-component.form-control, .default-theme .form-inline .form-control {
+    background-color: #e2d1ff;
     color: #333;
     border: 1px solid #4e79a7;
     border-radius: 5px;
@@ -41,26 +41,99 @@ body.default-theme {
     margin-bottom: 10px;
 }
 
-.default-theme .alert {
+.default-theme .textbox:focus, .default-theme .form-inline .form-control:focus, .default-theme .anvil-component .form-control:not(select):focus, .default-theme .anvil-component.form-control:focus {
+    border-color: #4e79a7;
+}
+
+.default-theme .link-text {
+    color: #4e79a7;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.default-theme .link-text:hover {
+    color: #9e79a7;
+}
+
+.default-theme .modal-content {
     background: linear-gradient(to right, #d6e3ff, #e2d1ff);
     color: #333;
+}
+
+.default-theme .radio {
+    display: inline-block;
+    margin-right: 10px;
+    position: relative;
+}
+
+.default-theme .radio input[type="radio"] {
+    opacity: 100;
+    position: absolute;
+    cursor: pointer;
+}
+
+.default-theme .radio .radio-label {
+    padding: 10px 15px;
+    background: linear-gradient(to right, #4e79a7, #9e79a7);
+    border: 2px solid transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s, border-color 0.3s;
+}
+
+.default-theme .radio input[type="radio"]:checked + .radio-label {
+    border-color: #333;
+}
+
+.default-theme .number-stepper {
+    background: #e2d1ff;
+    border: 1px solid #4e79a7;
     border-radius: 5px;
-    padding: 20px;
-    border: 1px solid #4e79a7;
+    padding: 10px;
+    font-size: 16px;
+    color: #333;
+    transition: border-color 0.3s;
 }
 
-.default-theme .markdown-table th {
-    background-color: #4e79a7;
+.default-theme .number-stepper:focus {
+    border-color: #4e79a7;
+}
+
+.default-theme .dropdown-menu {
+    background-color: #e2d1ff;
+    border: 1px solid #4e79a7;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+}
+
+.default-theme .dropdown-item {
+    padding: 10px;
+    transition: background 0.3s;
+}
+
+.default-theme .dropdown-item:hover {
+    background: #d6e3ff;
+}
+
+.default-theme .plotly-graph {
+    background: linear-gradient(to right, #d6e3ff, #e2d1ff);
+    color: #333;
+}
+
+.default-theme .tab-button {
+    background: #eee;
+    color: #333;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+}
+
+.default-theme .tab-button.active {
+    background: #4e79a7;
     color: white;
-}
-
-.default-theme .markdown-table td {
-    border: 1px solid #4e79a7;
-}
-
-.default-theme .plotly {
-    background-color: #f0f4f8;
-    color: #4e79a7;
 }
 
 

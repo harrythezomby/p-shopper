@@ -70,13 +70,13 @@ components:
 - name: gridList
   properties:
     columns:
-    - {id: UJCSTL, data_key: item_name, title: Item Name, expand: true}
-    - {id: BYPHYZ, data_key: category_id, title: Category, expand: true}
-    - {id: QHNMEC, data_key: quantity, title: Quantity, expand: true}
-    - {id: QEVMHQ, data_key: brand, title: Brand, expand: true}
-    - {id: GOPKWM, data_key: store, title: Store, expand: true}
-    - {id: AKPEWB, data_key: aisle, title: Aisle, expand: true}
-    - {id: QCBSKP, data_key: column_1, title: '', expand: false, width: '127'}
+    - {id: UJCSTL, data_key: item_name, title: Item Name, expand: false, width: 415}
+    - {id: BYPHYZ, data_key: category_id, title: Category, expand: false, width: 242}
+    - {id: QHNMEC, data_key: quantity, title: Quantity, expand: false, width: 269}
+    - {id: QEVMHQ, data_key: brand, title: Brand, expand: false, width: 260}
+    - {id: GOPKWM, data_key: store, title: Store, expand: false, width: 278}
+    - {id: AKPEWB, data_key: aisle, title: Aisle, expand: false, width: 269}
+    - {id: QCBSKP, data_key: column_1, title: '', expand: false, width: 192}
     wrap_on: never
     auto_header: false
   type: DataGrid

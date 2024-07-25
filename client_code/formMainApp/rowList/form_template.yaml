@@ -5,7 +5,7 @@ container:
 components:
 - properties: {}
   type: DataRowPanel
-  layout_properties: {}
+  layout_properties: {column: ''}
   name: dataRowPanelReadView
   components:
   - properties: {}
@@ -38,14 +38,14 @@ components:
     data_bindings:
     - {code: 'self.item[''aisle'']', writeback: false, property: text}
     name: lblAisle
-  - properties: {align: center, spacing_below: none, spacing_above: none}
+  - properties: {align: center, spacing_below: none, spacing_above: none, vertical_align: top, spacing: medium}
     type: FlowPanel
     layout_properties: {column: QCBSKP}
     name: flowRead
     components:
     - properties: {text: '', icon: 'fa:pencil', spacing_below: small}
       type: Button
-      layout_properties: {}
+      layout_properties: {expand: false}
       event_bindings: {click: btnEdit_click}
       name: btnEdit
     - properties: {text: '', icon: 'fa:shopping-basket'}

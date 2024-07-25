@@ -9,7 +9,6 @@ from .formItemCompReport import formItemCompReport
 from .formItemExpReport import formItemExpReport
 from .formWeeklySpendReport import formWeeklySpendReport
 
-
 class formReports(formReportsTemplate):
   def __init__(self, **properties):
     # Set Form properties and Data Bindings.
@@ -25,13 +24,11 @@ class formReports(formReportsTemplate):
     self.btnItemExpiryTab.tag = self.item_exp_report_form
     self.btnWeeklySpendCompTab.tag = self.weekly_spend_report_form
 
-    # Any other initialization code
-
   def tabClick(self, **event_args):
     """Tab functionality adapted from Anvil forum user david.wylie's example. See https://anvil.works/forum/t/is-there-a-tab-bar-component/4291"""
     sender = event_args.get("sender", None)
     if not sender:
-      print("Can't get sender  from : ", event_args)
+      print("Can't get sender from:", event_args)
       return
 
     for comp in self.flowTabs.get_components():
@@ -39,7 +36,10 @@ class formReports(formReportsTemplate):
         if comp == sender:
           comp.background = "green"
           self.columnpanelContent.clear()
-          self.columnpanelContent.add_component(comp.tag)
+          try:
+            self.columnpanelContent.add_component(comp.tag)
+          except TypeError as e:
+            print(f"Error adding component: {e}")
         else:
           comp.background = "#eee"
 

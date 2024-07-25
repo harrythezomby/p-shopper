@@ -10,27 +10,27 @@ from .formItemPriceHistGraph import formItemPriceHistGraph
 from .formItemQuanConsGraph import formItemQuanConsGraph
 from .formMonSpentHistGraph import formMonSpentHistGraph
 
-
 class formGraphs(formGraphsTemplate):
   def __init__(self, **properties):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
 
-    # Any code you write here will run before the form opens.
-
   def tabClick(self, **event_args):
-    """Tab funtionality adapted from Anvil forum user david.wylie's example. See https://anvil.works/forum/t/is-there-a-tab-bar-component/4291"""
+    """Tab functionality adapted from Anvil forum user david.wylie's example. See https://anvil.works/forum/t/is-there-a-tab-bar-component/4291"""
     sender = event_args.get("sender", None)
     if not sender:
-      print("Can't get sender  from : ", event_args)
+      print("Can't get sender from:", event_args)
       return
 
     for comp in self.flowTabs.get_components():
-      if type(comp) is Button:
+      if isinstance(comp, Button):
         if comp == sender:
           comp.background = "green"
           self.columnpanelContent.clear()
-          self.columnpanelContent.add_component(comp.tag)
+          try:
+            self.columnpanelContent.add_component(comp.tag)
+          except TypeError as e:
+            print(f"Error adding component: {e}")
         else:
           comp.background = "#eee"
 
@@ -41,4 +41,4 @@ class formGraphs(formGraphsTemplate):
     self.btnItemQuanConsTab.tag = formItemQuanConsGraph()
     self.btnMonSpentHistTab.tag = formMonSpentHistGraph()
 
-    self.tabClick(sender = self.btnItemPriceHistTab)
+    self.tabClick(sender=self.btnItemPriceHistTab)
