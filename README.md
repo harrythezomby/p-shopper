@@ -61,6 +61,8 @@ When you check off an item, P-Shopper records additional details for future calc
 
 # Deleting List Items
 ![image](https://github.com/user-attachments/assets/081edd47-4890-4e4a-87d4-808b9f021ef1)
+
+
 ![image](https://github.com/user-attachments/assets/a786ed80-8866-4699-9fe3-1ebe13268544)
 
 
@@ -266,7 +268,11 @@ P-Shopper allows you to export your shopping lists to a CSV format, making it ea
 
 # Graphs and Reports
 ![image](https://github.com/user-attachments/assets/606d8162-e416-4a1a-b124-ed54e443842f)
+
+
 ![image](https://github.com/user-attachments/assets/30ef5839-0900-417d-b7d9-59ea6dd80ca2)
+
+
 ![image](https://github.com/user-attachments/assets/cb5ce917-7b8d-4de1-a37f-c8154055d7ef)
 
 P-Shopper offers robust graphing and reporting functionalities to help you analyze your shopping habits and expenditure patterns. Here's a detailed look at the features:
