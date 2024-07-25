@@ -1,88 +1,110 @@
-# About This [Anvil](https://anvil.works/?utm_source=github:app_README) App
+# P-Shopper Input Validation Guide
 
-### Build web apps with nothing but Python.
+P-Shopper ensures that all input data is sanitized and validated to maintain data integrity and avoid errors. Here is an explanation of the validation rules applied to different fields when adding or editing items:
 
-The app in this repository is built with [Anvil](https://anvil.works?utm_source=github:app_README), the framework for building web apps with nothing but Python. You can clone this app into your own Anvil account to use and modify.
+## Item Name
+- **Sanitization:** The item name is stripped of leading and trailing spaces and converted to title case.
+- **Validation:** The item name must only contain English alphanumeric characters. No special characters or symbols are allowed.
+- **Error Handling:** If the item name contains invalid characters, an alert will be displayed, and the input field will be cleared.
 
-Below, you will find:
-- [How to open this app](#opening-this-app-in-anvil-and-getting-it-online) in Anvil and deploy it online
-- Information [about Anvil](#about-anvil)
-- And links to some handy [documentation and tutorials](#tutorials-and-documentation)
+## Quantity
+- **Sanitization:** The quantity is stripped of leading and trailing spaces.
+- **Validation:** The quantity must be a positive integer. It cannot be zero, negative, or a floating-point number. It must also not be text of any sort.
+- **Error Handling:** If the quantity is invalid, an alert will be displayed, and the input field will be cleared.
 
-## Opening this app in Anvil and getting it online
+## Brand
+- **Sanitization:** The brand name is stripped of leading and trailing spaces.
+- **Validation:** The brand name can contain letters, numbers, and the symbols `.`, `&`, `-`, and `_`. It should not be empty.
+- **Error Handling:** If the brand name contains invalid characters, an alert will be displayed, and the input field will be cleared. If the brand name is left blank, it will default to "None".
 
-### Cloning the app
+## Store
+- **Sanitization:** The store name is stripped of leading and trailing spaces.
+- **Validation:** The store name can contain letters, numbers, and the symbols `.`, `&`, `-`, and `_`. It should not be empty.
+- **Error Handling:** If the store name contains invalid characters, an alert will be displayed, and the input field will be cleared. If the store name is left blank, it will default to "None".
 
-Go to the [Anvil Editor](https://anvil.works/build?utm_source=github:app_README) (you might need to sign up for a free account) and click on “Clone from GitHub” (underneath the “Blank App” option):
+## Aisle
+- **Sanitization:** The aisle name is stripped of leading and trailing spaces and converted to uppercase.
+- **Validation:** The aisle name must only contain English alphanumeric characters. No special characters or symbols are allowed.
+- **Error Handling:** If the aisle name contains invalid characters, an alert will be displayed, and the input field will be cleared. If the aisle name is left blank, it will default to "None".
 
-<img src="https://anvil.works/docs/version-control-new-ide/img/git/clone-from-github.png" alt="Clone from GitHub"/>
+## Error Handling
+If any of the above validation criteria are not met, an alert will inform you of the specific problem that needs to be remedied before proceeding with adding or editing an item.
 
-Enter the URL of this GitHub repository. If you're not yet logged in, choose "GitHub credentials" as the authentication method and click "Connect to GitHub".
-
-<img src="https://anvil.works/docs/version-control-new-ide/img/git/clone-app-from-git.png" alt="Clone App from Git modal"/>
-
-Finally, click "Clone App".
-
-This app will then be in your Anvil account, ready for you to run it or start editing it! **Any changes you make will be automatically pushed back to this repository, if you have permission!** You might want to [make a new branch](https://anvil.works/docs/version-control-new-ide?utm_source=github:app_README).
-
-### Running the app yourself:
-
-Find the **Run** button at the top-right of the Anvil editor:
-
-<img src="https://anvil.works/docs/img/run-button-new-ide.png"/>
+By following these validation rules, P-Shopper ensures that all data entered into the system is clean, consistent, and reliable.
 
 
-### Publishing the app on your own URL
 
-Now you've cloned the app, you can [deploy it on the internet with two clicks](https://anvil.works/docs/deployment/quickstart?utm_source=github:app_README)! Find the **Publish** button at the top-right of the editor:
 
-<img src="https://anvil.works/docs/deployment-new-ide/img/environments/publish-button.png"/>
+# Explanation of the Dummy Item in P-Shopper
 
-When you click it, you will see the Publish dialog:
+When you create a new account in P-Shopper, the system automatically sets up a few initial items to help you get started. Here’s what happens:
 
-<img src="https://anvil.works/docs/deployment-new-ide/img/quickstart/empty-environments-dialog.png"/>
+## New List and Default Theme
 
-Click **Publish This App**, and you will see that your app has been deployed at a new, public URL:
+- **New List**: A default list named "New List" is created for you.
+- **Default Theme**: The theme of the app is set to the default theme to ensure you have a visually appealing and consistent experience right from the start.
 
-<img src="https://anvil.works/docs/deployment-new-ide/img/quickstart/default-public-environment.png"/>
+## Initial Category
 
-That's it - **your app is now online**. Click the link and try it!
+- **First Category**: A category named "First Category" is created. This helps you organize your items right away.
 
-## About Anvil
+## Example Item in Long-Term History
 
-If you’re new to Anvil, welcome! Anvil is a platform for building full-stack web apps with nothing but Python. No need to wrestle with JS, HTML, CSS, Python, SQL and all their frameworks – just build it all in Python.
+- **Example Item**: To help you understand how items are tracked, an example item is added to your long-term history. Here are its details:
+  - **Item Name**: Example Item
+  - **Category**: First Category
+  - **Quantity**: 1
+  - **Price**: 1
+  - **Purchase Date**: The current date when you created your account
+  - **Expiry Date**: The current date when you created your account
 
-<figure>
-<figcaption><h3>Learn About Anvil In 80 Seconds👇</h3></figcaption>
-<a href="https://www.youtube.com/watch?v=3V-3g1mQ5GY" target="_blank">
-<img
-  src="https://anvil-website-static.s3.eu-west-2.amazonaws.com/anvil-in-80-seconds-YouTube.png"
-  alt="Anvil In 80 Seconds"
-/>
-</a>
-</figure>
-<br><br>
+This setup ensures that you can quickly start using P-Shopper with a predefined structure, making it easier to understand and manage your shopping lists and items.
 
-[![Try Anvil Free](https://anvil-website-static.s3.eu-west-2.amazonaws.com/mark-complete.png)](https://anvil.works?utm_source=github:app_README)
 
-To learn more about Anvil, visit [https://anvil.works](https://anvil.works?utm_source=github:app_README).
 
-## Tutorials and documentation
 
-### Tutorials
 
-If you are just starting out with Anvil, why not **[try the 10-minute Feedback Form tutorial](https://anvil.works/learn/tutorials/feedback-form?utm_source=github:app_README)**? It features step-by-step tutorials that will introduce you to the most important parts of Anvil.
+# Categories
+## User-Oriented Write-Up
 
-Anvil has tutorials on:
-- [Building Dashboards](https://anvil.works/learn/tutorials/data-science#dashboarding?utm_source=github:app_README)
-- [Multi-User Applications](https://anvil.works/learn/tutorials/multi-user-apps?utm_source=github:app_README)
-- [Building Web Apps with an External Database](https://anvil.works/learn/tutorials/external-database?utm_source=github:app_README)
-- [Deploying Machine Learning Models](https://anvil.works/learn/tutorials/deploy-machine-learning-model?utm_source=github:app_README)
-- [Taking Payments with Stripe](https://anvil.works/learn/tutorials/stripe?utm_source=github:app_README)
-- And [much more....](https://anvil.works/learn/tutorials?utm_source=github:app_README)
+### Managing Categories in P-Shopper
 
-### Reference Documentation
+In P-Shopper, categories help you organize your shopping lists effectively. Here's how you can manage them:
 
-The Anvil reference documentation provides comprehensive information on how to use Anvil to build web applications. You can find the documentation [here](https://anvil.works/docs/overview?utm_source=github:app_README).
+1. **Adding a New Category**:
+    - When creating a new item, you can select "New Category" from the dropdown.
+    - This will prompt you to enter a name for the new category.
+    - After you enter the name, the new category will be added and can be used for any new items you create.
 
-If you want to get to the basics as quickly as possible, each section of this documentation features a [Quick-Start Guide](https://anvil.works/docs/overview/quickstarts?utm_source=github:app_README).
+2. **Removing a Category**:
+    - You can also select "Remove Category" from the dropdown.
+    - Enter the name of the category you wish to remove.
+    - If the category is not in use by any items, it will be removed, and you'll receive a confirmation.
+    - If the category is in use, you'll be notified that it cannot be deleted.
+
+3. **Automatic Category Selection**:
+    - After adding or removing a category, the dropdown will automatically reset to a default category to ensure smooth operation.
+
+## Developer-Oriented Write-Up
+
+### Managing Categories in P-Shopper
+
+In P-Shopper, categories are managed through a combination of user interactions and database operations. Here’s an in-depth look at how it works:
+
+1. **Adding a New Category**:
+    - When a user selects "New Category" from the category dropdown, a prompt is displayed asking for the new category name.
+    - The category name is capitalized correctly before being added to the `tblCategories` table.
+    - The `category_id` for the new entry is incremented based on the highest existing `category_id`.
+
+2. **Removing a Category**:
+    - Upon selecting "Remove Category," users are prompted to enter the category name they wish to delete.
+    - The system checks if the category exists in the `tblCategories` table.
+    - It then verifies whether the category is in use by querying the `tblItems` and `tblLongTermHistory` tables.
+    - If the category is not in use, it is deleted from the `tblCategories` table, and the user receives a confirmation.
+    - If the category is in use, the user is informed that it cannot be deleted.
+
+3. **Automatic Category Selection**:
+    - After adding or removing a category, the category dropdown is reset to ensure it does not stay on the "New Category" or "Remove Category" options.
+    - This is handled by resetting the dropdown to a default category, either the first category or the most recently used one.
+
+These functionalities ensure that categories are managed efficiently and that the user experience remains smooth and intuitive.
