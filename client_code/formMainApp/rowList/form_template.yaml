@@ -3,6 +3,51 @@ container:
   type: DataRowPanel
   properties: {visible: true, auto_display_data: false, underline: true}
 components:
+- properties: {visible: false}
+  type: DataRowPanel
+  layout_properties: {column: 'null'}
+  name: dataRowPanelWriteView
+  components:
+  - properties: {role: textbox}
+    type: TextBox
+    layout_properties: {column: GOPKWM}
+    data_bindings:
+    - {code: 'self.item[''store'']', writeback: false, property: text}
+    event_bindings: {}
+    name: tbStore
+  - properties: {role: textbox}
+    type: TextBox
+    layout_properties: {column: AKPEWB}
+    data_bindings:
+    - {code: 'self.item[''aisle'']', writeback: false, property: text}
+    event_bindings: {}
+    name: tbAisle
+  - properties: {align: center, spacing_above: none, spacing_below: none, vertical_align: full}
+    type: FlowPanel
+    layout_properties: {column: QCBSKP}
+    name: flowWrite
+    components:
+    - properties: {text: '', icon: 'fa:save', spacing_below: small, spacing_above: small, align: center}
+      type: Button
+      layout_properties: {}
+      event_bindings: {click: btnSaveEdits_click}
+      name: btnSaveEdits
+    - properties: {text: '', icon: 'fa:trash'}
+      type: Button
+      event_bindings: {click: btnDelete_click}
+      name: btnDelete
+- name: columnItemName
+  properties: {}
+  type: ColumnPanel
+  layout_properties: {column: UJCSTL}
+  components:
+  - properties: {role: textbox}
+    type: TextBox
+    layout_properties: {grid_position: 'QAGRCC,DYSGLQ'}
+    data_bindings:
+    - {code: 'self.item[''item_name'']', writeback: false, property: text}
+    event_bindings: {}
+    name: tbItemName
 - properties: {}
   type: DataRowPanel
   layout_properties: {column: n}
@@ -53,72 +98,36 @@ components:
       layout_properties: {}
       event_bindings: {click: btnCheck_click}
       name: btnCheck
-  - properties: {}
-    type: Label
-    layout_properties: {column: UJCSTL}
-    data_bindings:
-    - {code: 'self.item[''item_name'']', writeback: false, property: text}
-    name: lblItemName
-- properties: {visible: false}
-  type: DataRowPanel
-  layout_properties: {column: 'null'}
-  name: dataRowPanelWriteView
-  components:
-  - properties:
-      items: []
-      role: dropdown
-    type: DropDown
-    layout_properties: {column: BYPHYZ}
-    data_bindings:
-    - {code: 'self.item[''category_id''][''category_name'']', writeback: false, property: selected_value}
-    event_bindings: {}
-    name: ddCategory
-  - properties: {role: textbox}
-    type: TextBox
-    layout_properties: {column: QHNMEC}
-    data_bindings:
-    - {code: 'self.item[''quantity'']', writeback: false, property: text}
-    event_bindings: {}
-    name: tbQuantity
-  - properties: {role: textbox}
-    type: TextBox
-    layout_properties: {column: QEVMHQ}
-    data_bindings:
-    - {code: 'self.item[''brand'']', writeback: false, property: text}
-    event_bindings: {}
-    name: tbBrand
-  - properties: {role: textbox}
-    type: TextBox
-    layout_properties: {column: GOPKWM}
-    data_bindings:
-    - {code: 'self.item[''store'']', writeback: false, property: text}
-    event_bindings: {}
-    name: tbStore
-  - properties: {role: textbox}
-    type: TextBox
-    layout_properties: {column: AKPEWB}
-    data_bindings:
-    - {code: 'self.item[''aisle'']', writeback: false, property: text}
-    event_bindings: {}
-    name: tbAisle
-  - properties: {align: center, spacing_above: none, spacing_below: none, vertical_align: full}
-    type: FlowPanel
-    layout_properties: {column: QCBSKP}
-    name: flowWrite
-    components:
-    - properties: {text: '', icon: 'fa:save', spacing_below: small, spacing_above: small, align: center}
-      type: Button
-      layout_properties: {}
-      event_bindings: {click: btnSaveEdits_click}
-      name: btnSaveEdits
-    - properties: {text: '', icon: 'fa:trash'}
-      type: Button
-      event_bindings: {click: btnDelete_click}
-      name: btnDelete
-  - properties: {role: textbox}
-    type: TextBox
-    layout_properties: {column: UJCSTL}
-    data_bindings:
-    - {code: 'self.item[''item_name'']', writeback: false, property: text}
-    event_bindings: {}
-    name: tbItemName
+- name: columnCat
+  properties: {}
+  type: ColumnPanel
+  layout_properties: {column: BYPHYZ}
+- properties:
+    items: []
+    role: dropdown
+  type: DropDown
+  layout_properties: {column: QEVMHQ}
+  data_bindings:
+  - {code: 'self.item[''category_id''][''category_name'']', writeback: false, property: selected_value}
+  event_bindings: {}
+  name: ddCategory
+- properties: {role: textbox}
+  type: TextBox
+  layout_properties: {column: GOPKWM}
+  data_bindings:
+  - {code: 'self.item[''quantity'']', writeback: false, property: text}
+  event_bindings: {}
+  name: tbQuantity
+- properties: {role: textbox}
+  type: TextBox
+  layout_properties: {column: AKPEWB}
+  data_bindings:
+  - {code: 'self.item[''brand'']', writeback: false, property: text}
+  event_bindings: {}
+  name: tbBrand
+- properties: {}
+  type: Label
+  layout_properties: {column: QHNMEC}
+  data_bindings:
+  - {code: 'self.item[''item_name'']', writeback: false, property: text}
+  name: lblItemName
