@@ -6,7 +6,7 @@ import anvil.tables.query as q
 from anvil.tables import app_tables
 import anvil.users
 from .formInitiateShare import formInitiateShare
-from .formSettings import formSettings
+from .formThemes import formThemes
 from .formCheckItem import formCheckItem
 
 class formMainApp(formMainAppTemplate):
@@ -250,7 +250,7 @@ class formMainApp(formMainAppTemplate):
         open_form('formGraphsReports')
 
     def btnThemes_click(self, **event_args):
-        alert(content=formSettings(), large=True, buttons=[], title="Settings")
+        alert(content=formThemes(), large=True, buttons=[], title="Themes")
 
     def btnLogout_click(self, **event_args):
         anvil.users.logout()
@@ -278,36 +278,61 @@ class formMainApp(formMainAppTemplate):
       alert(content=content, large=True, buttons=[], title="Check Off Item")
 
     def btnCreateItem_click(self, **event_args):
-        item_name = self.tbNewItemName.text
+        # Sanitize and validate item name
+        item_name = self.tbNewItemName.text.strip().title()
+        if not item_name.isalnum():
+            alert("Item name can only contain English alphanumeric characters.")
+            self.tbNewItemName.text = ""
+            return
+        
+        # Validate and set quantity
+        try:
+            quantity = int(self.tbNewItemQuantity.text)
+            if quantity <= 0:
+                alert("Quantity must be a positive integer.")
+                self.tbNewItemQuantity.text = ""
+                return
+        except ValueError:
+            quantity = 1
+        
+        # Sanitize and validate brand
+        brand = self.tbNewItemBrand.text.strip()
+        # Allow letters, numbers, and specific symbols for Australian businesses
+        if not all(c.isalnum() or c in " .&-_" for c in brand):
+            alert("Brand can only contain letters, numbers, and the symbols .&-_")
+            self.tbNewItemBrand.text = ""
+            return
+        if brand == "":
+            brand = "None"
+        
+        # Sanitize and validate store
+        store = self.tbNewItemStore.text.strip()
+        if not all(c.isalnum() or c in " .&-_" for c in store):
+            alert("Store can only contain letters, numbers, and the symbols .&-_")
+            self.tbNewItemStore.text = ""
+            return
+        if store == "":
+            store = "None"
+        
+        # Sanitize and validate aisle
+        aisle = self.tbNewItemAisle.text.strip().upper()
+        if not aisle.isalnum():
+            alert("Aisle can only contain English alphanumeric characters.")
+            self.tbNewItemAisle.text = ""
+            return
+        if aisle == "":
+            aisle = "None"
+        
+        # Get selected category ID and list ID
         category_id = self.ddNewItemCategory.selected_value
         list_id = self.ddListSelector.selected_value
     
-        if self.tbNewItemQuantity.text == 0 or None:
-            quantity = 1
-        else:
-            quantity = self.tbNewItemQuantity.text
-    
-        none = "None"
-    
-        if self.tbNewItemBrand.text == "" or None:
-            brand = none
-        else:
-            brand = self.tbNewItemBrand.text
-    
-        if self.tbNewItemStore.text == "" or None:
-            store = none
-        else:
-            store = self.tbNewItemStore.text
-    
-        if self.tbNewItemAisle.text == "" or None:
-            aisle = none
-        else:
-            aisle = self.tbNewItemAisle.text
-    
+        # Add item to the database
         anvil.server.call('add_item', item_name, quantity, category_id, brand, store, aisle, list_id)
         alert("Item added successfully.")
+        
+        # Refresh the data grid and clear input fields
         self.refresh_data_grid()
-    
         self.tbNewItemName.text = ""
         self.tbNewItemQuantity.text = ""
         self.tbNewItemBrand.text = ""
@@ -321,21 +346,24 @@ class formMainApp(formMainAppTemplate):
       self.update_list_title()
 
     def btnDeleteList_click(self, **event_args):
-      selected_list_id = self.ddListSelector.selected_value
-      if not selected_list_id:
-          alert("No list selected to delete.")
-          return
-  
-      # Get the name of the selected list for the confirmation alert
-      selected_list_name = [item[0] for item in self.ddListSelector.items if item[1] == selected_list_id][0]
-  
-      confirm_delete = confirm(f"Are you sure you want to delete the list '{selected_list_name}'? This action cannot be undone.")
-      if confirm_delete:
-          anvil.server.call('delete_list', selected_list_id)
-          alert(f"List '{selected_list_name}' and its items have been deleted successfully.")
-          self.populate_lists_dropdown()
-          self.update_list_title()
-          self.refresh_data_grid()
+        selected_list_id = self.ddListSelector.selected_value
+        if not selected_list_id:
+            alert("No list selected to delete.")
+            return
+    
+        # Get the name of the selected list for the confirmation alert
+        selected_list_name = [item[0] for item in self.ddListSelector.items if item[1] == selected_list_id][0]
+    
+        confirm_delete = confirm(f"Are you sure you want to delete the list '{selected_list_name}'? This action cannot be undone.")
+        if confirm_delete:
+            success, message = anvil.server.call('delete_list', selected_list_id)
+            if success:
+                alert(f"List '{selected_list_name}' and its items have been deleted successfully.")
+                self.prepare.populate_lists_dropdown()
+                self.prepare.update_list_title()
+                self.prepare.refresh_data_grid()
+            else:
+                alert(message)
 
     def btnNewList_click(self, **event_args):
       content = TextBox()

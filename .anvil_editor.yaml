@@ -4,6 +4,7 @@ unique_ids:
     formMainApp.rowList: '1720838879105609556665.8925744'
     formGraphsReports.formReports.formItemCompReport: '1718064681696308995577989.88873'
     formGraphsReports.formGraphs.formCatConsGraph: '1718064535227918917320607.7393'
+    formMainApp.formThemes: '1718074502817903103090083.9081'
     formLogin: '1721285882195647110133203.2756'
     formMainApp.formInitiateShare: '1718073692333319927248305.75757'
     formGraphsReports.formGraphs.formItemPriceHistGraph: '1718064505697540681355279.95386'
@@ -15,7 +16,6 @@ unique_ids:
     formGraphsReports.formReports: '1718061378593580046528482.2091'
     formGraphsReports.formGraphs.formItemQuanConsGraph: '1718064518460317466487111.5487'
     formGraphsReports: '1718060918858169682631648.09604'
-    formMainApp.formSettings: '1718074502817903103090083.9081'
   modules:
     State: '1720975870372786863492441.1614'
   server_modules:

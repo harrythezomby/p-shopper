@@ -30,20 +30,71 @@ class rowList(rowListTemplate):
         self.dataRowPanelReadView.visible = False
 
     def btnSaveEdits_click(self, **event_args):
-        self.dataRowPanelReadView.visible = True
-        self.dataRowPanelWriteView.visible = False
+        # Sanitize and validate item name
+        item_name = self.tbItemName.text.strip().title()
+        if not item_name.isalnum():
+            alert("Item name can only contain English alphanumeric characters.")
+            self.tbItemName.text = ""
+            return
+        
+        # Validate and set quantity
+        try:
+            quantity = int(self.tbQuantity.text)
+            if quantity <= 0:
+                alert("Quantity must be a positive integer.")
+                self.tbQuantity.text = ""
+                return
+        except ValueError:
+            alert("Quantity must be an integer.")
+            self.tbQuantity.text = ""
+            return
+        
+        # Sanitize and validate brand
+        brand = self.tbBrand.text.strip()
+        if not all(c.isalnum() or c in " .&-_" for c in brand):
+            alert("Brand can only contain letters, numbers, and the symbols .&-_")
+            self.tbBrand.text = ""
+            return
+        if brand == "":
+            brand = "None"
+        
+        # Sanitize and validate store
+        store = self.tbStore.text.strip()
+        if not all(c.isalnum() or c in " .&-_" for c in store):
+            alert("Store can only contain letters, numbers, and the symbols .&-_")
+            self.tbStore.text = ""
+            return
+        if store == "":
+            store = "None"
+        
+        # Sanitize and validate aisle
+        aisle = self.tbAisle.text.strip().upper()
+        if not aisle.isalnum():
+            alert("Aisle can only contain English alphanumeric characters.")
+            self.tbAisle.text = ""
+            return
+        if aisle == "":
+            aisle = "None"
+        
+        # Get selected category ID
         selected_category_id = self.ddCategory.selected_value
         category = anvil.server.call('get_category_by_id', selected_category_id)
+    
+        # Save the edited item to the database
         anvil.server.call(
             'edit_item',
             item_id=self.item['item_id'],
-            item_name=self.tbItemName.text,
-            quantity=int(self.tbQuantity.text),
+            item_name=item_name,
+            quantity=quantity,
             category_id=category['category_id'],
-            brand=self.tbBrand.text,
-            store=self.tbStore.text,
-            aisle=self.tbAisle.text
+            brand=brand,
+            store=store,
+            aisle=aisle
         )
+    
+        # Update the UI
+        self.dataRowPanelReadView.visible = True
+        self.dataRowPanelWriteView.visible = False
         self.refresh_data_bindings()
         self.parent.parent.parent.refresh_data_grid()
 

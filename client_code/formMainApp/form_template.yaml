@@ -79,7 +79,7 @@ components:
     - {id: QCBSKP, data_key: column_1, title: '', expand: true, width: 199}
     wrap_on: never
     auto_header: false
-    role: wide
+    role: null
   type: DataGrid
   components:
   - name: rowHeaders
@@ -157,14 +157,14 @@ components:
         layout_properties: {}
         event_bindings: {click: btnCreateItem_click}
     layout_properties: {}
-  - name: lblIsEmpty
-    properties: {align: center}
-    type: Label
   - name: repeatListItems
     properties: {item_template: formMainApp.rowList, border: '', role: wide}
     type: RepeatingPanel
     data_bindings: []
     layout_properties: {pinned: false}
+  - name: lblIsEmpty
+    properties: {align: center}
+    type: Label
   layout_properties: {slot: default}
 - name: spacerListBottom
   properties: {height: 9}

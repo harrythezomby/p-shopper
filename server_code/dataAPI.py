@@ -155,13 +155,21 @@ def create_new_category(category_name):
 def remove_category(category_name):
     user = anvil.users.get_user()
     category = app_tables.tblcategories.get(category_name=category_name, user=user)
+    
     if category:
+        # Check if this is the last category for the user
+        total_categories = app_tables.tblcategories.search(user=user)
+        if len(list(total_categories)) == 1:
+            return False, "Cannot delete the last category."
+        
+        # Check if the category is in use in tblitems or tbllongtermhistory
         category_in_use = len(list(app_tables.tblitems.search(category_id=category))) > 0 or len(list(app_tables.tbllongtermhistory.search(category_id=category))) > 0
         if not category_in_use:
             category.delete()
             return True, "Category removed successfully."
         else:
             return False, "Category is in use and cannot be deleted."
+    
     return False, "Category does not exist."
 
 @anvil.server.callable
@@ -199,12 +207,31 @@ def user_has_lists(user):
 
 @anvil.server.callable
 def create_default_list(user):
+    # Create default list
     last_list = list(app_tables.tbllists.search(tables.order_by("list_id", ascending=False)))
     new_list_id = last_list[0]['list_id'] + 1 if last_list else 1
     app_tables.tbllists.add_row(list_id=new_list_id, list_name='New List', user=user)
-    
+
     # Set default theme for the new user
     user['theme'] = 'default-theme'
+
+    # Create a new category named 'First Category' for the new user
+    last_category = list(app_tables.tblcategories.search(tables.order_by("category_id", ascending=False)))
+    new_category_id = last_category[0]['category_id'] + 1 if last_category else 1
+    new_category = app_tables.tblcategories.add_row(category_id=new_category_id, category_name='First Category', user=user)
+
+    # Create an entry in the long-term history database for the current user
+    current_date = datetime.date.today()
+    app_tables.tbllongtermhistory.add_row(
+        item_name='Example Item',
+        category_id=new_category,
+        quantity=1,
+        purchase_date=current_date,
+        expiry_date=current_date,
+        price=1,
+        user=user
+    )
+
 
 @anvil.server.callable
 def get_user_lists():
@@ -572,6 +599,12 @@ def delete_list(list_id):
     list_row = app_tables.tbllists.get(list_id=list_id)
     if not list_row:
         raise ValueError("List not found")
+    
+    user = list_row['user']
+    user_lists = app_tables.tbllists.search(user=user)
+
+    if len(list(user_lists)) <= 1:
+        return False, "Cannot delete the last list."
 
     # Get all items associated with the list
     list_items = app_tables.tbllistitems.search(list_id=list_row)
@@ -584,6 +617,7 @@ def delete_list(list_id):
             item_row.delete()  # Delete from tblItems if not linked to other lists
 
     list_row.delete()  # Finally, delete the list itself
+    return True, "List deleted successfully."
 
 # Theming
 @anvil.server.callable

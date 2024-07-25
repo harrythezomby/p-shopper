@@ -42,4 +42,5 @@ components:
   properties: {text: Confirm}
   type: Button
   layout_properties: {grid_position: 'SQJJEB,VHRLWX'}
+  event_bindings: {click: btnConfirm_click}
 is_package: true

@@ -1,9 +1,9 @@
-from ._anvil_designer import formSettingsTemplate
+from ._anvil_designer import formThemesTemplate
 from anvil import *
 import anvil.server
 import anvil.users
 
-class formSettings(formSettingsTemplate):
+class formThemes(formThemesTemplate):
     def __init__(self, **properties):
         self.init_components(**properties)
 
@@ -26,4 +26,9 @@ class formSettings(formSettingsTemplate):
     def btnColourThemeDark_click(self, **event_args):
         anvil.server.call('set_user_theme', 'dark-theme')
         get_open_form().apply_theme('dark-theme')
+
+    def btnConfirm_click(self, **event_args):
+      """This method is called when the button is clicked"""
+      # Command to close the form with this button
+      self.raise_event("x-close-alert", value=42)
 
