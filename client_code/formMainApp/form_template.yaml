@@ -76,7 +76,7 @@ components:
     - {id: QEVMHQ, data_key: brand, title: Brand, expand: true, width: 263}
     - {id: GOPKWM, data_key: store, title: Store, expand: true, width: 272}
     - {id: AKPEWB, data_key: aisle, title: Aisle, expand: true, width: 170}
-    - {id: QCBSKP, data_key: column_1, title: '', expand: true, width: 199}
+    - {id: QCBSKP, data_key: buttons, title: '', expand: true, width: 199}
     wrap_on: never
     auto_header: false
     role: null
@@ -122,7 +122,7 @@ components:
     type: DataRowPanel
     components:
     - name: tbNewItemName
-      properties: {background: '', role: textbox}
+      properties: {background: '', role: textbox, placeholder: New Item Name...}
       type: TextBox
       layout_properties: {column: UJCSTL}
     - name: ddNewItemCategory
@@ -131,19 +131,19 @@ components:
       layout_properties: {column: BYPHYZ}
       event_bindings: {change: ddNewItemCategory_change}
     - name: tbNewItemQuantity
-      properties: {type: number, role: textbox}
+      properties: {type: number, role: textbox, placeholder: Qty... (Opt)}
       type: TextBox
       layout_properties: {column: QHNMEC}
     - name: tbNewItemBrand
-      properties: {role: textbox}
+      properties: {role: textbox, placeholder: Brand... (Opt)}
       type: TextBox
       layout_properties: {column: QEVMHQ}
     - name: tbNewItemStore
-      properties: {role: textbox}
+      properties: {role: textbox, placeholder: Store... (Opt)}
       type: TextBox
       layout_properties: {column: GOPKWM}
     - name: tbNewItemAisle
-      properties: {role: textbox}
+      properties: {role: textbox, placeholder: Aisle... (Opt)}
       type: TextBox
       layout_properties: {column: AKPEWB}
     - name: flowNew

@@ -5,7 +5,6 @@ import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
 import anvil.users
-from .formInitiateShare import formInitiateShare
 from .formThemes import formThemes
 from .formCheckItem import formCheckItem
 
@@ -280,48 +279,51 @@ class formMainApp(formMainAppTemplate):
     def btnCreateItem_click(self, **event_args):
         # Sanitize and validate item name
         item_name = self.tbNewItemName.text.strip().title()
-        if not item_name.isalnum():
-            alert("Item name can only contain English alphanumeric characters.")
+        if not all(c.isalnum() or c.isspace() for c in item_name):
+            alert("Item name can only contain English alphanumeric characters and spaces.")
             self.tbNewItemName.text = ""
             return
         
         # Validate and set quantity
-        try:
-            quantity = int(self.tbNewItemQuantity.text)
-            if quantity <= 0:
+        quantity_text = self.tbNewItemQuantity.text
+        if quantity_text is None:
+            quantity_text = ""
+        quantity_text = quantity_text.strip()
+        if not quantity_text:
+            quantity = 1
+        else:
+            try:
+                quantity = int(quantity_text)
+                if quantity <= 0:
+                    alert("Quantity must be a positive integer.")
+                    self.tbNewItemQuantity.text = ""
+                    return
+            except ValueError:
                 alert("Quantity must be a positive integer.")
                 self.tbNewItemQuantity.text = ""
                 return
-        except ValueError:
-            quantity = 1
         
         # Sanitize and validate brand
-        brand = self.tbNewItemBrand.text.strip()
+        brand = self.tbNewItemBrand.text.strip() if self.tbNewItemBrand.text else "None"
         # Allow letters, numbers, and specific symbols for Australian businesses
         if not all(c.isalnum() or c in " .&-_" for c in brand):
             alert("Brand can only contain letters, numbers, and the symbols .&-_")
             self.tbNewItemBrand.text = ""
             return
-        if brand == "":
-            brand = "None"
         
         # Sanitize and validate store
-        store = self.tbNewItemStore.text.strip()
+        store = self.tbNewItemStore.text.strip() if self.tbNewItemStore.text else "None"
         if not all(c.isalnum() or c in " .&-_" for c in store):
             alert("Store can only contain letters, numbers, and the symbols .&-_")
             self.tbNewItemStore.text = ""
             return
-        if store == "":
-            store = "None"
         
         # Sanitize and validate aisle
-        aisle = self.tbNewItemAisle.text.strip().upper()
-        if not aisle.isalnum():
-            alert("Aisle can only contain English alphanumeric characters.")
+        aisle = self.tbNewItemAisle.text.strip().title() if self.tbNewItemAisle.text else "None"
+        if not all(c.isalnum() or c.isspace() for c in aisle):
+            alert("Aisle can only contain English alphanumeric characters and spaces.")
             self.tbNewItemAisle.text = ""
             return
-        if aisle == "":
-            aisle = "None"
         
         # Get selected category ID and list ID
         category_id = self.ddNewItemCategory.selected_value
@@ -338,6 +340,9 @@ class formMainApp(formMainAppTemplate):
         self.tbNewItemBrand.text = ""
         self.tbNewItemStore.text = ""
         self.tbNewItemAisle.text = ""
+
+
+    
 
 
     """List Interaction"""
