@@ -8,6 +8,7 @@ import anvil.users
 from .formInitiateShare import formInitiateShare
 from .formSettings import formSettings
 from .formCheckItem import formCheckItem
+from .Theming import All
 
 class formMainApp(formMainAppTemplate):
     def __init__(self, **properties):
@@ -27,7 +28,7 @@ class formMainApp(formMainAppTemplate):
         self.current_sort_column = 'item_name'
         self.current_sort_reverse = False
 
-        self.apply_user_theme()  # Apply the user's theme on startup
+        All.apply_user_theme(self)  # Apply the user's theme on startup
       
         self.populate_lists_dropdown()
         self.update_expiry_warning()
@@ -310,17 +311,4 @@ class formMainApp(formMainAppTemplate):
             self.update_list_title()
             self.refresh_data_grid()
 
-# Theming
-    def apply_user_theme(self):
-        theme = anvil.server.call('get_user_theme')
-        self.apply_theme(theme)
-    
-    def apply_theme(self, theme_name):
-        js_code = f"""
-        document.body.className = '';
-        document.body.classList.add('{theme_name}');
-        """
-        self.call_js(js_code)
 
-    def call_js(self, js_code):
-        anvil.js.window.eval(js_code)
