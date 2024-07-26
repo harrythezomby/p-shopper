@@ -1,12 +1,50 @@
-container: {type: ColumnPanel}
+container:
+  type: ColumnPanel
+  properties: {role: null, border: '', background: ''}
+  event_bindings: {show: form_show}
 components:
-- name: label_1
-  properties: {text: hello}
-  type: Label
-  layout_properties: {grid_position: 'DWVSGB,EMKXQJ'}
 - name: btnOpen
-  properties: {text: button_1}
+  properties: {text: Login, align: right}
   type: Button
-  layout_properties: {grid_position: 'MVODTI,AROHQA'}
+  layout_properties: {grid_position: 'MSGIAX,JHAVGT'}
   event_bindings: {click: btnOpen_click}
+- name: richtextInfo
+  properties:
+    content: |
+      # Welcome to P-Shopper
+
+      P-Shopper is your ultimate shopping list management tool designed to streamline your grocery shopping experience. Whether you're organizing your weekly groceries or managing bulk purchases, P-Shopper makes it easy to create, manage, and track your shopping lists.
+
+      ## Features
+
+      ### Effortless List Management
+
+      - **Create and Manage Lists**: Easily create and manage multiple shopping lists to suit your needs. Rename or delete lists with a few clicks, ensuring your shopping experience is always organized.
+      - **Item Categories**: Organize your items into categories for quick and easy access. Add, edit, or remove categories to keep everything in order.
+      - **Search and Filter**: Quickly find items within your lists using our powerful search and filter features. Sort items by name, quantity, category, brand, store, or aisle.
+
+      ### Comprehensive Tracking
+
+      - **Check Off Items**: Mark items as purchased and record their purchase and expiry dates. Keep track of your spending and ensure you never miss an item.
+      - **Graphs and Reports**: Gain insights into your shopping habits with detailed graphs and reports. Track spending over time, monitor item consumption, and more.
+
+      ### Themes and Customization
+
+      - **Personalized Themes**: Choose from a variety of themes to customize the look and feel of P-Shopper. Make your experience uniquely yours with our stylish theme options.
+
+      ### Export and Share
+
+      - **Export Lists**: Export your shopping lists to CSV for easy sharing and printing. Ensure everyone in your household is on the same page with shared shopping lists.
+
+      ## Getting Started
+
+      To get started with P-Shopper, simply create an account and log in. Once you're logged in, you can start creating your first shopping list and exploring all the features P-Shopper has to offer.
+
+      ## Disclaimer
+
+      Please note that P-Shopper requires you to be logged in to function properly. Many of the app's features, such as list management and tracking, depend on user authentication to provide a personalized and secure experience, which is why this is the case.
+
+      Join the P-Shopper community today and take control of your shopping experience!
+  type: RichText
+  layout_properties: {grid_position: 'DKWNIK,IXIPJT'}
 is_package: true
