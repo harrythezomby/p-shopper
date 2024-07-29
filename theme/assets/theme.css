@@ -9,4 +9,12 @@ body.anvil-show-banner {
 	margin-top: 0px;
 }
 
+.anvil-role-wide .data-grid-child-panel {
+  overflow-x: auto;
+}
 
+.anvil-role-wide .anvil-data-row-panel {
+  flex-wrap: nowrap;
+  min-width: -moz-min-content;
+  min-width: min-content;
+}

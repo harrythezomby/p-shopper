@@ -3,9 +3,9 @@ container:
   type: DataRowPanel
   properties: {visible: true, auto_display_data: false, underline: true}
 components:
-- properties: {}
+- properties: {align: center}
   type: DataRowPanel
-  layout_properties: {column: n}
+  layout_properties: {column: UJCSTL}
   name: dataRowPanelReadView
   components:
   - properties: {}
@@ -59,9 +59,9 @@ components:
     data_bindings:
     - {code: 'self.item[''item_name'']', writeback: false, property: text}
     name: lblItemName
-- properties: {visible: false}
+- properties: {visible: false, align: center}
   type: DataRowPanel
-  layout_properties: {column: 'null'}
+  layout_properties: {column: UJCSTL}
   name: dataRowPanelWriteView
   components:
   - properties:
@@ -122,3 +122,7 @@ components:
     - {code: 'self.item[''item_name'']', writeback: false, property: text}
     event_bindings: {}
     name: tbItemName
+- name: datarowpanelReadV2
+  properties: {}
+  type: DataRowPanel
+  layout_properties: {column: UJCSTL}

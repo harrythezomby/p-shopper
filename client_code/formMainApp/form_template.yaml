@@ -83,7 +83,7 @@ components:
   type: DataGrid
   components:
   - name: rowHeaders
-    properties: {italic: false, bold: false, underline: false, align: left}
+    properties: {italic: false, bold: false, underline: false, align: center}
     type: DataRowPanel
     components:
     - name: linkCategory
@@ -118,7 +118,7 @@ components:
       event_bindings: {click: linkAisle_click}
     layout_properties: {}
   - name: rowButtons
-    properties: {align: left, role: null}
+    properties: {align: center, role: null}
     type: DataRowPanel
     components:
     - name: tbNewItemName

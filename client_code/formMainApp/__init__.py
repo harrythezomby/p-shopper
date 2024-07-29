@@ -279,7 +279,7 @@ class formMainApp(formMainAppTemplate):
     def btnCreateItem_click(self, **event_args):
         # Sanitize and validate item name
         item_name = self.tbNewItemName.text.strip().title()
-        if not all(c.isalnum() or c.isspace() for c in item_name):
+        if not all(c.isalnum() or c.isspace() for c in item_name) or self.tbNewItemName.text == "":
             alert("Item name can only contain English alphanumeric characters and spaces.")
             self.tbNewItemName.text = ""
             return
