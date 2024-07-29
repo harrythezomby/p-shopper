@@ -3,17 +3,33 @@ container:
   properties: {role: null, border: '', background: ''}
   event_bindings: {show: form_show}
 components:
-- name: btnOpen
-  properties: {text: Login, align: right}
-  type: Button
-  layout_properties: {grid_position: 'MSGIAX,JHAVGT'}
-  event_bindings: {click: btnOpen_click}
+- name: flowHeader
+  properties: {align: right}
+  type: FlowPanel
+  layout_properties: {grid_position: 'JRHHVH,SSTCPR'}
+  components:
+  - name: btnGithub
+    properties: {text: GitHub Repo, icon: 'fa:github'}
+    type: Button
+    layout_properties: {}
+    event_bindings: {click: btnGithub_click}
+  - name: btnOpen
+    properties: {text: Login, align: right, icon: 'fa:sign-in'}
+    type: Button
+    layout_properties: {}
+    event_bindings: {click: btnOpen_click}
+- name: imgPreview
+  properties: {source: _/theme/pshopperdef.png, display_mode: fill_width}
+  type: Image
+  layout_properties: {grid_position: 'QNLATZ,FYFFST'}
 - name: richtextInfo
   properties:
     content: |
       # Welcome to P-Shopper
 
       P-Shopper is your ultimate shopping list management tool designed to streamline your grocery shopping experience. Whether you're organizing your weekly groceries or managing bulk purchases, P-Shopper makes it easy to create, manage, and track your shopping lists.
+
+      For a much more detailed overview of the app, including screenshots and other goodies, please visit the [GitHub repository](https://github.com/harrythezomby/p-shopper) via this link or by using the button above, where you'll be able to browse through P-Shopper's full read-me.
 
       ## Features
 

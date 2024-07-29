@@ -38,7 +38,7 @@ components:
     data_bindings:
     - {code: 'self.item[''aisle'']', writeback: false, property: text}
     name: lblAisle
-  - properties: {align: center, spacing_below: none, spacing_above: none, vertical_align: top, spacing: medium}
+  - properties: {align: left, spacing_below: none, spacing_above: none, vertical_align: top, spacing: medium}
     type: FlowPanel
     layout_properties: {column: QCBSKP}
     name: flowRead
@@ -101,7 +101,7 @@ components:
     - {code: 'self.item[''aisle'']', writeback: false, property: text}
     event_bindings: {}
     name: tbAisle
-  - properties: {align: center, spacing_above: none, spacing_below: none, vertical_align: full}
+  - properties: {align: left, spacing_above: none, spacing_below: none, vertical_align: full}
     type: FlowPanel
     layout_properties: {column: QCBSKP}
     name: flowWrite

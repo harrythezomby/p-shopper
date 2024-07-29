@@ -20,9 +20,9 @@ class formLogin(formLoginTemplate):
         <style>
         /* General Styles for Markdown */
         body.default-theme {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f0f4f8;
+            background: linear-gradient(to right, #d6e3ff, #e2d1ff);
             color: #333;
+            font-family: 'Roboto', sans-serif;
         }
 
         /* Headings */
@@ -191,6 +191,10 @@ class formLogin(formLoginTemplate):
 
     def call_js(self, js_code):
         anvil.js.window.eval(js_code)
+
+    def btnGithub_click(self, **event_args):
+      """This method is called when the button is clicked"""
+      anvil.js.window.open("https://github.com/harrythezomby/p-shopper", "_blank")
 
 
 
