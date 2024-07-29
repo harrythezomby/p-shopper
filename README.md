@@ -1,6 +1,8 @@
 # Welcome to P-Shopper!
 ![image](https://github.com/user-attachments/assets/258fdd1b-57e3-4469-af37-9bf5b801bdc5)
 
+## Note to Developers:
+If testing/playing around with the app in a development environment, such as straight from an Anvil clone link, make sure to follow the standard account creation steps present within the app itself. This is because P-Shopper performs a variety of tasks behind the scenes upon new user accounts being created, which has to do setting up graphs and reports, as well as creating a default list for the new user. If this isn't done, errors _will_ be encountered, so please keep this in mind!
 
 # Creating List Items
 
