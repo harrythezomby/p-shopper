@@ -10,24 +10,6 @@ components:
   components:
   - properties: {}
     type: Label
-    layout_properties: {column: BYPHYZ}
-    data_bindings:
-    - {code: 'self.item[''category_id''][''category_name'']', writeback: false, property: text}
-    name: lblCategory
-  - properties: {}
-    type: Label
-    layout_properties: {column: QHNMEC}
-    data_bindings:
-    - {code: 'self.item[''quantity'']', writeback: false, property: text}
-    name: lblQuantity
-  - properties: {}
-    type: Label
-    layout_properties: {column: QEVMHQ}
-    data_bindings:
-    - {code: 'self.item[''brand'']', writeback: false, property: text}
-    name: lblBrand
-  - properties: {}
-    type: Label
     layout_properties: {column: GOPKWM}
     data_bindings:
     - {code: 'self.item[''store'']', writeback: false, property: text}
@@ -38,27 +20,6 @@ components:
     data_bindings:
     - {code: 'self.item[''aisle'']', writeback: false, property: text}
     name: lblAisle
-  - properties: {align: left, spacing_below: none, spacing_above: none, vertical_align: top, spacing: medium}
-    type: FlowPanel
-    layout_properties: {column: QCBSKP}
-    name: flowRead
-    components:
-    - properties: {text: '', icon: 'fa:pencil', spacing_below: small}
-      type: Button
-      layout_properties: {expand: false}
-      event_bindings: {click: btnEdit_click}
-      name: btnEdit
-    - properties: {text: '', icon: 'fa:shopping-basket'}
-      type: Button
-      layout_properties: {}
-      event_bindings: {click: btnCheck_click}
-      name: btnCheck
-  - properties: {}
-    type: Label
-    layout_properties: {column: UJCSTL}
-    data_bindings:
-    - {code: 'self.item[''item_name'']', writeback: false, property: text}
-    name: lblItemName
 - properties: {visible: false, align: center}
   type: DataRowPanel
   layout_properties: {column: UJCSTL}
@@ -126,3 +87,43 @@ components:
   properties: {}
   type: DataRowPanel
   layout_properties: {column: UJCSTL}
+  components:
+  - properties: {}
+    type: Label
+    layout_properties: {column: UJCSTL}
+    data_bindings:
+    - {code: 'self.item[''item_name'']', writeback: false, property: text}
+    name: lblItemName
+  - properties: {}
+    type: Label
+    layout_properties: {column: BYPHYZ}
+    data_bindings:
+    - {code: 'self.item[''category_id''][''category_name'']', writeback: false, property: text}
+    name: lblCategory
+  - properties: {}
+    type: Label
+    layout_properties: {column: QHNMEC}
+    data_bindings:
+    - {code: 'self.item[''quantity'']', writeback: false, property: text}
+    name: lblQuantity
+  - properties: {}
+    type: Label
+    layout_properties: {column: QEVMHQ}
+    data_bindings:
+    - {code: 'self.item[''brand'']', writeback: false, property: text}
+    name: lblBrand
+  - properties: {align: left, spacing_below: none, spacing_above: none, vertical_align: top, spacing: medium}
+    type: FlowPanel
+    layout_properties: {column: QCBSKP}
+    name: flowRead
+    components:
+    - properties: {text: '', icon: 'fa:pencil', spacing_below: small}
+      type: Button
+      layout_properties: {expand: false}
+      event_bindings: {click: btnEdit_click}
+      name: btnEdit
+    - properties: {text: '', icon: 'fa:shopping-basket'}
+      type: Button
+      layout_properties: {}
+      event_bindings: {click: btnCheck_click}
+      name: btnCheck

@@ -9,12 +9,26 @@ body.anvil-show-banner {
 	margin-top: 0px;
 }
 
+/* Wide */
 .anvil-role-wide .data-grid-child-panel {
   overflow-x: auto;
 }
 
 .anvil-role-wide .anvil-data-row-panel {
+  display: flex;
   flex-wrap: nowrap;
   min-width: -moz-min-content;
   min-width: min-content;
+  overflow: auto;
+}
+
+.anvil-role-wide .anvil-data-row-panel > .anvil-column-panel {
+  flex: 0 0 auto;
+}
+
+.anvil-role-wide .anvil-data-row-panel .anvil-label, 
+.anvil-role-wide .anvil-data-row-panel .anvil-link, 
+.anvil-role-wide .anvil-data-row-panel .anvil-button {
+  pointer-events: auto;
+  cursor: pointer;
 }
