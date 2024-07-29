@@ -32,8 +32,8 @@ class rowList(rowListTemplate):
     def btnSaveEdits_click(self, **event_args):
       # Sanitize and validate item name
       item_name = self.tbItemName.text.strip().title()
-      if not all(c.isalnum() or c.isspace() for c in item_name):
-          alert("Item name can only contain English alphanumeric characters and spaces.")
+      if not all(c.isalnum() or c.isspace() for c in item_name) or self.tbItemName.text == "":
+          alert("Item name can only contain English alphanumeric characters and spaces and cannot be blank.")
           self.tbItemName.text = ""
           return
       
@@ -121,3 +121,4 @@ class rowList(rowListTemplate):
             alert("Error: List item not found.")
         self.refresh_data_bindings()
         self.parent.parent.parent.refresh_data_grid()
+

@@ -120,5 +120,5 @@ components:
     layout_properties: {column: UJCSTL}
     data_bindings:
     - {code: 'self.item[''item_name'']', writeback: false, property: text}
-    event_bindings: {}
+    event_bindings: {pressed_enter: tbItemName_pressed_enter}
     name: tbItemName
