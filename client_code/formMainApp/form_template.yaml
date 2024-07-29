@@ -67,6 +67,11 @@ components:
       type: DropDown
       event_bindings: {change: filter}
       layout_properties: {}
+- name: rowButtons
+  properties: {align: left, role: null}
+  type: DataRowPanel
+  components: []
+  layout_properties: {slot: default}
 - name: gridList
   properties:
     columns:
@@ -91,72 +96,70 @@ components:
       type: Link
       layout_properties: {column: BYPHYZ}
       event_bindings: {click: linkCategory_click}
+      components: []
     - name: linkItemName
       properties: {text: Item Name}
       type: Link
       layout_properties: {column: UJCSTL}
       event_bindings: {click: linkItemName_click}
+      components: []
     - name: linkQuantity
       properties: {text: Quantity}
       type: Link
       layout_properties: {column: QHNMEC}
       event_bindings: {click: linkQuantity_click}
+      components: []
     - name: linkBrand
       properties: {text: Brand}
       type: Link
       layout_properties: {column: QEVMHQ}
       event_bindings: {click: linkBrand_click}
+      components: []
     - name: linkStore
       properties: {text: Store}
       type: Link
       layout_properties: {column: GOPKWM}
       event_bindings: {click: linkStore_click}
+      components: []
     - name: linkAisle
       properties: {text: Aisle, col_spacing: medium, align: left}
       type: Link
       layout_properties: {column: AKPEWB}
       event_bindings: {click: linkAisle_click}
-    layout_properties: {}
-  - name: rowButtons
-    properties: {align: left, role: null}
-    type: DataRowPanel
+      components: []
+  - name: flowNew
+    properties: {spacing_below: none, spacing_above: none, align: left}
+    type: FlowPanel
     components:
     - name: tbNewItemName
       properties: {background: '', role: textbox, placeholder: New Item Name...}
       type: TextBox
-      layout_properties: {column: UJCSTL}
+      layout_properties: {width: 363.33299999999997, expand: true}
     - name: ddNewItemCategory
       properties: {role: dropdown}
       type: DropDown
-      layout_properties: {column: BYPHYZ}
+      layout_properties: {expand: true}
       event_bindings: {change: ddNewItemCategory_change}
     - name: tbNewItemQuantity
       properties: {type: number, role: textbox, placeholder: Qty... (Opt)}
       type: TextBox
-      layout_properties: {column: QHNMEC}
+      layout_properties: {expand: true}
     - name: tbNewItemBrand
       properties: {role: textbox, placeholder: Brand... (Opt)}
       type: TextBox
-      layout_properties: {column: QEVMHQ}
+      layout_properties: {expand: true}
     - name: tbNewItemStore
       properties: {role: textbox, placeholder: Store... (Opt)}
       type: TextBox
-      layout_properties: {column: GOPKWM}
+      layout_properties: {expand: true}
     - name: tbNewItemAisle
       properties: {role: textbox, placeholder: Aisle... (Opt)}
       type: TextBox
-      layout_properties: {column: AKPEWB}
-    - name: flowNew
-      properties: {spacing_below: none, spacing_above: none, align: left}
-      type: FlowPanel
-      layout_properties: {column: QCBSKP}
-      components:
-      - name: btnCreateItem
-        properties: {text: '', icon: 'fa:plus', align: left, underline: true, spacing_below: none, spacing_above: none}
-        type: Button
-        layout_properties: {}
-        event_bindings: {click: btnCreateItem_click}
-    layout_properties: {}
+      layout_properties: {expand: true}
+    - name: btnCreateItem
+      properties: {text: '', icon: 'fa:plus', align: left, underline: true, spacing_below: none, spacing_above: none}
+      type: Button
+      event_bindings: {click: btnCreateItem_click}
   - name: repeatListItems
     properties: {item_template: formMainApp.rowList, border: '', role: null}
     type: RepeatingPanel

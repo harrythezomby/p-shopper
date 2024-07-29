@@ -5,7 +5,7 @@ container:
 components:
 - properties: {}
   type: DataRowPanel
-  layout_properties: {column: n}
+  layout_properties: {column: UJCSTL}
   name: dataRowPanelReadView
   components:
   - properties: {}
@@ -61,7 +61,7 @@ components:
     name: lblItemName
 - properties: {visible: false}
   type: DataRowPanel
-  layout_properties: {column: 'null'}
+  layout_properties: {column: UJCSTL}
   name: dataRowPanelWriteView
   components:
   - properties:
