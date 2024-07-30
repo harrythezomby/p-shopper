@@ -364,9 +364,9 @@ class formMainApp(formMainAppTemplate):
             success, message = anvil.server.call('delete_list', selected_list_id)
             if success:
                 alert(f"List '{selected_list_name}' and its items have been deleted successfully.")
-                self.prepare.populate_lists_dropdown()
-                self.prepare.update_list_title()
-                self.prepare.refresh_data_grid()
+                self.populate_lists_dropdown()
+                self.update_list_title()
+                self.refresh_data_grid()
             else:
                 alert(message)
 
