@@ -355,8 +355,9 @@ At the bottom of the P-Shopper screen, you may notice a message indicating items
 
 # Themes
 
-P-Shopper offers a variety of themes to customize the look and feel of your application. 
-They can be selected via the 'Themes' button in the main app like so:
+P-Shopper offers a variety of themes to customize the look and feel of your application. They can be selected via the 'Themes' button in the main app like so:
+
+
 ![image](https://github.com/user-attachments/assets/fcd4516e-4eb7-4b8a-af12-3f1879fd37a0)
 
 ![image](https://github.com/user-attachments/assets/28bd1edb-d420-442f-878e-4a064da31135)
