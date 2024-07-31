@@ -3,3 +3,4 @@ roles:
 - {name: dropdown}
 - {name: radio}
 - {name: wide}
+- {name: tab-button}

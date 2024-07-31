@@ -13,6 +13,7 @@ class formGraphsReports(formGraphsReportsTemplate):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
 
+    # Tab buttons changing colour is currently broken, however the code still remains
     # Set initial roles for tab buttons
     self.btnGraphsTab.role = 'tab-button'
     self.btnReportsTab.role = 'tab-button'
@@ -43,6 +44,7 @@ class formGraphsReports(formGraphsReportsTemplate):
 
     self.tabClick(sender=self.btnGraphsTab)
 
+  # Back button functionality to go back to the main app
   def btnBack_click(self, **event_args):
     """This method is called when the button is clicked"""
     open_form('formMainApp')
