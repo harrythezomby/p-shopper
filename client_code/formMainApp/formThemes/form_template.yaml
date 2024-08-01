@@ -1,46 +1,46 @@
+is_package: true
 container: {type: ColumnPanel}
 components:
-- name: columnColourTheme
-  properties: {}
+- properties: {}
   type: ColumnPanel
   layout_properties: {grid_position: 'JUQNMH,IXMNEC'}
+  name: columnColourTheme
   components:
-  - name: lblColourTheme
-    properties: {text: 'Colour Theme:'}
+  - properties: {text: 'Colour Theme:'}
     type: Label
     layout_properties: {grid_position: 'OQGZPT,RMSGMJ'}
-  - name: btnColourThemeDefault
-    properties: {text: P-Shopper, icon: 'fa:check'}
+    name: lblColourTheme
+  - properties: {text: P-Shopper, icon: 'fa:smile-o'}
     type: Button
     layout_properties: {grid_position: 'CJBYXN,WUSUBN'}
     event_bindings: {click: btnColourThemeDefault_click}
-  - name: btnColourThemeDark
-    properties: {text: Dark, icon: 'fa:moon-o'}
+    name: btnColourThemeDefault
+  - properties: {text: Dark, icon: 'fa:moon-o'}
     type: Button
     layout_properties: {grid_position: 'CJBYXN,IJGGCZ'}
     event_bindings: {click: btnColourThemeDark_click}
-  - name: btnColourThemePrincess
-    properties: {text: Princess, icon: ''}
+    name: btnColourThemeDark
+  - properties: {text: Princess, icon: ''}
     type: Button
     layout_properties: {grid_position: 'CJBYXN,SORZJD'}
     event_bindings: {click: btnColourThemePrincess_click}
-  - name: btnColourThemeSakura
-    properties: {text: Sakura, icon: 'fa:diamond'}
+    name: btnColourThemePrincess
+  - properties: {text: Sakura, icon: 'fa:diamond'}
     type: Button
     layout_properties: {grid_position: 'CJBYXN,YWUYUJ'}
     event_bindings: {click: btnColourThemeSakura_click}
-  - name: btnColourThemePlainish
-    properties: {text: Plainish, icon: 'fa:newspaper-o'}
+    name: btnColourThemeSakura
+  - properties: {text: Plainish, icon: 'fa:newspaper-o'}
     type: Button
     layout_properties: {grid_position: 'CJBYXN,SFIQAX'}
     event_bindings: {click: btnColourThemePlainish_click}
-- name: spacer_1
-  properties: {height: 32}
+    name: btnColourThemePlainish
+- properties: {height: 32}
   type: Spacer
   layout_properties: {grid_position: 'TWGRAA,VVUXDM'}
-- name: btnConfirm
-  properties: {text: Confirm}
+  name: spacer_1
+- properties: {text: Confirm, icon: 'fa:check'}
   type: Button
   layout_properties: {grid_position: 'SQJJEB,VHRLWX'}
   event_bindings: {click: btnConfirm_click}
-is_package: true
+  name: btnConfirm

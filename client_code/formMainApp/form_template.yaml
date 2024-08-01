@@ -3,62 +3,61 @@ container:
   type: HtmlTemplate
   properties: {html: '@theme:standard-page.html'}
 components:
-- name: lblListTitle
-  properties: {text: List Title, align: center, font_size: 25, bold: true}
+- properties: {text: List Title, align: center, font_size: 25, bold: true}
   type: Label
   layout_properties: {slot: default}
-- name: flowListTopControls
-  properties: {align: center}
+  name: lblListTitle
+- properties: {align: center}
   type: FlowPanel
   layout_properties: {slot: default}
+  name: flowListTopControls
   components:
-  - name: flowListControls
-    properties: {}
+  - properties: {}
     type: FlowPanel
+    name: flowListControls
     components:
-    - name: lblListSelector
-      properties: {text: 'List:'}
+    - properties: {text: 'List:'}
       type: Label
-    - name: ddListSelector
-      properties:
+      name: lblListSelector
+    - properties:
         items: [Lists]
         placeholder: ''
         include_placeholder: false
       type: DropDown
       event_bindings: {change: ddListSelector_change}
-    - name: btnNewList
-      properties: {text: '', icon: 'fa:plus'}
+      name: ddListSelector
+    - properties: {text: '', icon: 'fa:plus'}
       type: Button
       event_bindings: {click: btnNewList_click}
-    - name: btnRenameList
-      properties: {text: '', icon: 'fa:font'}
+      name: btnNewList
+    - properties: {text: '', icon: 'fa:font'}
       type: Button
       event_bindings: {click: btnRenameList_click}
-    - name: btnDeleteList
-      properties: {text: '', icon: 'fa:trash'}
+      name: btnRenameList
+    - properties: {text: '', icon: 'fa:trash'}
       type: Button
       layout_properties: {}
       event_bindings: {click: btnDeleteList_click}
-  - name: spacerListTop
-    properties: {height: 32}
+      name: btnDeleteList
+  - properties: {height: 32}
     type: Spacer
     layout_properties: {width: 243, expand: true}
-  - name: flowSearch
-    properties: {align: right, visible: true, spacing: tiny}
+    name: spacerListTop
+  - properties: {align: right, visible: true, spacing: tiny}
     type: FlowPanel
+    name: flowSearch
     components:
-    - name: tbSearchList
-      properties: {placeholder: Enter Search Term, spacing_below: none, spacing_above: none}
+    - properties: {placeholder: Enter Search Term, spacing_below: none, spacing_above: none}
       type: TextBox
       layout_properties: {}
       event_bindings: {pressed_enter: search, change: search}
-    - name: btnSearch
-      properties: {text: '', icon: 'fa:search', align: center, spacing_above: none, spacing_below: none}
+      name: tbSearchList
+    - properties: {text: '', icon: 'fa:search', align: center, spacing_above: none, spacing_below: none}
       type: Button
       layout_properties: {}
       event_bindings: {click: search}
-    - name: ddCategorySelector
-      properties:
+      name: btnSearch
+    - properties:
         items: [Categories]
         placeholder: Category
         include_placeholder: false
@@ -67,8 +66,8 @@ components:
       type: DropDown
       event_bindings: {change: filter}
       layout_properties: {}
-- name: gridList
-  properties:
+      name: ddCategorySelector
+- properties:
     columns:
     - {id: UJCSTL, data_key: item_name, title: Item Name, expand: true, width: 365}
     - {id: BYPHYZ, data_key: category_id, title: Category, expand: true, width: 272}
@@ -81,129 +80,129 @@ components:
     auto_header: false
     role: wide
   type: DataGrid
+  layout_properties: {slot: default}
+  name: gridList
   components:
-  - name: rowHeaders
-    properties: {italic: false, bold: false, underline: false, align: left}
+  - properties: {italic: false, bold: false, underline: false, align: left}
     type: DataRowPanel
+    layout_properties: {}
+    name: rowHeaders
     components:
-    - name: linkCategory
-      properties: {text: Category}
+    - properties: {text: Category}
       type: Link
       layout_properties: {column: BYPHYZ}
       event_bindings: {click: linkCategory_click}
-    - name: linkItemName
-      properties: {text: Item Name}
+      name: linkCategory
+    - properties: {text: Item Name}
       type: Link
       layout_properties: {column: UJCSTL}
       event_bindings: {click: linkItemName_click}
-    - name: linkQuantity
-      properties: {text: Quantity}
+      name: linkItemName
+    - properties: {text: Quantity}
       type: Link
       layout_properties: {column: QHNMEC}
       event_bindings: {click: linkQuantity_click}
-    - name: linkBrand
-      properties: {text: Brand}
+      name: linkQuantity
+    - properties: {text: Brand}
       type: Link
       layout_properties: {column: QEVMHQ}
       event_bindings: {click: linkBrand_click}
-    - name: linkStore
-      properties: {text: Store}
+      name: linkBrand
+    - properties: {text: Store}
       type: Link
       layout_properties: {column: GOPKWM}
       event_bindings: {click: linkStore_click}
-    - name: linkAisle
-      properties: {text: Aisle, col_spacing: medium, align: left}
+      name: linkStore
+    - properties: {text: Aisle, col_spacing: medium, align: left}
       type: Link
       layout_properties: {column: AKPEWB}
       event_bindings: {click: linkAisle_click}
-    layout_properties: {}
-  - name: rowButtons
-    properties: {align: left, role: null}
+      name: linkAisle
+  - properties: {align: left, role: null}
     type: DataRowPanel
+    layout_properties: {}
+    name: rowButtons
     components:
-    - name: tbNewItemName
-      properties: {background: '', role: textbox, placeholder: New Item Name...}
+    - properties: {background: '', role: textbox, placeholder: New Item Name...}
       type: TextBox
       layout_properties: {column: UJCSTL}
-    - name: ddNewItemCategory
-      properties: {role: dropdown}
+      name: tbNewItemName
+    - properties: {role: dropdown}
       type: DropDown
       layout_properties: {column: BYPHYZ}
       event_bindings: {change: ddNewItemCategory_change}
-    - name: tbNewItemQuantity
-      properties: {type: number, role: textbox, placeholder: Qty... (Opt)}
+      name: ddNewItemCategory
+    - properties: {type: number, role: textbox, placeholder: Qty... (Opt)}
       type: TextBox
       layout_properties: {column: QHNMEC}
-    - name: tbNewItemBrand
-      properties: {role: textbox, placeholder: Brand... (Opt)}
+      name: tbNewItemQuantity
+    - properties: {role: textbox, placeholder: Brand... (Opt)}
       type: TextBox
       layout_properties: {column: QEVMHQ}
-    - name: tbNewItemStore
-      properties: {role: textbox, placeholder: Store... (Opt)}
+      name: tbNewItemBrand
+    - properties: {role: textbox, placeholder: Store... (Opt)}
       type: TextBox
       layout_properties: {column: GOPKWM}
-    - name: tbNewItemAisle
-      properties: {role: textbox, placeholder: Aisle... (Opt)}
+      name: tbNewItemStore
+    - properties: {role: textbox, placeholder: Aisle... (Opt)}
       type: TextBox
       layout_properties: {column: AKPEWB}
-    - name: flowNew
-      properties: {spacing_below: none, spacing_above: none, align: left}
+      name: tbNewItemAisle
+    - properties: {spacing_below: none, spacing_above: none, align: left}
       type: FlowPanel
       layout_properties: {column: QCBSKP}
+      name: flowNew
       components:
-      - name: btnCreateItem
-        properties: {text: '', icon: 'fa:plus', align: left, underline: true, spacing_below: none, spacing_above: none}
+      - properties: {text: '', icon: 'fa:plus', align: left, underline: true, spacing_below: none, spacing_above: none}
         type: Button
         layout_properties: {}
         event_bindings: {click: btnCreateItem_click}
-    layout_properties: {}
-  - name: repeatListItems
-    properties: {item_template: formMainApp.rowList, border: '', role: null}
+        name: btnCreateItem
+  - properties: {item_template: formMainApp.rowList, border: '', role: null}
     type: RepeatingPanel
-    data_bindings: []
     layout_properties: {pinned: false}
-  - name: lblIsEmpty
-    properties: {align: center}
+    name: repeatListItems
+  - properties: {align: center}
     type: Label
-  layout_properties: {slot: default}
-- name: spacerListBottom
-  properties: {height: 9}
+    name: lblIsEmpty
+- properties: {height: 9}
   type: Spacer
   layout_properties: {slot: default}
-- name: flowListBottomButtons
-  properties: {}
+  name: spacerListBottom
+- properties: {}
   type: FlowPanel
   layout_properties: {slot: default}
+  name: flowListBottomButtons
   components:
-  - name: btnReports
-    properties: {text: Reports, icon: 'fa:bar-chart'}
+  - properties: {text: Reports, icon: 'fa:bar-chart'}
     type: Button
     layout_properties: {}
     event_bindings: {click: btnReports_click}
-  - name: btnExport
-    properties: {text: Export, icon: 'fa:save'}
+    name: btnReports
+  - properties: {text: Export, icon: 'fa:save'}
     type: Button
     layout_properties: {}
     event_bindings: {click: btnExport_click}
-  - name: spacerListBottomButtons
-    properties: {height: 32}
+    name: btnExport
+  - properties: {height: 32}
     type: Spacer
     layout_properties: {width: 776, expand: true}
-  - name: btnThemes
-    properties: {text: Themes, icon: 'fa:cog'}
+    name: spacerListBottomButtons
+  - properties: {text: Themes, icon: 'fa:cog'}
     type: Button
     layout_properties: {}
     event_bindings: {click: btnThemes_click}
-  - name: btnLogout
-    properties: {text: Log Out, icon: 'fa:sign-out'}
+    name: btnThemes
+  - properties: {text: Log Out, icon: 'fa:sign-out'}
     type: Button
     layout_properties: {}
     event_bindings: {click: btnLogout_click}
-- name: lblExpiryWarning
-  properties: {icon: 'fa:warning', text: Items Expiring Soon Will Appear Here}
+    name: btnLogout
+- properties: {icon: 'fa:warning', text: Items Expiring Soon Will Appear Here}
   type: Label
   layout_properties: {slot: default}
-- name: lblPShopper
-  properties: {text: P-Shopper v0.1a, align: center}
+  name: lblExpiryWarning
+- properties: {text: P-Shopper v0.1a, align: center}
   type: Label
   layout_properties: {slot: default}
+  name: lblPShopper
