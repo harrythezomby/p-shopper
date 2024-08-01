@@ -20,7 +20,7 @@ components:
     layout_properties: {grid_position: 'CJBYXN,IJGGCZ'}
     event_bindings: {click: btnColourThemeDark_click}
     name: btnColourThemeDark
-  - properties: {text: Princess, icon: ''}
+  - properties: {text: Princess, icon: 'fa:birthday-cake'}
     type: Button
     layout_properties: {grid_position: 'CJBYXN,SORZJD'}
     event_bindings: {click: btnColourThemePrincess_click}
