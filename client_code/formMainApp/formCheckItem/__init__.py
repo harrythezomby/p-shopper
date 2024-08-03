@@ -21,7 +21,11 @@ class formCheckItem(formCheckItemTemplate):
     def btnConfirm_click(self, **event_args):
         purchase_date = self.datepickerPurchaseDate.date
         expiry_date = self.datepickerExpiryDate.date
-        price = float(self.tbPrice.text)
+
+        if self.tbPrice.text == float:
+          price = float(self.tbPrice.text)
+        else:
+          price = 0
 
         anvil.server.call('check_off_item', self.list_item_id, purchase_date, expiry_date, price)
         alert("Item checked off successfully.")
