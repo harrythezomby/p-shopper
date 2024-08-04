@@ -54,7 +54,7 @@ class rowList(rowListTemplate):
               return
       
       # Sanitize and validate brand
-      brand = self.tbBrand.text.strip() if self.tbBrand.text else "None"
+      brand = self.tbBrand.text.strip().title() if self.tbBrand.text else "None"
       # Allow letters, numbers, and specific symbols for Australian businesses
       if not all(c.isalnum() or c in " .&-_" for c in brand):
           alert("Brand can only contain letters, numbers, and the symbols .&-_")
@@ -62,7 +62,7 @@ class rowList(rowListTemplate):
           return
       
       # Sanitize and validate store
-      store = self.tbStore.text.strip() if self.tbStore.text else "None"
+      store = self.tbStore.text.strip().title() if self.tbStore.text else "None"
       if not all(c.isalnum() or c in " .&-_" for c in store):
           alert("Store can only contain letters, numbers, and the symbols .&-_")
           self.tbStore.text = ""
