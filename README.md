@@ -51,11 +51,11 @@ When you check off an item, P-Shopper records additional details for future calc
 ![image](https://github.com/user-attachments/assets/74810418-f7cb-4180-94aa-879b5915680a)
 
 
-- **Checkbox**: Each item in your list has a checkbox.
-- **Prompt**: Clicking the checkbox will prompt you to enter additional details, such as:
-  - **Purchase Date**: The date you purchased the item.
-  - **Expiry Date**: The date the item will expire.
-  - **Price**: The price you paid for the item.
+- **Checkbox**: Each item in your list has a button to check it off.
+- **Prompt**: Clicking the button will prompt you to enter additional details, such as:
+  - **Purchase Date**: The date you purchased the item. If this is et blank no purchase date is set.
+  - **Expiry Date**: The date the item will expire. If this is left blank no expiry date is set.
+  - **Price**: The price you paid for the item. If this is left blank a price of $0 is substituted.
 
 ### Record Details
 - **History**: Checked-off items are recorded in the long-term history database, including all relevant details.
