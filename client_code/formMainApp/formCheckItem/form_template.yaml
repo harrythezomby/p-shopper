@@ -27,7 +27,7 @@ components:
     type: Label
     layout_properties: {}
   - name: tbPrice
-    properties: {placeholder: Enter Price...}
+    properties: {placeholder: Enter Price..., type: text}
     type: TextBox
     layout_properties: {}
 - name: flowExpiryDate
