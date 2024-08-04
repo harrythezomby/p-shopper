@@ -97,7 +97,7 @@ class rowList(rowListTemplate):
       self.refresh_data_bindings()
       self.parent.parent.parent.refresh_data_grid()
 
-
+    # Deletes the designated list item
     def btnDelete_click(self, **event_args):
         item_id = self.item['item_id']
         confirm_delete = confirm("Are you sure you want to delete this item?")

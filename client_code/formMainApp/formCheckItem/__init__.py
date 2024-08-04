@@ -22,6 +22,7 @@ class formCheckItem(formCheckItemTemplate):
         purchase_date = self.datepickerPurchaseDate.date
         expiry_date = self.datepickerExpiryDate.date
 
+        # Validation, assume 0 if no price is entered
         try:
             price = float(self.tbPrice.text)
         except ValueError:

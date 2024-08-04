@@ -1,3 +1,4 @@
+# Imports
 from ._anvil_designer import formReportsTemplate
 from anvil import *
 import anvil.users
@@ -26,6 +27,7 @@ class formReports(formReportsTemplate):
 
   def tabClick(self, **event_args):
     """Tab functionality adapted from Anvil forum user david.wylie's example. See https://anvil.works/forum/t/is-there-a-tab-bar-component/4291"""
+    """For more information on the code, please checkout the forum link for explainations, the basic rundown is that tags are used for this tab functionality"""
     sender = event_args.get("sender", None)
     if not sender:
       print("Can't get sender from:", event_args)

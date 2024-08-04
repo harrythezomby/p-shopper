@@ -15,6 +15,8 @@ class formGraphs(formGraphsTemplate):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
 
+  """Tab functionality adapted from Anvil forum user david.wylie's example. See https://anvil.works/forum/t/is-there-a-tab-bar-component/4291"""
+  """For more information on the code, please checkout the forum link for explainations, the basic rundown is that tags are used for this tab functionality"""
   def tabClick(self, **event_args):
     """Tab functionality adapted from Anvil forum user david.wylie's example. See https://anvil.works/forum/t/is-there-a-tab-bar-component/4291"""
     sender = event_args.get("sender", None)

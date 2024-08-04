@@ -1,3 +1,4 @@
+# Imports
 from ._anvil_designer import formLoginTemplate
 from anvil import *
 import anvil.server
@@ -15,6 +16,7 @@ class formLogin(formLoginTemplate):
         # Apply default theme CSS
         self.apply_default_theme()
 
+    # Apply the default theme on startup, the css is in here as a workaround, since I couldn't get it to import straight from default-theme.css - potential optimisation for the future
     def apply_default_theme(self):
         css_code = """
         <style>
@@ -172,26 +174,30 @@ class formLogin(formLoginTemplate):
         """
         self.call_js(js_code)
 
+    # The login button functionality
     def btnOpen_click(self, **event_args):
         """This method is called when the button is clicked"""
         user = anvil.users.login_with_form()
         if user:
-            if not anvil.server.call('user_has_lists', user):
-                anvil.server.call('create_default_list', user)
-            self.remove_default_theme()  # Optional: remove the default theme class upon login
+            if not anvil.server.call('user_has_lists', user): # Check if the user has lists
+                anvil.server.call('create_default_list', user) # If not, make the default list
+            self.remove_default_theme()  # Removes the default theme class upon login
             open_form('formMainApp')
         else:
             alert("Login failed. Please try again.")
 
+    # Removes the default theme upon logging in incase the user has a different theme selected
     def remove_default_theme(self):
         js_code = """
         document.body.classList.remove('default-theme');
         """
         anvil.js.window.eval(js_code)
 
+    # Function used to inject js
     def call_js(self, js_code):
         anvil.js.window.eval(js_code)
 
+    # Button to go to the github repo for the project
     def btnGithub_click(self, **event_args):
       """This method is called when the button is clicked"""
       anvil.js.window.open("https://github.com/harrythezomby/p-shopper", "_blank")

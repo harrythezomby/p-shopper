@@ -1,3 +1,4 @@
+# Imports
 from ._anvil_designer import formItemExpReportTemplate
 from anvil import *
 import anvil.users
@@ -48,6 +49,7 @@ class formItemExpReport(formItemExpReportTemplate):
             alert(f"The following item(s) are expiring in the next two days: {', '.join(alert_items)}")
             self.alert_shown = True  # Set the flag to True after showing the alert
 
+    # Timeframe selectors
     def radioWeek_change(self, **event_args):
         if self.radioWeek.selected:
             self.timeframe = 'week'
@@ -63,6 +65,7 @@ class formItemExpReport(formItemExpReportTemplate):
             self.timeframe = 'year'
             self.generate_report()
 
+    # Exporting the report
     def btnExport_click(self, **event_args):
         # Generate report markdown
         report_markdown = self.textReport.content

@@ -1,3 +1,4 @@
+# Imports
 from ._anvil_designer import formItemCompReportTemplate
 from anvil import *
 import anvil.users
@@ -51,6 +52,7 @@ class formItemCompReport(formItemCompReportTemplate):
         # Display the report in the rich text component
         self.textReport.content = report_markdown
 
+    # Timeframe selectors
     def radioWeek_change(self, **event_args):
         if self.radioWeek.selected:
             self.timeframe = 'week'
@@ -66,6 +68,7 @@ class formItemCompReport(formItemCompReportTemplate):
             self.timeframe = 'year'
             self.generate_report()
 
+    # Exporting the report
     def btnExport_click(self, **event_args):
         # Generate report markdown
         report_markdown = self.textReport.content

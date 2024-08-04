@@ -1,3 +1,4 @@
+# Imports
 from ._anvil_designer import formItemQuanConsGraphTemplate
 from anvil import *
 import anvil.users
@@ -26,14 +27,17 @@ class formItemQuanConsGraph(formItemQuanConsGraphTemplate):
         item_name = self.ddItemSelector.selected_value
         timeframe = self.timeframe
 
+        # Get data from the server
         data = anvil.server.call('get_item_consumption_data', item_name, timeframe)
         
         # Sort data based on the actual date for correct chronological order
         data.sort(key=lambda x: x['date'])
 
+        # Set graph headers
         x = [item['date'] for item in data]
         y = [item['quantity'] for item in data]
 
+        # Timeframe settings
         if timeframe == 'week':
             x_labels = [f"Week {label}" for label in x]
             x_axis_title = 'Week'
@@ -47,6 +51,7 @@ class formItemQuanConsGraph(formItemQuanConsGraphTemplate):
         # Find the item name
         item_name = self.ddItemSelector.selected_value
 
+        # Plot the data
         self.plotItemQuanCons.data = [go.Bar(x=x_labels, y=y, name='Consumption')]
         self.plotItemQuanCons.layout = go.Layout(
             title=f"{item_name} Consumption",
@@ -57,9 +62,11 @@ class formItemQuanConsGraph(formItemQuanConsGraphTemplate):
         # Ensure the plot is refreshed
         self.plotItemQuanCons.redraw()
 
+    # Updates the graph when the item is changed
     def ddItemSelector_change(self, **event_args):
         self.plot_graph()
 
+    # Updates the graph when the timeframe is changed
     def radioWeek_change(self, **event_args):
         if self.radioWeek.selected:
             self.timeframe = 'week'

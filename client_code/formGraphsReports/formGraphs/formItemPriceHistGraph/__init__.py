@@ -1,3 +1,4 @@
+# Imports
 from ._anvil_designer import formItemPriceHistGraphTemplate
 from anvil import *
 import anvil.users
@@ -26,14 +27,17 @@ class formItemPriceHistGraph(formItemPriceHistGraphTemplate):
         item_name = self.ddItemSelector.selected_value
         timeframe = self.timeframe
 
+        # Get the data from the server
         data = anvil.server.call('get_item_price_history_data', item_name, timeframe)
         
         # Sort data based on the actual date for correct chronological order
         data.sort(key=lambda x: x['date'])
 
+        # Set x and y headers
         x = [item['date'] for item in data]
         y = [item['price'] for item in data]
 
+        # Timeframe settings
         if timeframe == 'week':
             x_labels = [f"Week {label}" for label in x]
             x_axis_title = 'Week'
@@ -47,6 +51,7 @@ class formItemPriceHistGraph(formItemPriceHistGraphTemplate):
         # Find the item name
         item_name = self.ddItemSelector.selected_value
 
+        # Scatterplot settings
         self.plotItemPriceHist.data = [go.Scatter(x=x_labels, y=y, mode='lines+markers', name='Price')]
         self.plotItemPriceHist.layout = go.Layout(
             title=f"{item_name} Price History",
@@ -57,9 +62,11 @@ class formItemPriceHistGraph(formItemPriceHistGraphTemplate):
         # Ensure the plot is refreshed
         self.plotItemPriceHist.redraw()
 
+    # Reload the graph when the item is changed
     def ddItemSelector_change(self, **event_args):
         self.plot_graph()
 
+    # Timeframe selector
     def radioWeek_change(self, **event_args):
         if self.radioWeek.selected:
             self.timeframe = 'week'

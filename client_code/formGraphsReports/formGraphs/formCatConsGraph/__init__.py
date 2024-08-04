@@ -1,3 +1,4 @@
+# Imports
 from ._anvil_designer import formCatConsGraphTemplate
 from anvil import *
 import anvil.users
@@ -26,14 +27,17 @@ class formCatConsGraph(formCatConsGraphTemplate):
         category_id = self.ddCatSelector.selected_value
         timeframe = self.timeframe
 
+        # Get the data from the server
         data = anvil.server.call('get_category_consumption_data', category_id, timeframe)
         
         # Sort data based on the actual date for correct chronological order
         data.sort(key=lambda x: x['date'])
 
+        # Set the x and y data for the graph
         x = [item['date'] for item in data]
         y = [item['quantity'] for item in data]
 
+        # Sets the timeframe behaviour of the graph
         if timeframe == 'week':
             x_labels = [f"Week {label}" for label in x]
             x_axis_title = 'Week'
@@ -47,6 +51,7 @@ class formCatConsGraph(formCatConsGraphTemplate):
         # Find the category name
         category_name = next((cat[0] for cat in self.ddCatSelector.items if cat[1] == category_id), "Category")
 
+        # Sets properties of the plotly graph
         self.plotGraphCatCons.data = [go.Bar(x=x_labels, y=y, name='Consumption')]
         self.plotGraphCatCons.layout = go.Layout(
             title=f"{category_name} Consumption",
@@ -57,9 +62,11 @@ class formCatConsGraph(formCatConsGraphTemplate):
         # Ensure the plot is refreshed
         self.plotGraphCatCons.redraw()
 
+    # Updates the graph when the category is changed
     def ddCatSelector_change(self, **event_args):
         self.plot_graph()
 
+    # Updates the graph when the timeframe is changed
     def radioWeek_change(self, **event_args):
         if self.radioWeek.selected:
             self.timeframe = 'week'
@@ -75,7 +82,4 @@ class formCatConsGraph(formCatConsGraphTemplate):
             self.timeframe = 'year'
             self.plot_graph()
 
-    def btnExport_click(self, **event_args):
-      """This method is called when the button is clicked"""
-      pass
 

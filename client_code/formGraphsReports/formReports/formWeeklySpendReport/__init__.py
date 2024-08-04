@@ -1,3 +1,4 @@
+# Imports
 from ._anvil_designer import formWeeklySpendReportTemplate
 from anvil import *
 import anvil.users
@@ -27,6 +28,7 @@ class formWeeklySpendReport(formWeeklySpendReportTemplate):
         # Display the report in the rich text component
         self.textReport.content = report_markdown
 
+    # Exporting the report
     def btnExport_click(self, **event_args):
         # Generate report markdown
         report_markdown = self.textReport.content
