@@ -7,7 +7,7 @@ If testing/playing around with the app in a development environment, such as str
 
 **WARNING:** As of 08/04/2024, I have gone through and commented longer and more in-depth explainations for most of P-Shopper's functions, especially the dataAPI. If any code has been broken during this process, please revert to a previous commit, or better yet - switch to the **'stable-nocomments'** branch which I have created from the latest commit before accidental breaking changes might have been implemented! **EDIT:** P-Shopper has been thoroughly tested once again, and commented changes have been merged into master. However, If anything breaks please try this alternate branch just in case!
 
-If you would like to **clone** P-Shopper, please use the [Anvil Clone Link](https://anvil.works/build#clone:4XSC54KRG5P37WYX=ZAAKC3ED6TL3K73UNRQ7RYYY)
+If you would like to **clone** P-Shopper, please use the [Anvil Clone Link](https://anvil.works/build#clone:4XSC54KRG5P37WYX=ZAAKC3ED6TL3K73UNRQ7RYYY).
 
 # Creating List Items
 
