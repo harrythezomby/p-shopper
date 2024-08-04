@@ -1,3 +1,4 @@
+# Imports
 import anvil.users
 import anvil.tables as tables
 import anvil.tables.query as q
@@ -273,13 +274,17 @@ def check_off_item(list_item_id, purchase_date, expiry_date, price):
 
 @anvil.server.callable
 def export_items_to_csv(list_id):
+    # Retrieve the list row based on the list_id
     list_row = app_tables.tbllists.get(list_id=list_id)
+    # Search for all items associated with this list
     list_items = app_tables.tbllistitems.search(list_id=list_row)
     items = [li['item_id'] for li in list_items]
 
+    # Create an in-memory text stream to write CSV data
     output = io.StringIO()
     writer = csv.writer(output)
 
+    # Define CSV headers
     headers = ["Item Name", "Category", "Quantity", "Brand", "Store", "Aisle"]
     writer.writerow(headers)
 
@@ -287,13 +292,16 @@ def export_items_to_csv(list_id):
         row_data = []
         for col in ["item_name", "category_id", "quantity", "brand", "store", "aisle"]:
             if col == "category_id":
+                # Retrieve category name or set to "Unknown Category" if None
                 cell_value = row[col]['category_name'] if row[col] else "Unknown Category"
             else:
                 cell_value = row[col]
-              
+
             if isinstance(cell_value, dict):
+                # Convert dictionary values to a string
                 cell_value = ', '.join([f"{k}: {v}" for k, v in cell_value.items()])
             elif isinstance(cell_value, list):
+                # Convert list values to a string
                 cell_value = ','.join(str(item) for item in cell_value)
             else:
                 cell_value = str(cell_value)
@@ -301,6 +309,7 @@ def export_items_to_csv(list_id):
         writer.writerow(row_data)
 
     csv_data = output.getvalue()
+    # Create a BlobMedia object for the CSV data
     media = anvil.BlobMedia("text/csv", csv_data.encode("utf-8"), name="items.csv")
 
     return media
@@ -308,8 +317,9 @@ def export_items_to_csv(list_id):
 # Functions for the category consumption graph
 @anvil.server.callable
 def get_all_categories_for_graphs():
-    user = anvil.users.get_user()
-    categories = app_tables.tblcategories.search(user=user)
+    user = anvil.users.get_user()  # Get the current logged-in user
+    categories = app_tables.tblcategories.search(user=user)  # Search for categories for the user
+    # Return a list of category details
     return [{'category_id': cat['category_id'], 'category_name': cat['category_name']} for cat in categories]
 
 @anvil.server.callable
@@ -317,8 +327,8 @@ def get_category_consumption_data(category_id, timeframe):
     from dateutil.relativedelta import relativedelta
     import collections
 
-    user = anvil.users.get_user()
-    now = datetime.datetime.now()
+    user = anvil.users.get_user()  # Get the current logged-in user
+    now = datetime.datetime.now()  # Get the current date and time
 
     if timeframe == 'week':
         start_date = now - datetime.timedelta(weeks=52)  # Past year
@@ -332,27 +342,29 @@ def get_category_consumption_data(category_id, timeframe):
     else:
         raise ValueError("Invalid timeframe")
 
-    category_row = app_tables.tblcategories.get(category_id=category_id)
+    category_row = app_tables.tblcategories.get(category_id=category_id)  # Get the category row
     rows = app_tables.tbllongtermhistory.search(
         category_id=category_row,
         purchase_date=q.greater_than_or_equal_to(start_date),
         user=user
     )
 
+    # Aggregate data by date
     aggregated_data = collections.defaultdict(int)
     for row in rows:
         date_key = row['purchase_date'].strftime(date_format)
         aggregated_data[date_key] += row['quantity']
 
+    # Return sorted aggregated data
     sorted_data = [{'date': date, 'quantity': quantity} for date, quantity in sorted(aggregated_data.items())]
     return sorted_data
 
 # Functions for the item quantity consumption graph
 @anvil.server.callable
 def get_all_items_for_graphs():
-    user = anvil.users.get_user()
-    items = app_tables.tbllongtermhistory.search(user=user)
-    unique_items = {item['item_name'] for item in items}
+    user = anvil.users.get_user()  # Get the current logged-in user
+    items = app_tables.tbllongtermhistory.search(user=user)  # Search for items in long-term history
+    unique_items = {item['item_name'] for item in items}  # Get unique item names
     return [{'item_name': name} for name in unique_items]
 
 @anvil.server.callable
@@ -360,8 +372,8 @@ def get_item_consumption_data(item_name, timeframe):
     from dateutil.relativedelta import relativedelta
     import collections
 
-    user = anvil.users.get_user()
-    now = datetime.datetime.now()
+    user = anvil.users.get_user()  # Get the current logged-in user
+    now = datetime.datetime.now()  # Get the current date and time
 
     if timeframe == 'week':
         start_date = now - datetime.timedelta(weeks=52)  # Past year
@@ -381,11 +393,13 @@ def get_item_consumption_data(item_name, timeframe):
         user=user
     )
 
+    # Aggregate data by date
     aggregated_data = collections.defaultdict(int)
     for row in rows:
         date_key = row['purchase_date'].strftime(date_format)
         aggregated_data[date_key] += row['quantity']
 
+    # Return sorted aggregated data
     sorted_data = [{'date': date, 'quantity': quantity} for date, quantity in sorted(aggregated_data.items())]
     return sorted_data
 
@@ -395,8 +409,8 @@ def get_money_spent_data(timeframe):
     from dateutil.relativedelta import relativedelta
     import collections
 
-    user = anvil.users.get_user()
-    now = datetime.datetime.now()
+    user = anvil.users.get_user()  # Get the current logged-in user
+    now = datetime.datetime.now()  # Get the current date and time
 
     if timeframe == 'week':
         start_date = now - datetime.timedelta(weeks=52)  # Past year
@@ -415,11 +429,13 @@ def get_money_spent_data(timeframe):
         user=user
     )
 
+    # Aggregate data by date
     aggregated_data = collections.defaultdict(float)
     for row in rows:
         date_key = row['purchase_date'].strftime(date_format)
         aggregated_data[date_key] += row['price']
 
+    # Return sorted aggregated data
     sorted_data = [{'date': date, 'amount_spent': amount} for date, amount in sorted(aggregated_data.items())]
     return sorted_data
 
@@ -429,8 +445,8 @@ def get_item_price_history_data(item_name, timeframe):
     from dateutil.relativedelta import relativedelta
     import collections
 
-    user = anvil.users.get_user()
-    now = datetime.datetime.now()
+    user = anvil.users.get_user()  # Get the current logged-in user
+    now = datetime.datetime.now()  # Get the current date and time
 
     if timeframe == 'week':
         start_date = now - datetime.timedelta(weeks=52)  # Past year
@@ -450,13 +466,16 @@ def get_item_price_history_data(item_name, timeframe):
         user=user
     )
 
+    # Aggregate data by date
     aggregated_data = collections.defaultdict(list)
     for row in rows:
         date_key = row['purchase_date'].strftime(date_format)
         price_per_quantity = row['price'] / row['quantity']
         aggregated_data[date_key].append(price_per_quantity)
 
+    # Calculate average price for each date
     average_data = {date: sum(prices) / len(prices) for date, prices in aggregated_data.items()}
+    # Return sorted average data
     sorted_data = [{'date': date, 'price': price} for date, price in sorted(average_data.items())]
     return sorted_data
 
@@ -466,8 +485,8 @@ def get_item_comparison_report_data(timeframe):
     from dateutil.relativedelta import relativedelta
     import collections
 
-    user = anvil.users.get_user()
-    now = datetime.datetime.now()
+    user = anvil.users.get_user()  # Get the current logged-in user
+    now = datetime.datetime.now()  # Get the current date and time
 
     if timeframe == 'week':
         start_date = now - datetime.timedelta(weeks=1)  # Past week
@@ -483,6 +502,7 @@ def get_item_comparison_report_data(timeframe):
         user=user
     )
 
+    # Initialize counters and totals
     item_count = collections.Counter()
     category_count = collections.Counter()
     date_count = collections.Counter()
@@ -497,6 +517,7 @@ def get_item_comparison_report_data(timeframe):
         total_quantity += row['quantity']
         total_spending += row['price']
 
+    # Find most bought item, date, and category
     most_bought_item = item_count.most_common(1)[0] if item_count else ("N/A", 0)
     most_bought_date = date_count.most_common(1)[0] if date_count else ("N/A", 0)
     most_bought_category = category_count.most_common(1)[0] if category_count else ("N/A", 0)
@@ -519,8 +540,8 @@ def get_weekly_spending_report():
     from dateutil.relativedelta import relativedelta
     import collections
 
-    user = anvil.users.get_user()
-    now = datetime.datetime.now()
+    user = anvil.users.get_user()  # Get the current logged-in user
+    now = datetime.datetime.now()  # Get the current date and time
     start_date = now - datetime.timedelta(weeks=52)  # Past year
 
     rows = app_tables.tbllongtermhistory.search(
@@ -556,7 +577,7 @@ def get_weekly_spending_report():
 def get_expiry_report(timeframe):
     from dateutil.relativedelta import relativedelta
 
-    now = datetime.date.today()
+    now = datetime.date.today()  # Get today's date
 
     if timeframe == 'week':
         future_end_date = now + datetime.timedelta(weeks=1)
@@ -570,14 +591,14 @@ def get_expiry_report(timeframe):
     else:
         raise ValueError("Invalid timeframe")
 
-    user = anvil.users.get_user()
+    user = anvil.users.get_user()  # Get the current logged-in user
     future_items = []
     expired_items = []
     alert_items = []
 
-    rows = app_tables.tbllongtermhistory.search(user=user)
+    rows = app_tables.tbllongtermhistory.search(user=user)  # Search for rows in long-term history for the user
     for row in rows:
-        expiry_date = row['expiry_date']
+        expiry_date = row['expiry_date']  # Get the expiry date of the item
         if expiry_date:
             if now <= expiry_date <= future_end_date:
                 future_items.append({
@@ -596,12 +617,12 @@ def get_expiry_report(timeframe):
 
 @anvil.server.callable
 def delete_list(list_id):
-    list_row = app_tables.tbllists.get(list_id=list_id)
+    list_row = app_tables.tbllists.get(list_id=list_id)  # Get the list row
     if not list_row:
         raise ValueError("List not found")
     
-    user = list_row['user']
-    user_lists = app_tables.tbllists.search(user=user)
+    user = list_row['user']  # Get the user associated with the list
+    user_lists = app_tables.tbllists.search(user=user)  # Search for all lists for the user
 
     if len(list(user_lists)) <= 1:
         return False, "Cannot delete the last list."
@@ -610,27 +631,27 @@ def delete_list(list_id):
     list_items = app_tables.tbllistitems.search(list_id=list_row)
     for list_item in list_items:
         item_row = list_item['item_id']
-        list_item.delete()  # Delete from tblListItems
+        list_item.delete()  # Delete from tbllistitems
         
         # Check if the item is linked to other lists
         if not app_tables.tbllistitems.search(item_id=item_row):
-            item_row.delete()  # Delete from tblItems if not linked to other lists
+            item_row.delete()  # Delete from tblitems if not linked to other lists
 
     list_row.delete()  # Finally, delete the list itself
     return True, "List deleted successfully."
 
-# Theming
+"""Theming"""
 @anvil.server.callable
 def get_user_theme():
-    user = anvil.users.get_user()
+    user = anvil.users.get_user()  # Get the current logged-in user
     if user:
-        return user['theme']
+        return user['theme']  # Return the user's theme
     return 'default-theme'
 
 @anvil.server.callable
 def set_user_theme(theme):
-    user = anvil.users.get_user()
+    user = anvil.users.get_user()  # Get the current logged-in user
     if user:
-        user['theme'] = theme
+        user['theme'] = theme  # Set the user's theme
 
 
