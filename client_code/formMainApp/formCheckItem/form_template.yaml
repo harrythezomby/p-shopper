@@ -23,7 +23,7 @@ components:
   layout_properties: {grid_position: 'YNEXOI,YXPTHR'}
   components:
   - name: lblPrice
-    properties: {text: 'Price:'}
+    properties: {text: 'Price ($):'}
     type: Label
     layout_properties: {}
   - name: tbPrice

@@ -285,9 +285,10 @@ class formMainApp(formMainAppTemplate):
             return
         
         # Validate and set quantity
-        quantity_text = self.tbNewItemQuantity.text
+        quantity_text = str(self.tbNewItemQuantity.text)
         if quantity_text is None:
             quantity_text = ""
+            quantity = 1
         quantity_text = quantity_text.strip()
         if not quantity_text:
             quantity = 1
@@ -304,7 +305,7 @@ class formMainApp(formMainAppTemplate):
                 return
         
         # Sanitize and validate brand
-        brand = self.tbNewItemBrand.text.strip() if self.tbNewItemBrand.text else "None"
+        brand = self.tbNewItemBrand.text.strip().title() if self.tbNewItemBrand.text else "None"
         # Allow letters, numbers, and specific symbols for Australian businesses
         if not all(c.isalnum() or c in " .&-_" for c in brand):
             alert("Brand can only contain letters, numbers, and the symbols .&-_")
@@ -312,7 +313,7 @@ class formMainApp(formMainAppTemplate):
             return
         
         # Sanitize and validate store
-        store = self.tbNewItemStore.text.strip() if self.tbNewItemStore.text else "None"
+        store = self.tbNewItemStore.text.strip().title() if self.tbNewItemStore.text else "None"
         if not all(c.isalnum() or c in " .&-_" for c in store):
             alert("Store can only contain letters, numbers, and the symbols .&-_")
             self.tbNewItemStore.text = ""

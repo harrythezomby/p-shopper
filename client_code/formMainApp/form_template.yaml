@@ -132,7 +132,7 @@ components:
       layout_properties: {column: BYPHYZ}
       event_bindings: {change: ddNewItemCategory_change}
       name: ddNewItemCategory
-    - properties: {type: number, role: textbox, placeholder: Qty... (Opt)}
+    - properties: {type: number, role: textbox, placeholder: Qty..., hide_text: false}
       type: TextBox
       layout_properties: {column: QHNMEC}
       name: tbNewItemQuantity
@@ -140,6 +140,7 @@ components:
       type: TextBox
       layout_properties: {column: QEVMHQ}
       name: tbNewItemBrand
+      event_bindings: {pressed_enter: tbNewItemBrand_pressed_enter}
     - properties: {role: textbox, placeholder: Store... (Opt)}
       type: TextBox
       layout_properties: {column: GOPKWM}
