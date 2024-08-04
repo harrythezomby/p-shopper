@@ -140,7 +140,7 @@ components:
       type: TextBox
       layout_properties: {column: QEVMHQ}
       name: tbNewItemBrand
-      event_bindings: {pressed_enter: tbNewItemBrand_pressed_enter}
+      event_bindings: {}
     - properties: {role: textbox, placeholder: Store... (Opt)}
       type: TextBox
       layout_properties: {column: GOPKWM}
