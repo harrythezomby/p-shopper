@@ -4,6 +4,9 @@
 ## Note to Developers:
 If testing/playing around with the app in a development environment, such as straight from an Anvil clone link, make sure to follow the standard account creation steps present within the app itself. This is because P-Shopper performs a variety of tasks behind the scenes upon new user accounts being created, which has to do setting up graphs and reports, as well as creating a default list for the new user. If this isn't done, errors _will_ be encountered, so please keep this in mind!
 
+
+**WARNING:** As of 08/04/2024, I have gone through and commented longer and more in-depth explainations for most of P-Shopper's functions, especially the dataAPI. If any code has been broken during this process, please revert to a previous commit, or better yet - switch to the 'nocomments' branch which I have created from the latest commit before accidental breaking changes might have been implemented!
+
 # Creating List Items
 
 P-Shopper provides an intuitive way to add new items to your shopping list:
